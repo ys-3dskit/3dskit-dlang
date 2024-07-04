@@ -3,7 +3,7 @@
  * @brief Service interface for PxiFS services. This is normally not accessible to userland apps. https://3dbrew.org/wiki/Filesystem_services_PXI
  */
 
-import core.stdc.config;
+//import core.stdc.config;
 
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;

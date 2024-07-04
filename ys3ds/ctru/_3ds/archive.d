@@ -3,7 +3,7 @@
  * @brief FS_Archive driver
  */
 
-import core.sys.posix.sys.types;
+//import core.sys.posix.sys.types;
 
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;

@@ -3,7 +3,9 @@
  * @brief UTF conversion functions.
  */
 
-import core.sys.posix.sys.types;
+//import core.sys.posix.sys.types;
+
+import ys3ds.ctru._3ds.types;
 
 extern (C):
 

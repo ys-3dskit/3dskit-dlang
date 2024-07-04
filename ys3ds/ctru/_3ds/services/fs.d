@@ -3,7 +3,7 @@
  * @brief Filesystem Services
  */
 
-import core.stdc.config;
+//import core.stdc.config;
 
 import ys3ds.ctru._3ds.types;
 

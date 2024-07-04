@@ -1,4 +1,6 @@
-import core.sys.posix.sys.socket;
+module ys3ds.ctru.netinet.in_;
+
+import ys3ds.ctru.sys.socket;
 
 extern (C):
 

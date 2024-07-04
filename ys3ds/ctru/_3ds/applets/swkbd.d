@@ -228,7 +228,7 @@ void swkbdSetValidation (
 {
   swkbd.valid_input = validInput;
   swkbd.filter_flags = filterFlags;
-  swkbd.max_digits = (filterFlags & SWKBD_FILTER_DIGITS) ? maxDigits : 0;
+  swkbd.max_digits = cast(ushort) ((filterFlags & SWKBD_FILTER_DIGITS) ? maxDigits : 0);
 }
 
 /**
@@ -239,8 +239,8 @@ void swkbdSetValidation (
  */
 void swkbdSetNumpadKeys (SwkbdState* swkbd, int left, int right)
 {
-  swkbd.numpad_keys[0] = left;
-  swkbd.numpad_keys[1] = right;
+  swkbd.numpad_keys[0] = cast(ushort) left;
+  swkbd.numpad_keys[1] = cast(ushort) right;
 }
 
 /**

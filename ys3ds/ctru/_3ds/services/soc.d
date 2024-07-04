@@ -5,7 +5,7 @@
  * After initializing this service you will be able to use system calls from netdb.h, sys/socket.h etc.
  */
 
-import core.stdc.config;
+//import core.stdc.config;
 import ys3ds.ctru.sys.socket;
 
 //alias in_addr = uint; // struct in_addr { in_addr_t s_addr; }; in_addr_t = uint32_t;

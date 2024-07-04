@@ -1,6 +1,7 @@
 module ys3ds.ctru.netdb;
 
-import core.sys.posix.netinet.in_;
+import ys3ds.ctru.netinet.in_;
+import ys3ds.ctru.sys.socket;
 
 extern (C):
 

@@ -40,13 +40,16 @@ struct LightSemaphore
 }
 
 // TODO: test that all inline assembly produces identical output to C headers
+// use GDC-style asm, which LDC supports unlike DMD-style.
+// the alternative is ldc.llvmasm.__asm.
 
 /// Performs a Data Synchronization Barrier operation.
 void __dsb ()
 {
   asm
   {
-    mcr p15, 0, 0, c7, c10, 4;
+    //"mcr p15, 0, %[val], c7, c10, 4" :: [val] "r" (0) : "memory";
+    "mcr p15, 0, %0, c7, c10, 4" :  : "r"(0) : "memory";
   }
 }
 
@@ -55,7 +58,8 @@ void __dmb ()
 {
   asm
   {
-    mcr p15, 0, 0, c7, c10, 5;
+    //"mcr p15, 0, %[val], c7, c10, 5" :: [val] "r" (0) : "memory";
+    "mcr p15, 0, %0, c7, c10, 5" :  : "r"(0) : "memory";
   }
 }
 
@@ -64,7 +68,8 @@ void __isb ()
 {
   asm
   {
-    mcr p15, 0, 0, c7, c5, 4;
+    //"mcr p15, 0, %[val], c7, c5, 4" :: [val] "r" (0) : "memory";
+    "mcr p15, 0, %0, c7, c5, 4" :  : "r"(0) : "memory";
   }
 }
 
@@ -73,7 +78,7 @@ void __clrex ()
 {
   asm
   {
-    clrex;
+    "clrex" ::: "memory";
   }
 }
 
@@ -87,7 +92,8 @@ int __ldrex (int* addr)
   int val;
   asm
   {
-    ldrex val, addr;
+    //"ldrex %[val], %[addr]" : [val] "=r" (val) : [addr] "Q" (*addr);
+    "ldrex %0, %1" : "=r"(val) : "Q"(*addr);
   }
   return val;
 }
@@ -103,7 +109,8 @@ bool __strex (int* addr, int val)
   bool res;
   asm
   {
-    strex res, val, addr;
+    //"strex %[res], %[val], %[addr]" : [res] "=&r" (res) : [val] "r" (val), [addr] "Q" (*addr);
+    "strex %0, %1, %2" : "=&r"(res) : "r"(val), "Q"(*addr);
   }
   return res;
 }
@@ -118,7 +125,8 @@ ushort __ldrexh (ushort* addr)
   ushort val;
   asm
   {
-    ldrexh val, addr;
+    //"ldrexh %[val], %[addr]" : [val] "=r" (val) : [addr] "Q" (*addr);
+    "ldrexh %0, %1" : "=r" (val) : "Q" (*addr);
   }
   return val;
 }
@@ -134,7 +142,8 @@ bool __strexh (ushort* addr, ushort val)
   bool res;
   asm
   {
-    strexh res, val, addr;
+    //"strexh %[res], %[val], %[addr]" : [res] "=&r" (res) : [val] "r" (val), [addr] "Q" (*addr);
+    "strexh %0, %1, %2" : "=&r"(res) : "r"(val), "Q"(*addr);
   }
   return res;
 }
@@ -149,7 +158,8 @@ ubyte __ldrexb (ubyte* addr)
   ubyte val;
   asm
   {
-    ldrexb val, addr;
+    //"ldrexb %[val], %[addr]" : [val] "=r" (val) : [addr] "Q" (*addr);
+    "ldrexb %0, %1" : "=r"(val) : "Q"(*addr);
   }
   return val;
 }
@@ -165,7 +175,8 @@ bool __strexb (ubyte* addr, ubyte val)
   bool res;
   asm
   {
-    strexb res, val, addr;
+    //"strexb %[res], %[val], %[addr]" : [res] "=&r" (res) : [val] "r" (val), [addr] "Q" (*addr);
+    "strexb %0, %1, %2" : "=&r"(res) : "r"(val), "Q"(*addr);
   }
   return res;
 }

@@ -3,17 +3,22 @@
  * @brief Various system types.
  */
 
-import core.stdc.config;
-import core.stdc.stdint;
+//import core.stdc.config;
+//import core.stdc.stdint;
 
 extern (C):
 
+// missing aliases
+alias ssize_t = ptrdiff_t;
+alias c_ulong = ulong;
+alias c_long = long;
+
 /// The maximum value of a u64.
-enum U64_MAX = UINT64_MAX;
+enum U64_MAX = ulong.max; //UINT64_MAX;
 
 /// would be nice if newlib had this already
 
-enum SSIZE_MAX = SIZE_MAX >> 1; ///<  8-bit unsigned integer ///< 16-bit unsigned integer ///< 32-bit unsigned integer ///< 64-bit unsigned integer ///<  8-bit signed integer ///< 16-bit signed integer ///< 32-bit signed integer ///< 64-bit signed integer
+enum SSIZE_MAX = size_t.max >> 1; //SIZE_MAX >> 1; ///<  8-bit unsigned integer ///< 16-bit unsigned integer ///< 32-bit unsigned integer ///< 64-bit unsigned integer ///<  8-bit signed integer ///< 16-bit signed integer ///< 32-bit signed integer ///< 64-bit signed integer
 
 alias vu8 = ubyte; ///<  8-bit volatile unsigned integer.
 alias vu16 = ushort; ///< 16-bit volatile unsigned integer.

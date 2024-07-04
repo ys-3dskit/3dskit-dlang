@@ -1,6 +1,6 @@
 module ys3ds.ctru.sys.socket;
 
-import core.stdc.time;
+//import core.stdc.time;
 
 extern (C):
 

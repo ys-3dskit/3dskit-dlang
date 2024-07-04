@@ -3,7 +3,7 @@
  * @brief Red-black trees.
  */
 
-import core.stdc.stdint;
+//import core.stdc.stdint;
 
 extern (C):
 
@@ -24,7 +24,7 @@ alias rbtree_node_comparator_t = int function (
 /// An rbtree node.
 struct rbtree_node
 {
-    uintptr_t parent_color; ///< Parent color.
+    size_t parent_color; ///< Parent color.
     rbtree_node_t*[2] child; ///< Node children.
 }
 

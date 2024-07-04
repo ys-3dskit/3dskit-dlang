@@ -3,7 +3,7 @@
  * @brief Provides functions to use threads.
  */
 
-import core.stdc.stddef;
+//import core.stdc.stddef;
 
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.errf;
@@ -126,5 +126,5 @@ void threadOnException (
   *cast(uint*)(tls + 0x48) = cast(uint) exception_data;
 
   __dsb();
-  __lsb();
+  __isb();
 }

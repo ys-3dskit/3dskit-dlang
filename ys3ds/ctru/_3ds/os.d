@@ -253,6 +253,7 @@ uint osGetMemRegionUsed (MemRegion region)
 {
   long mem_used;
   svcGetSystemInfo(&mem_used, 0, region);
+  return cast(uint) mem_used;
 }
 
 /**

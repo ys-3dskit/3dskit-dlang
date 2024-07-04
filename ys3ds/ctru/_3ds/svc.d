@@ -576,7 +576,8 @@ void* getThreadLocalStorage ()
   void* ret;
   asm
   {
-    mrc p15, 0, ret, c13, c0, 3;
+    //"mrc p15, 0, %[data], c13, c0, 3" : [data] "=r" (ret);
+    "mrc p15, 0, %0, c13, c0, 3" : "=r"(ret);
   }
   return ret;
 }
@@ -1486,6 +1487,6 @@ void SVC_STOP_POINT()
   // TODO: test inline assembly at usages is same as C
   asm
   {
-    svc 0xFF;
+    "svc 0xFF";
   }
 }

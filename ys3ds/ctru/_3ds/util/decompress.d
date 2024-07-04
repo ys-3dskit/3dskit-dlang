@@ -5,8 +5,10 @@ module ys3ds.ctru._3ds.util.decompress;
  * @brief Decompression functions.
  */
 
-import core.stdc.config;
-import core.sys.posix.sys.types;
+//import core.stdc.config;
+//import core.sys.posix.sys.types;
+
+import ys3ds.ctru._3ds.types;
 
 extern (C):
 
@@ -228,7 +230,7 @@ bool decompress_Huff (
   iov.data = output;
   iov.size = size;
 
-  return decompressV_Huff(&iov, 1, callback, userdata, insize);
+  return decompressV_Huff(bits, &iov, 1, callback, userdata, insize);
 }
 
 /** @brief Decompress run-length encoding
