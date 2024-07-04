@@ -24,7 +24,13 @@ enum LINK3DS_COMM_PORT = 17491; ///< 3dslink TCP server port
 int link3dsConnectToHost (bool redirStdout, bool redirStderr);
 
 /// Same as \ref link3dsConnectToHost but redirecting both stdout/stderr.
-int link3dsStdio ();
+int link3dsStdio ()
+{
+  return link3dsConnectToHost(true, true);
+}
 
 /// Same as \ref link3dsConnectToHost but redirecting only stderr.
-int link3dsStdioForDebug ();
+int link3dsStdioForDebug ()
+{
+  return link3dsConnectToHost(false, true);
+}

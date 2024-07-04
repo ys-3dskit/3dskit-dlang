@@ -48,7 +48,10 @@ void pxiDevExit ();
  */
 ubyte pxiDevMakeTransferOption (
     FS_CardSpiBaudRate baudRate,
-    FS_CardSpiBusMode busMode);
+    FS_CardSpiBusMode busMode)
+{
+  return (baudRate & 0x3F) | ((busMode & 0x3) << 6);
+}
 
 /**
  * @brief Creates a packed card SPI wait operation value.
@@ -60,7 +63,10 @@ ubyte pxiDevMakeTransferOption (
 ulong pxiDevMakeWaitOperation (
     PXIDEV_WaitType waitType,
     PXIDEV_DeassertType deassertType,
-    ulong timeout);
+    ulong timeout)
+{
+  return (waitType & 0xF) | ((deassertType & 0xF) << 4) | ((timeout & 0xFFFFFFFFFFFFFF) << 8);
+}
 
 /**
  * @brief Performs multiple card SPI writes and reads.

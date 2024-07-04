@@ -22,7 +22,23 @@ extern (D) auto CSND_TIMER(T)(auto ref T n)
  * @param pan Pan to use.
  * @return A left/right volume pair for use by hardware.
  */
-uint CSND_VOL (float vol, float pan);
+uint CSND_VOL (float vol, float pan)
+{
+  float rpan;
+  uint lvol, rvol;
+
+  if (vol < 0.0f) vol = 0.0f;
+  else if (vol > 1.0f) vol = 1.0f;
+
+  rpan = (pan+1) / 2;
+  if (rpan < 0.0f) rpan = 0.0f;
+  else if (rpan > 1.0f) rpan = 1.0f;
+
+  lvol = vol * (1-rpan) * 0x8000;
+  rvol = vol * rpan * 0x8000;
+
+  return lvol | (rvol << 16);
+}
 
 /// CSND encodings.
 enum

@@ -6,9 +6,9 @@
  */
 
 import core.stdc.config;
-import core.sys.posix.sys.socket;
+import ys3ds.ctru.sys.socket;
 
-alias in_addr = uint; // struct in_addr { in_addr_t s_addr; }; in_addr_t = uint32_t;
+//alias in_addr = uint; // struct in_addr { in_addr_t s_addr; }; in_addr_t = uint32_t;
 
 import ys3ds.ctru._3ds.types;
 

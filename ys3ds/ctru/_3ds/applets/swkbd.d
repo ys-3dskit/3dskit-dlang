@@ -208,7 +208,10 @@ void swkbdInit (SwkbdState* swkbd, SwkbdType type, int numButtons, int maxTextLe
  * @param swkbd Pointer to swkbd state.
  * @param mode Password mode.
  */
-void swkbdSetPasswordMode (SwkbdState* swkbd, SwkbdPasswordMode mode);
+void swkbdSetPasswordMode (SwkbdState* swkbd, SwkbdPasswordMode mode)
+{
+  swkbd.password_mode = mode;
+}
 
 /**
  * @brief Configures input validation in a software keyboard.
@@ -221,7 +224,12 @@ void swkbdSetValidation (
     SwkbdState* swkbd,
     SwkbdValidInput validInput,
     uint filterFlags,
-    int maxDigits);
+    int maxDigits)
+{
+  swkbd.valid_input = validInput;
+  swkbd.filter_flags = filterFlags;
+  swkbd.max_digits = (filterFlags & SWKBD_FILTER_DIGITS) ? maxDigits : 0;
+}
 
 /**
  * @brief Configures what characters will the two bottom keys in a numpad produce.
@@ -229,7 +237,11 @@ void swkbdSetValidation (
  * @param left Unicode codepoint produced by the leftmost key in the bottom row (0 hides the key).
  * @param left Unicode codepoint produced by the rightmost key in the bottom row (0 hides the key).
  */
-void swkbdSetNumpadKeys (SwkbdState* swkbd, int left, int right);
+void swkbdSetNumpadKeys (SwkbdState* swkbd, int left, int right)
+{
+  swkbd.numpad_keys[0] = left;
+  swkbd.numpad_keys[1] = right;
+}
 
 /**
  * @brief Specifies which special features are enabled in a software keyboard.
@@ -317,4 +329,7 @@ SwkbdButton swkbdInputText (SwkbdState* swkbd, char* buf, size_t bufsize);
  * @param swkbd Pointer to swkbd state.
  * @return The result value.
  */
-SwkbdResult swkbdGetResult (SwkbdState* swkbd);
+SwkbdResult swkbdGetResult (SwkbdState* swkbd)
+{
+  return swkbd.result;
+}

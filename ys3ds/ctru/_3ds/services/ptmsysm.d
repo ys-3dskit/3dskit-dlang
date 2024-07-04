@@ -38,7 +38,14 @@ enum
 }
 
 /// See @ref PTMSYSM_NotifySleepPreparationComplete. Corresponds to the number of potentially remaning notifs. until sleep/wakeup.
-int ptmSysmGetNotificationAckValue (uint id);
+int ptmSysmGetNotificationAckValue (uint id)
+{
+  immutable uint[] values = [3, -1, 1, 0, 0, -1, 2];
+  if (id < PTMNOTIFID_SLEEP_REQUESTED || id > PTMNOTIFID_HALF_AWAKE)
+    return -1;
+
+  return values[id - PTMNOTIFID_SLEEP_REQUESTED];
+}
 
 /// Initializes ptm:sysm.
 Result ptmSysmInit ();

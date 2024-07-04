@@ -197,7 +197,11 @@ bool aptIsHomePressed ();
 void aptJumpToHomeMenu ();
 
 /// Handles incoming jump-to-HOME requests.
-void aptHandleJumpToHome ();
+void aptHandleJumpToHome ()
+{
+  if (aptShouldJumpToHome())
+    aptJumpToHomeMenu();
+}
 
 /**
  * @brief Main function which handles sleep mode and HOME/power buttons - call this at the beginning of every frame.
@@ -306,7 +310,12 @@ Result APT_GetAppletManInfo (APT_AppletPos inpos, APT_AppletPos* outpos, NS_APPI
  * @brief Gets the menu's app ID.
  * @return The menu's app ID.
  */
-NS_APPID aptGetMenuAppID ();
+NS_APPID aptGetMenuAppID ()
+{
+  NS_APPID menu_appid = NS_APPID.APPID_NONE;
+  APT_GetAppletManInfo(APT_AppletPos.APTPOS_NONE, null, null, &menu_appid, null);
+  return menu_appid;
+}
 
 /**
  * @brief Gets an applet's information.

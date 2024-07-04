@@ -39,24 +39,58 @@ struct LightSemaphore
     short max_count; ///< The maximum release count of the semaphore
 }
 
+// TODO: test that all inline assembly produces identical output to C headers
+
 /// Performs a Data Synchronization Barrier operation.
-void __dsb ();
+void __dsb ()
+{
+  asm
+  {
+    mcr p15, 0, 0, c7, c10, 4;
+  }
+}
 
 /// Performs a Data Memory Barrier operation.
-void __dmb ();
+void __dmb ()
+{
+  asm
+  {
+    mcr p15, 0, 0, c7, c10, 5;
+  }
+}
 
 /// Performs an Instruction Synchronization Barrier (officially "flush prefetch buffer") operation.
-void __isb ();
+void __isb ()
+{
+  asm
+  {
+    mcr p15, 0, 0, c7, c5, 4;
+  }
+}
 
 /// Performs a clrex operation.
-void __clrex ();
+void __clrex ()
+{
+  asm
+  {
+    clrex;
+  }
+}
 
 /**
  * @brief Performs a ldrex operation.
  * @param addr Address to perform the operation on.
  * @return The resulting value.
  */
-int __ldrex (int* addr);
+int __ldrex (int* addr)
+{
+  int val;
+  asm
+  {
+    ldrex val, addr;
+  }
+  return val;
+}
 
 /**
  * @brief Performs a strex operation.
@@ -64,14 +98,30 @@ int __ldrex (int* addr);
  * @param val Value to store.
  * @return Whether the operation was successful.
  */
-bool __strex (int* addr, int val);
+bool __strex (int* addr, int val)
+{
+  bool res;
+  asm
+  {
+    strex res, val, addr;
+  }
+  return res;
+}
 
 /**
  * @brief Performs a ldrexh operation.
  * @param addr Address to perform the operation on.
  * @return The resulting value.
  */
-ushort __ldrexh (ushort* addr);
+ushort __ldrexh (ushort* addr)
+{
+  ushort val;
+  asm
+  {
+    ldrexh val, addr;
+  }
+  return val;
+}
 
 /**
  * @brief Performs a strexh operation.
@@ -79,14 +129,30 @@ ushort __ldrexh (ushort* addr);
  * @param val Value to store.
  * @return Whether the operation was successful.
  */
-bool __strexh (ushort* addr, ushort val);
+bool __strexh (ushort* addr, ushort val)
+{
+  bool res;
+  asm
+  {
+    strexh res, val, addr;
+  }
+  return res;
+}
 
 /**
  * @brief Performs a ldrexb operation.
  * @param addr Address to perform the operation on.
  * @return The resulting value.
  */
-ubyte __ldrexb (ubyte* addr);
+ubyte __ldrexb (ubyte* addr)
+{
+  ubyte val;
+  asm
+  {
+    ldrexb val, addr;
+  }
+  return val;
+}
 
 /**
  * @brief Performs a strexb operation.
@@ -94,7 +160,15 @@ ubyte __ldrexb (ubyte* addr);
  * @param val Value to store.
  * @return Whether the operation was successful.
  */
-bool __strexb (ubyte* addr, ubyte val);
+bool __strexb (ubyte* addr, ubyte val)
+{
+  bool res;
+  asm
+  {
+    strexb res, val, addr;
+  }
+  return res;
+}
 
 /// Performs an atomic pre-increment operation.
 extern (D) auto AtomicIncrement(T)(auto ref T ptr)
@@ -245,13 +319,19 @@ void CondVar_WakeUp (CondVar* cv, int num_threads);
  * @brief Wakes up a single thread waiting on a condition variable.
  * @param cv Pointer to the condition variable.
  */
-void CondVar_Signal (CondVar* cv);
+void CondVar_Signal (CondVar* cv)
+{
+  CondVar_WakeUp(cv, 1);
+}
 
 /**
  * @brief Wakes up all threads waiting on a condition variable.
  * @param cv Pointer to the condition variable.
  */
-void CondVar_Broadcast (CondVar* cv);
+void CondVar_Broadcast (CondVar* cv)
+{
+  CondVar_WakeUp(cv, ARBITRATION_SIGNAL_ALL);
+}
 
 /**
  * @brief Initializes a light event.

@@ -7,6 +7,8 @@ import core.stdc.stddef;
 
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.errf;
+import ys3ds.ctru._3ds.svc;
+import ys3ds.ctru._3ds.synchronization;
 
 extern (C):
 
@@ -115,4 +117,14 @@ void threadExit (int rc);
 void threadOnException (
     ExceptionHandler handler,
     void* stack_top,
-    ERRF_ExceptionData* exception_data);
+    ERRF_ExceptionData* exception_data)
+{
+  ubyte* tls = cast(ubyte*) getThreadLocalStorage();
+
+  *cast(uint*)(tls + 0x40) = cast(uint) handler;
+  *cast(uint*)(tls + 0x44) = cast(uint) stack_top;
+  *cast(uint*)(tls + 0x48) = cast(uint) exception_data;
+
+  __dsb();
+  __lsb();
+}

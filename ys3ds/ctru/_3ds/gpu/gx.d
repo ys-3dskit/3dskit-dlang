@@ -164,7 +164,11 @@ bool gxCmdQueueWait (gxCmdQueue_s* queue, long timeout);
 void gxCmdQueueSetCallback (
     gxCmdQueue_s* queue,
     void function (gxCmdQueue_s*) callback,
-    void* user);
+    void* user)
+{
+  queue.callback = callback;
+  queue.user = user;
+}
 
 /**
  * @brief Selects a command queue to which GX_* functions will add commands instead of immediately submitting them to GX.

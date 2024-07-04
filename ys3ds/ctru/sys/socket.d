@@ -4,6 +4,12 @@ import core.stdc.time;
 
 extern (C):
 
+// missing defs from the original header
+alias in_addr_t = uint; // uint32_t
+struct in_addr {
+  in_addr_t s_addr;
+}
+
 enum SOL_SOCKET = 0xFFFF;
 
 enum PF_UNSPEC = 0;
@@ -66,6 +72,8 @@ struct linger
     int l_onoff;
     int l_linger;
 }
+
+alias ssize_t = ptrdiff_t;
 
 int accept (int sockfd, sockaddr* addr, socklen_t* addrlen);
 int bind (int sockfd, const(sockaddr)* addr, socklen_t addrlen);

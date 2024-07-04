@@ -570,19 +570,34 @@ struct StartupInfo
  * @brief Gets the thread local storage buffer.
  * @return The thread local storage buffer.
  */
-void* getThreadLocalStorage ();
+void* getThreadLocalStorage ()
+{
+  // TODO: test inline asm output is identical to C ver
+  void* ret;
+  asm
+  {
+    mrc p15, 0, ret, c13, c0, 3;
+  }
+  return ret;
+}
 
 /**
  * @brief Gets the thread command buffer.
  * @return The thread command buffer.
  */
-uint* getThreadCommandBuffer ();
+uint* getThreadCommandBuffer ()
+{
+  return cast(uint*)(cast(ubyte*)getThreadLocalStorage() + 0x80);
+}
 
 /**
  * @brief Gets the thread static buffer.
  * @return The thread static buffer.
  */
-uint* getThreadStaticBuffers ();
+uint* getThreadStaticBuffers ()
+{
+  return cast(uint*)(cast(ubyte*) getThreadLocalStorage() + 0x180);
+}
 
 ///@name Device drivers
 ///@{
@@ -590,10 +605,30 @@ uint* getThreadStaticBuffers ();
 /// Writes the default DMA device config that the kernel uses when DMACFG_*_IS_DEVICE and DMACFG_*_USE_CFG are not set
 
 // Kernel uses this default instance if _IS_DEVICE and _USE_CFG are not set
-void dmaDeviceConfigInitDefault (DmaDeviceConfig* cfg);
+void dmaDeviceConfigInitDefault (DmaDeviceConfig* cfg)
+{
+  *cfg = DmaDeviceConfig(
+    -1,
+    8 | 4 | 2 | 1,
+    0x80,
+    0,
+    0x80,
+    0
+  );
+}
 
 /// Initializes a \ref DmaConfig instance with sane defaults for RAM<>RAM tranfers
-void dmaConfigInitDefault (DmaConfig* cfg);
+void dmaConfigInitDefault (DmaConfig* cfg)
+{
+  *cfg = DmaConfig(
+    -1,
+    0,
+    DMACFG_WAIT_AVAILABLE,
+    0,
+    DmaDeviceConfig.init,
+    DmaDeviceConfig.init
+  );
+}
 
 ///@}
 
@@ -1446,3 +1481,11 @@ Result svcGetDebugThreadParam (long* unused, uint* out_, Handle debug_, uint thr
 Result svcBackdoor (int function () callback);
 
 /// Stop point, does nothing if the process is not attached (as opposed to 'bkpt' instructions)
+void SVC_STOP_POINT()
+{
+  // TODO: test inline assembly at usages is same as C
+  asm
+  {
+    svc 0xFF;
+  }
+}

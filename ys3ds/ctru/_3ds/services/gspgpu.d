@@ -70,7 +70,21 @@ enum GSPGPU_Event
  * @param format See \ref GSPGPU_FramebufferFormat.
  * @return Bytes per pixel.
  */
-uint gspGetBytesPerPixel (GSPGPU_FramebufferFormat format);
+uint gspGetBytesPerPixel (GSPGPU_FramebufferFormat format)
+{
+  switch (format) with (GSPGPU_FramebufferFormat)
+  {
+    case GSP_RGBA8_OES:
+        return 4;
+    default:
+    case GSP_BGR8_OES:
+      return 3;
+    case GSP_RGB565_OES:
+    case GSP_RGB5_A1_OES:
+    case GSP_RGBA4_OES:
+      return 2;
+  }
+}
 
 /// Initializes GSPGPU.
 Result gspInit ();

@@ -21,13 +21,21 @@ extern __gshared uint gpuCmdBufOffset; ///< GPU command buffer offset.
  * @param size Size of the command buffer.
  * @param offset Offset of the command buffer.
  */
-void GPUCMD_SetBuffer (uint* adr, uint size, uint offset);
+void GPUCMD_SetBuffer (uint* adr, uint size, uint offset)
+{
+  gpuCmdBuf = adr;
+  gpuCmdBufSize = size;
+  gpuCmdBufOffset = offset;
+}
 
 /**
  * @brief Sets the offset of the GPU command buffer.
  * @param offset Offset of the command buffer.
  */
-void GPUCMD_SetBufferOffset (uint offset);
+void GPUCMD_SetBufferOffset (uint offset)
+{
+  gpuCmdBufOffset = offset;
+}
 
 /**
  * @brief Gets the current GPU command buffer.
@@ -35,7 +43,15 @@ void GPUCMD_SetBufferOffset (uint offset);
  * @param size Pointer to output the size (in words) of the command buffer to.
  * @param offset Pointer to output the offset of the command buffer to.
  */
-void GPUCMD_GetBuffer (uint** addr, uint* size, uint* offset);
+void GPUCMD_GetBuffer (uint** addr, uint* size, uint* offset)
+{
+  if (addr)
+    *addr = gpuCmdBuf;
+  if (size)
+    *size = gpuCmdBufSize;
+  if (offset)
+    *offset = gpuCmdBufOffset;
+}
 
 /**
  * @brief Adds raw GPU commands to the current command buffer.
@@ -88,7 +104,10 @@ uint f32tof24 (float f);
 uint f32tof31 (float f);
 
 /// Adds a command with a single parameter to the current command buffer.
-void GPUCMD_AddSingleParam (uint header, uint param);
+void GPUCMD_AddSingleParam (uint header, uint param)
+{
+  GPUCMD_Add(header, &param, 1);
+}
 
 /// Adds a masked register write to the current command buffer.
 extern (D) auto GPUCMD_AddMaskedWrite(T0, T1, T2)(auto ref T0 reg, auto ref T1 mask, auto ref T2 val)

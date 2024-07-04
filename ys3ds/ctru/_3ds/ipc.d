@@ -30,7 +30,12 @@ enum IPC_BufferRights
 uint IPC_MakeHeader (
     ushort command_id,
     uint normal_params,
-    uint translate_params);
+    uint translate_params)
+{
+  return (cast(uint) command_id << 16)
+    | ((cast(uint) normal_params & 0x3F) << 6)
+    | ((cast(uint) translate_params & 0x3F) << 6);
+}
 
 /**
  * @brief Creates a header to share handles
@@ -41,7 +46,10 @@ uint IPC_MakeHeader (
  *
  * @note Zero values will have no effect.
  */
-uint IPC_Desc_SharedHandles (uint number);
+uint IPC_Desc_SharedHandles (uint number)
+{
+  return (cast(uint) (number - 1) << 26);
+}
 
 /**
  * @brief Creates the header to transfer handle ownership
@@ -52,7 +60,10 @@ uint IPC_Desc_SharedHandles (uint number);
  *
  * @note Zero values will have no effect.
  */
-uint IPC_Desc_MoveHandles (uint number);
+uint IPC_Desc_MoveHandles (uint number)
+{
+  return IPC_Desc_SharedHandles(number) | 0x10;
+}
 
 /**
  * @brief Returns the code to ask the kernel to fill the handle with the current process ID.
@@ -60,9 +71,15 @@ uint IPC_Desc_MoveHandles (uint number);
  *
  * The next value is a placeholder that will be replaced by the current process ID by the kernel.
  */
-uint IPC_Desc_CurProcessId ();
+uint IPC_Desc_CurProcessId ()
+{
+  return 0x20;
+}
 
-uint IPC_Desc_CurProcessHandle ();
+deprecated uint IPC_Desc_CurProcessHandle ()
+{
+  return IPC_Desc_CurProcessId();
+}
 
 /**
  * @brief Creates a header describing a static buffer.
@@ -72,7 +89,10 @@ uint IPC_Desc_CurProcessHandle ();
  *
  * The next value is a pointer to the buffer. It will be copied to TLS offset 0x180 + static_buffer_id*8.
  */
-uint IPC_Desc_StaticBuffer (size_t size, uint buffer_id);
+uint IPC_Desc_StaticBuffer (size_t size, uint buffer_id)
+{
+  return (size << 14) | ((buffer_id & 0xF) << 10) | 0x2;
+}
 
 /**
  * @brief Creates a header describing a buffer to be sent over PXI.
@@ -83,7 +103,11 @@ uint IPC_Desc_StaticBuffer (size_t size, uint buffer_id);
  *
  * The next value is a phys-address of a table located in the BASE memregion.
  */
-uint IPC_Desc_PXIBuffer (size_t size, uint buffer_id, bool is_read_only);
+uint IPC_Desc_PXIBuffer (size_t size, uint buffer_id, bool is_read_only)
+{
+  ubyte type = is_read_only ? 0x6 : 0x4;
+  return (size << 8) | ((buffer_id & 0xF) << 4) | type;
+}
 
 /**
  * @brief Creates a header describing a buffer from the main memory.
@@ -93,4 +117,7 @@ uint IPC_Desc_PXIBuffer (size_t size, uint buffer_id, bool is_read_only);
  *
  * The next value is a pointer to the buffer.
  */
-uint IPC_Desc_Buffer (size_t size, IPC_BufferRights rights);
+uint IPC_Desc_Buffer (size_t size, IPC_BufferRights rights)
+{
+  return (size << 4) | 0x8 | rights;
+}

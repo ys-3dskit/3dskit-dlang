@@ -193,7 +193,10 @@ const(char)* osStrError (Result error);
  *
  * This can be used to compare system versions easily with @ref SYSTEM_VERSION.
  */
-uint osGetFirmVersion ();
+uint osGetFirmVersion ()
+{
+  return OS_KernelConfig.firm_ver &~ 0xFF;
+}
 
 /**
  * @brief Gets the system's kernel version.
@@ -205,34 +208,62 @@ uint osGetFirmVersion ();
  * if(osGetKernelVersion() > SYSTEM_VERSION(2,46,0)) printf("You are running 9.0 or higher\n");
  * @endcode
  */
-uint osGetKernelVersion ();
+uint osGetKernelVersion ()
+{
+  return OS_KernelConfig.kernel_ver & ~0xFF;
+}
 
 /// Gets the system's "core version" (2 on NATIVE_FIRM, 3 on SAFE_FIRM, etc.)
-uint osGetSystemCoreVersion ();
+uint osGetSystemCoreVersion ()
+{
+  return OS_KernelConfig.kernel_syscore_ver;
+}
 
 /// Gets the system's memory layout ID (0-5 on Old 3DS, 6-8 on New 3DS)
-uint osGetApplicationMemType ();
+uint osGetApplicationMemType ()
+{
+  return OS_KernelConfig.app_memtype;
+}
 
 /**
  * @brief Gets the size of the specified memory region.
  * @param region Memory region to check.
  * @return The size of the memory region, in bytes.
  */
-uint osGetMemRegionSize (MemRegion region);
+uint osGetMemRegionSize (MemRegion region)
+{
+  if (region == MemRegion.MEMREGION_ALL)
+  {
+    return osGetMemRegionSize(MemRegion.MEMREGION_APPLICATION)
+      + osGetMemRegionSize(MemRegion.MEMREGION_SYSTEM)
+      + osGetMemRegionSize(MemRegion.MEMREGION_BASE);
+  }
+  else
+  {
+    return OS_KernelConfig.memregion_sz[region - 1];
+  }
+}
 
 /**
  * @brief Gets the number of used bytes within the specified memory region.
  * @param region Memory region to check.
  * @return The number of used bytes of memory.
  */
-uint osGetMemRegionUsed (MemRegion region);
+uint osGetMemRegionUsed (MemRegion region)
+{
+  long mem_used;
+  svcGetSystemInfo(&mem_used, 0, region);
+}
 
 /**
  * @brief Gets the number of free bytes within the specified memory region.
  * @param region Memory region to check.
  * @return The number of free bytes of memory.
  */
-uint osGetMemRegionFree (MemRegion region);
+uint osGetMemRegionFree (MemRegion region)
+{
+  return osGetMemRegionSize(region) - osGetMemRegionUsed(region);
+}
 
 /**
  * @brief Reads the latest reference timepoint published by PTM.
@@ -250,13 +281,21 @@ ulong osGetTime ();
  * @brief Starts a tick counter.
  * @param cnt The tick counter.
  */
-void osTickCounterStart (TickCounter* cnt);
+void osTickCounterStart (TickCounter* cnt)
+{
+  cnt.reference = svcGetSystemTick();
+}
 
 /**
  * @brief Updates the elapsed time in a tick counter.
  * @param cnt The tick counter.
  */
-void osTickCounterUpdate (TickCounter* cnt);
+void osTickCounterUpdate (TickCounter* cnt)
+{
+  ulong now = svcGetSystemTick();
+  cnt.elapsed = now - cnt.reference;
+  cnt.reference = now;
+}
 
 /**
  * @brief Reads the elapsed time in a tick counter.
@@ -280,19 +319,28 @@ double osTickCounterRead (const(TickCounter)* cnt);
  *
  * These values correspond with the number of wifi bars displayed by Home Menu.
  */
-ubyte osGetWifiStrength ();
+ubyte osGetWifiStrength ()
+{
+  return OS_SharedConfig.wifi_strength;
+}
 
 /**
  * @brief Gets the state of the 3D slider.
  * @return The state of the 3D slider (0.0~1.0)
  */
-float osGet3DSliderState ();
+float osGet3DSliderState ()
+{
+  return OS_SharedConfig.slider_3d;
+}
 
 /**
  * @brief Checks whether a headset is connected.
  * @return true or false.
  */
-bool osIsHeadsetConnected ();
+bool osIsHeadsetConnected ()
+{
+  return OS_SharedConfig.headset_connected != 0;
+}
 
 /**
  * @brief Configures the New 3DS speedup.

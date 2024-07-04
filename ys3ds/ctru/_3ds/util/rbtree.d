@@ -8,6 +8,10 @@ import core.stdc.stdint;
 extern (C):
 
 /// Retrieves an rbtree item.
+extern(D) auto rbtree_item(type, T0, T2)(auto ref T0 ptr, auto ref T2 member)
+{
+  return cast(type*) (cast(char*)ptr - type.offsetof[member]);
+}
 
 alias rbtree_t = rbtree; ///< rbtree type.
 alias rbtree_node_t = rbtree_node; ///< rbtree node type.

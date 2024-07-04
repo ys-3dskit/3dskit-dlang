@@ -1,16 +1,30 @@
 module ys3ds.ctru.arpa.inet;
 
-import core.sys.posix.sys.socket;
+import ys3ds.ctru.sys.socket;
+
+import std.bitmanip : swapEndian;
 
 extern (C):
 
-uint htonl (uint hostlong);
+uint htonl (uint hostlong)
+{
+  return swapEndian(hostlong);
+}
 
-ushort htons (ushort hostshort);
+ushort htons (ushort hostshort)
+{
+  return swapEndian(hostshort);
+}
 
-uint ntohl (uint netlong);
+uint ntohl (uint netlong)
+{
+  return swapEndian(netlong);
+}
 
-ushort ntohs (ushort netshort);
+ushort ntohs (ushort netshort)
+{
+  return swapEndian(netshort);
+}
 
 in_addr_t inet_addr (const(char)* cp);
 int inet_aton (const(char)* cp, in_addr* inp);
