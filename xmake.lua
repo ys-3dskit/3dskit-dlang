@@ -4,7 +4,7 @@ add_rules("mode.debug", "mode.release")
 
 
 target("ys3ds-dlang")
-	set_kind("object")
+	set_kind("static")
 	set_plat("3ds")
 
 	set_arch("arm")

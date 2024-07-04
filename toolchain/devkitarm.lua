@@ -20,6 +20,7 @@ toolchain("devkitarm")
 
 	set_toolset("dc", "ldc2")
 	set_toolset("dcld", DEVKITPRO .. "/devkitARM/bin/" .. "arm-none-eabi-g++")
+	set_toolset("dcar", DEVKITPRO .. "/devkitARM/bin/" .. "arm-none-eabi-ar")
 
 	add_defines("__3DS__", "HAVE_LIBCTRU")
 

@@ -21,5 +21,3 @@ C headers manually edited -> [DStep](https://github.com/jacob-carlborg/dstep) ->
 xmake f -p 3ds -m release -a arm --toolchain=devkitarm
 xmake
 ```
-
-This will not compile a library, but will leave object files in `build/.objs`.
