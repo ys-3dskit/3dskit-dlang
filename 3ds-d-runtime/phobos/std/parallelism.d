@@ -944,7 +944,13 @@ alias totalCPUs =
 
 uint totalCPUsImpl() @nogc nothrow @trusted
 {
-    version (Windows)
+    version (Horizon) // 3dskit
+    {
+        import ys3ds.ctru._3ds.services.ptmsysm : PTMSYSM_CheckNew3DS;
+
+        return PTMSYSM_CheckNew3DS() ? 4 : 2;
+    }
+    else version (Windows)
     {
         // BUGS:  Only works on Windows 2000 and above.
         import core.sys.windows.winbase : SYSTEM_INFO, GetSystemInfo;

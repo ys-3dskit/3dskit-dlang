@@ -120,6 +120,7 @@ version (Android) {}
 else version (iOS) {}
 else version (TVOS) {}
 else version (WatchOS) {}
+else version (Horizon) {} // 3dskit
 else version (Posix)
     version = HasUnzip;
 
@@ -262,7 +263,13 @@ final class ArchiveMember
      */
     @property @safe void fileAttributes(uint attr)
     {
-        version (Posix)
+        version (Horizon) // 3dskit
+        {
+            _externalAttributes = (attr & 0xFFFF) << 16;
+            _madeVersion &= 0x00FF;
+            _madeVersion |= 0x0300; // attributes are in UNIX format
+        }
+        else version (Posix)
         {
             _externalAttributes = (attr & 0xFFFF) << 16;
             _madeVersion &= 0x00FF;
@@ -290,7 +297,13 @@ final class ArchiveMember
     /// ditto
     @property @nogc nothrow uint fileAttributes() const
     {
-        version (Posix)
+        version (Horizon) // 3dskit
+        {
+            if ((_madeVersion & 0xFF00) == 0x0300)
+                return _externalAttributes >> 16;
+            return 0;
+        }
+        else version (Posix)
         {
             if ((_madeVersion & 0xFF00) == 0x0300)
                 return _externalAttributes >> 16;

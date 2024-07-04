@@ -175,6 +175,8 @@ enum ControlChar : char
 /// Newline sequence for this system.
 version (Windows)
     immutable newline = "\r\n";
+else version (Horizon) // 3dskit
+    immutable newline = "\n";
 else version (Posix)
     immutable newline = "\n";
 else version (LDC) // WebAssembly etc.

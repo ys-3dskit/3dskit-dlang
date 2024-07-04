@@ -130,7 +130,8 @@ private:
 /** String used to separate directory names in a path.  Under
     POSIX this is a slash, under Windows a backslash.
 */
-version (Posix)          enum string dirSeparator = "/";
+version (Horizon)        enum string dirSeparator = "/"; // 3dskit
+else version (Posix)     enum string dirSeparator = "/";
 else version (Windows)   enum string dirSeparator = "\\";
 else static assert(0, "unsupported platform");
 
@@ -368,9 +369,10 @@ enum CaseSensitive : bool
         assert(relativePath!(CaseSensitive.no)(`c:\FOO\bar`, `c:\foo\baz`) == `..\bar`);
 }
 
-version (Windows)     private enum osDefaultCaseSensitivity = false;
-else version (Darwin) private enum osDefaultCaseSensitivity = false;
-else version (Posix)  private enum osDefaultCaseSensitivity = true;
+version (Windows)      private enum osDefaultCaseSensitivity = false;
+else version (Darwin)  private enum osDefaultCaseSensitivity = false;
+else version (Horizon) private enum osDefaultCaseSensitivity = true; // 3dskit
+else version (Posix)   private enum osDefaultCaseSensitivity = true;
 else static assert(0);
 
 /**
@@ -781,7 +783,11 @@ private auto _rootName(R)(R path)
     if (path.empty)
         goto Lnull;
 
-    version (Posix)
+    version (Horizon) // 3dskit
+    {
+        if (isDirSeparator(path[0])) return path[0 .. 1];
+    }
+    else version (Posix)
     {
         if (isDirSeparator(path[0])) return path[0 .. 1];
     }
@@ -1650,7 +1656,11 @@ if ((isRandomAccessRange!R1 && hasSlicing!R1 && hasLength!R1 && isSomeChar!(Elem
         {
             if (isRooted(r2))
             {
-                version (Posix)
+                version (Horizon) // 3dskit
+                {
+                    pos = 0;
+                }
+                else version (Posix)
                 {
                     pos = 0;
                 }
@@ -2409,6 +2419,19 @@ if ((isRandomAccessRange!R && hasSlicing!R ||
                     popFront();
                 }
             }
+            else version (Horizon) // 3dskit
+            {
+                if (_path.length >= 1 && isDirSeparator(_path[0]))
+                {
+                    fs = 0;
+                    fe = 1;
+                    ps = ltrim(fe, pe);
+                }
+                else
+                {
+                    popFront();
+                }
+            }
             else version (Posix)
             {
                 if (_path.length >= 1 && isDirSeparator(_path[0]))
@@ -2576,7 +2599,8 @@ if (isRandomAccessRange!R && isSomeChar!(ElementType!R) ||
     is(StringTypeOf!R))
 {
     if (path.length >= 1 && isDirSeparator(path[0])) return true;
-    version (Posix)         return false;
+    version (Horizon)       return false; // 3dskit
+    else version (Posix)    return false;
     else version (Windows)  return isAbsolute!(BaseOf!R)(path);
 }
 
@@ -2675,6 +2699,10 @@ else version (Windows)
     {
         return isDriveRoot!(BaseOf!R)(path) || isUNC!(BaseOf!R)(path);
     }
+}
+else version (Horizon) // 3dskit
+{
+    alias isAbsolute = isRooted;
 }
 else version (Posix)
 {
@@ -3672,6 +3700,10 @@ if ((isRandomAccessRange!Range && hasLength!Range && hasSlicing!Range && isSomeC
                     break;
             }
         }
+        else version (Horizon) // 3dskit
+        {
+            if (c == 0 || c == '/') return false;
+        }
         else version (Posix)
         {
             if (c == 0 || c == '/') return false;
@@ -3860,6 +3892,10 @@ if ((isRandomAccessRange!Range && hasLength!Range && hasSlicing!Range && isSomeC
             remainder = path;
         }
     }
+    else version (Horizon) // 3dskit
+    {
+        remainder = path;
+    }
     else version (Posix)
     {
         remainder = path;
@@ -3977,7 +4013,11 @@ if (isConvertibleToString!Range)
 */
 string expandTilde(return scope const string inputPath) @safe nothrow
 {
+    // i'm not copy pasting this twice.
     version (Posix)
+        static assert(0, "don't use the 3dskit version of phobos on anything other than a 3ds.");
+
+    else version (Horizon) // 3dskit
     {
         import core.exception : onOutOfMemoryError;
         import core.stdc.errno : errno, EBADF, ENOENT, EPERM, ERANGE, ESRCH;

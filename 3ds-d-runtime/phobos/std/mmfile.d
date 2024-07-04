@@ -41,6 +41,8 @@ import std.internal.cstring;
 
 //debug = MMFILE;
 
+version (Horizon) static assert(0, "No memory mapped files on the 3DS"); // 3dskit
+
 version (Windows)
 {
     import core.sys.windows.winbase;

@@ -91,7 +91,11 @@ module std.process;
 
 import core.thread : ThreadID;
 
-version (Posix)
+version (Horizon)
+{
+    // TODO: implement process.d for 3ds
+}
+else version (Posix)
 {
     import core.sys.posix.sys.wait;
     import core.sys.posix.unistd;

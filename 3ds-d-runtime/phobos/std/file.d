@@ -106,6 +106,10 @@ version (Windows)
 {
     import core.sys.windows.winbase, core.sys.windows.winnt, std.windows.syserror;
 }
+else version (Horizon) // 3dskit
+{
+    // TODO: implement file.d for 3ds
+}
 else version (Posix)
 {
     import core.sys.posix.dirent, core.sys.posix.fcntl, core.sys.posix.sys.stat,
@@ -118,6 +122,10 @@ else
 version (Windows)
 {
     private alias FSChar = WCHAR;       // WCHAR can be aliased to wchar or wchar_t
+}
+else version (Horizon) // 3dskit
+{
+    private alias FSChar = char;
 }
 else version (Posix)
 {
@@ -149,6 +157,7 @@ version (StdUnittest) private struct TestAliasedString
     string _s;
 }
 
+// 3dskit: not porting because this is only used for unit tests
 version (Android)
 {
     package enum system_directory = "/system/etc";
@@ -242,7 +251,7 @@ private T cenforce(T)(T condition, lazy scope const(char)[] name, string file = 
     {
         throw new FileException(name, .GetLastError(), file, line);
     }
-    else version (Posix)
+    else version (Posix) // TODO: 3dskit
     {
         throw new FileException(name, .errno, file, line);
     }

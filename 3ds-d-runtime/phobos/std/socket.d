@@ -60,6 +60,10 @@ version (Windows)
         return WSAGetLastError();
     }
 }
+else version (Horizon) // 3dskit
+{
+    // TODO: implement socket.d for 3ds
+}
 else version (Posix)
 {
     version (linux)

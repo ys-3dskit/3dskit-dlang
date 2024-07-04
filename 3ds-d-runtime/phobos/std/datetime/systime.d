@@ -94,6 +94,11 @@ version (Windows)
     import core.sys.windows.winnt;
     import core.sys.windows.winsock2;
 }
+else version (Horizon) // 3dskit, use posix
+{
+    import core.sys.posix.signal : timespec;
+    import core.sys.posix.sys.types : time_t;
+}
 else version (Posix)
 {
     import core.sys.posix.signal : timespec;
@@ -227,6 +232,14 @@ public:
             }
             else
                 return result;
+        }
+        else version (Horizon) // 3dskit
+        {
+            import ys3ds.ctru._3ds.os : osGetTime;
+
+            ulong msSince1900 = osGetTime();
+            long msSince1 = msSince1900 + (1900-1)*365*24*60*60*1000;
+            return convert!("msecs", "hnsecs")(msSince1);
         }
         else version (Posix)
         {
@@ -521,6 +534,7 @@ $(P
 See_Also:
     $(RELATIVE_LINK2 .Clock.currTime, `Clock.currTime`) will return the current time as a `SysTime`.
   +/
+// TODO: 3dskit for this 9 thousand line struct
 struct SysTime
 {
     import core.stdc.time : tm;

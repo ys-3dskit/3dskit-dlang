@@ -42,6 +42,8 @@ immutable
         android,   /// Android
         otherPosix, /// Other Posix Systems
         unknown,   /// Unknown
+
+        horizon, // 3dskit
     }
 
     /// The OS that the program was compiled for.
@@ -57,6 +59,7 @@ immutable
     else version (NetBSD)  OS os = OS.netBSD;
     else version (OpenBSD) OS os = OS.openBSD;
     else version (DragonFlyBSD) OS os = OS.dragonFlyBSD;
+    else version (Horizon) OS os = OS.horizon; // 3dskit
     else version (Posix)   OS os = OS.otherPosix;
     else OS os = OS.unknown;
 
