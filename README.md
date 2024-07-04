@@ -21,3 +21,12 @@ C headers manually edited -> [DStep](https://github.com/jacob-carlborg/dstep) ->
 xmake f -p 3ds -m release -a arm --toolchain=devkitarm
 xmake
 ```
+
+## licenses
+
+The headers included in the `headers` directory are licensed according to the source software.
+(For devkitpro software (libctru, citro2d, citro3d), this is the Zlib license).
+
+The bindings in the `ys3ds` directory are released under the public domain by me.
+
+The ports of the D runtime libraries in `3ds-d-runtime` are licensed under Boost as noted there.
