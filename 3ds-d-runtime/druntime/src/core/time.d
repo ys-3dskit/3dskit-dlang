@@ -74,6 +74,10 @@ version (Windows)
 {
 import core.sys.windows.winbase /+: QueryPerformanceCounter, QueryPerformanceFrequency+/;
 }
+else version (Horizon) // 3dskit
+{
+
+}
 else version (Posix)
 {
 import core.sys.posix.time;
@@ -257,6 +261,10 @@ version (CoreDdoc) enum ClockType
         Uses $(D CLOCK_UPTIME_PRECISE).
       +/
     uptimePrecise = 10,
+}
+else version (Horizon) enum ClockType // 3dskit
+{
+  normal = 0
 }
 else version (Windows) enum ClockType
 {
@@ -2120,6 +2128,10 @@ struct MonoTimeImpl(ClockType clockType)
                              " is not supported by MonoTimeImpl on this system.");
         }
     }
+    else version (Horizon) // 3dskit
+    {
+      static assert(clockType == ClockType.normal);
+    }
     else version (Posix)
     {
         enum clockArg = _posixClock(clockType);
@@ -2171,6 +2183,11 @@ struct MonoTimeImpl(ClockType clockType)
         }
         else version (Darwin)
             return MonoTimeImpl(mach_absolute_time());
+        else version (Horizon) // 3dskit
+        {
+          import ys3ds.ctru._3ds.svc : svcGetSystemTick;
+          return MonoTimeImpl(svcGetSystemTick());
+        }
         else version (Posix)
         {
             timespec ts = void;
@@ -2500,6 +2517,8 @@ private:
 // here even when that bug is fixed.
 private immutable long[__traits(allMembers, ClockType).length] _ticksPerSecond;
 
+// TODO: [3dskit] test if _d_initMonoTime still gets called with betterc
+
 // This is called directly from the runtime initilization function (rt_init),
 // instead of using a static constructor. Other subsystems inside the runtime
 // (namely, the GC) may need time functionality, but cannot wait until the
@@ -2529,6 +2548,11 @@ extern(C) void _d_initMonoTime() @nogc nothrow
     // all.
     version (CoreDdoc)
     {}
+    else version (Horizon) // 3dskit
+    {
+      // https://github.com/Provenance-Emu/Provenance/blob/develop/PVSupport/Sources/retro/gfx/drivers/ctr_gu.h#L51
+      tps[0] = 268123480L; // 3ds cpu ticks per second
+    }
     else version (Windows)
     {
         long ticksPerSecond;

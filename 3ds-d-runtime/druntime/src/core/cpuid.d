@@ -56,6 +56,8 @@
 
 module core.cpuid;
 
+static assert(0, "core.cpuid is not usable with 3dskit - this module works for x86 and IA-64, which the 3DS is not.");
+
 version (GNU) version = GNU_OR_LDC;
 version (LDC) version = GNU_OR_LDC;
 

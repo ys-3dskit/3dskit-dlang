@@ -10,6 +10,8 @@
 
 module core.runtime;
 
+static assert(0, "core.runtime is not usable with 3dskit.");
+
 version (OSX)
     version = Darwin;
 else version (iOS)

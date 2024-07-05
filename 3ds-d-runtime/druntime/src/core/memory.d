@@ -104,6 +104,8 @@
 
 module core.memory;
 
+// 3dskit note: the gc parts of core.memory will not work, but not disabling this module for puremalloc.
+
 version (ARM)
     version = AnyARM;
 else version (AArch64)

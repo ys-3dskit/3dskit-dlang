@@ -13,6 +13,8 @@
 
 module core.simd;
 
+static assert(0, "core.simd is not usable with 3dskit - the 3DS does not have SIMD");
+
 pure:
 nothrow:
 @safe:

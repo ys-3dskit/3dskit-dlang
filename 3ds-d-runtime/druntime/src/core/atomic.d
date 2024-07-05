@@ -13,6 +13,8 @@
 
 module core.atomic;
 
+static assert(0, "core.atomic is not usable with 3dskit");
+
 ///
 @safe unittest
 {
