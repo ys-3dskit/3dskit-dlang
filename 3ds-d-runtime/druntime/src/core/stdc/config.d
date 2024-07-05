@@ -132,7 +132,7 @@ version (Windows)
     alias long  cpp_longlong;
     alias ulong cpp_ulonglong;
 }
-else version (Posix)
+else version (Horizon)
 {
   static if ( (void*).sizeof > int.sizeof )
   {
@@ -163,6 +163,7 @@ else version (Posix)
     alias ulong cpp_ulonglong;
   }
 }
+else version (Posix) static assert(0); // 3dskit
 else version (WASI)
 {
     static if ( (void*).sizeof > int.sizeof )

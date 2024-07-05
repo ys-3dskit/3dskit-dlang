@@ -26,7 +26,21 @@ extern (C):
 nothrow:
 @nogc:
 
-version (CRuntime_Glibc)
+version (Horizon) // 3dskit
+{ // dkp sys/_types
+  struct mbstate_t
+  {
+    int __count;
+    union  ___value
+    {
+      wint_t __wch;
+      char[4] __wchb;
+    }
+    ___value __value;
+  }
+}
+
+else version (CRuntime_Glibc)
 {
     ///
     struct mbstate_t

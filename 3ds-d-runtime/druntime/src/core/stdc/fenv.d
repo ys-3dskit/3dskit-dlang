@@ -48,7 +48,13 @@ version (MinGW)
 version (CRuntime_Glibc)
     version = GNUFP;
 
-version (GNUFP)
+version (Horizon) // 3dskit
+{ // dkp sys/fenv.h
+  alias fenv_t = int;
+  alias fexcept_t = int;
+}
+
+else version (GNUFP)
 {
     // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/x86/fpu/bits/fenv.h
     version (X86)
@@ -867,7 +873,13 @@ else
 
 }
 
-version (GNUFP)
+version (Horizon) //3dskit
+{
+  private extern __gshared const(fenv_t)* _fe_dfl_env;
+
+  enum FE_DFL_ENV = &_fe_dfl_env;
+}
+else version (GNUFP)
 {
     ///
     enum FE_DFL_ENV = cast(fenv_t*)(-1);

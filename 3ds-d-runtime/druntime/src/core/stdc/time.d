@@ -15,6 +15,7 @@
 
 module core.stdc.time;
 
+// todo: [3dskit] come back here when `sys` ported
 version (Posix)
     public import core.sys.posix.stdc.time;
 else version (Windows)

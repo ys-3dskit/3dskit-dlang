@@ -30,7 +30,13 @@ extern (C):
 nothrow:
 @nogc:
 
-version (CRuntime_DigitalMars)
+version (Horizon) // 3dskit
+{
+  noreturn __assert(const(char)*, int, const(char)*);
+  noreturn __assert_func(const(char)*, int, const(char)*, const(char)*);
+}
+
+else version (CRuntime_DigitalMars)
 {
     /***
      * Assert failure function in the Digital Mars C library.

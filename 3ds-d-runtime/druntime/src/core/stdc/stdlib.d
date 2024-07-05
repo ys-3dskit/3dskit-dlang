@@ -89,7 +89,8 @@ enum EXIT_FAILURE = 1;
 enum MB_CUR_MAX   = 1;
 
 ///
-version (Windows)      enum RAND_MAX = 0x7fff;
+version (Horizon) enum RAND_MAX = 0x7fffffff; // 3dskit
+else version (Windows)      enum RAND_MAX = 0x7fff;
 else version (CRuntime_Glibc)  enum RAND_MAX = 0x7fffffff;
 else version (Darwin)  enum RAND_MAX = 0x7fffffff;
 else version (FreeBSD) enum RAND_MAX = 0x7ffffffd;

@@ -62,7 +62,13 @@ enum float INFINITY       = float.infinity;
 ///
 enum float NAN            = float.nan;
 
-version (FreeBSD)
+version (Horizon) // 3dskit
+{
+  enum int FP_ILOGB0 = -int.max;
+  enum int FP_ILOGBNAN = int.max;
+}
+
+else version (FreeBSD)
 {
     ///
     enum int FP_ILOGB0        = -int.max;
@@ -284,7 +290,40 @@ version (none)
     pure int isunordered(real x, real y);
 }
 
-version (CRuntime_DigitalMars)
+version (Horizon)
+{
+  enum
+  {
+    FP_NAN = 0,
+    FP_INFINITE = 1,
+    FP_ZERO = 2,
+    FP_SUBNORMAL = 3,
+    FP_NORMAL = 4
+  }
+
+  pure int __isinff(float);
+  pure int __isinfd(double);
+  pure int __isnanf(float);
+  pure int __isnand(double);
+  pure int __fpclassifyf(float);
+  pure int __fpclassifyd(double);
+  pure int __signbitf(float);
+  pure int __signbitd(double);
+
+  pragma(mangle, "__isinff") pure int isinf(float x);
+  pragma(mangle, "__isinfd") pure int isinf(double x);
+
+  pragma(mangle, "__isnanf") pure int isnan(float x);
+  pragma(mangle, "__isnand") pure int isnan(double x);
+
+  pragma(mangle, "__fpclassifyf") pure int fpclassify(float x);
+  pragma(mangle, "__fpclassifyd") pure int fpclassify(double x);
+
+  pragma(mangle, "__signbitf") pure int signbit(float x);
+  pragma(mangle, "__signbitd") pure int signbit(double x);
+}
+
+else version (CRuntime_DigitalMars)
 {
     enum
     {

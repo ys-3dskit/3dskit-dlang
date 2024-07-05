@@ -77,7 +77,16 @@ enum ULLONG_MAX     = ulong.max;
 // File system limits
 //
 
-version (Darwin)
+version (Horizon) // 3dskit
+{ // dkp sys/syslimits.h
+  enum MAX_CANON = 255;
+  enum MAX_INPUT = 255;
+  enum NAME_MAX = 255;
+  enum PATH_MAX = 1024;
+  enum PIPE_BUF = 512;
+}
+
+else version (Darwin)
 {
     ///
     enum MAX_CANON      = 1024;

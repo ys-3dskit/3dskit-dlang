@@ -163,6 +163,7 @@ else version (Haiku)
 }
 else
 {
+  // [3dskit] - this falls back onto using the C macro directly, which is fine.
     ///
     extern(C) pragma(mangle, "getErrno") @property int errno();
     ///
@@ -172,6 +173,10 @@ else
 extern (C):
 
 
+version (Horizon) // 3dskit
+{
+  // no enums
+}
 version (CRuntime_DigitalMars)
 {
     enum EPERM              = 1;        /// Operation not permitted

@@ -24,7 +24,14 @@ alias int sig_atomic_t;
 
 private alias void function(int) sigfn_t;
 
-version (Posix)
+version (Horizon) // 3dskit
+{
+  enum SIG_DFL = cast(sigfn_t) 0;
+  enum SIG_IGN = cast(sigfn_t) 1;
+  enum SIG_ERR = cast(sigfn_t) -1;
+}
+
+else version (Posix)
 {
     ///
     enum SIG_ERR    = cast(sigfn_t) -1;
