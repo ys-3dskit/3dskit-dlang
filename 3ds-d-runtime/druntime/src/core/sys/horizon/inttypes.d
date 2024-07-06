@@ -12,9 +12,9 @@
  *    (See accompanying file LICENSE or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
-module core.sys.posix.inttypes;
+module core.sys.horizon.inttypes;
 
-import core.sys.posix.config;
+import core.sys.horizon.config;
 public import core.stdc.inttypes;
 
 version (Horizon):

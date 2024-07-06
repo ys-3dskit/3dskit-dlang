@@ -9,37 +9,12 @@
  * Source:    $(DRUNTIMESRC core/sys/posix/_signal.d)
  */
 
-module core.sys.posix.signal;
+module core.sys.horizon.signal;
 
-import core.sys.posix.config;
+import core.sys.horizon.config;
 public import core.stdc.signal;
-public import core.sys.posix.sys.types; // for pid_t
-public import core.sys.posix.time; // for timespec
-
-version (OSX)
-    version = Darwin;
-else version (iOS)
-    version = Darwin;
-else version (TVOS)
-    version = Darwin;
-else version (WatchOS)
-    version = Darwin;
-
-version (ARM)     version = ARM_Any;
-version (AArch64) version = ARM_Any;
-version (HPPA)    version = HPPA_Any;
-version (MIPS32)  version = MIPS_Any;
-version (MIPS64)  version = MIPS_Any;
-version (PPC)     version = PPC_Any;
-version (PPC64)   version = PPC_Any;
-version (RISCV32) version = RISCV_Any;
-version (RISCV64) version = RISCV_Any;
-version (S390)    version = IBMZ_Any;
-version (SPARC)   version = SPARC_Any;
-version (SPARC64) version = SPARC_Any;
-version (SystemZ) version = IBMZ_Any;
-version (X86)     version = X86_Any;
-version (X86_64)  version = X86_Any;
+public import core.sys.horizon.sys.types; // for pid_t
+public import core.sys.horizon.time; // for timespec
 
 version (Horizon):
 extern (C):
@@ -120,9 +95,9 @@ nothrow @nogc
 
 enum
 {
-  SIGEV_SIGNAL,
-  SIGEV_NONE,
-  SIGEV_THREAD
+  SIGEV_SIGNAL = 2,
+  SIGEV_NONE = 1,
+  SIGEV_THREAD = 3
 }
 
 union sigval
@@ -131,70 +106,11 @@ union sigval
     void*   sival_ptr;
 }
 
-version (Solaris)
-{
-    import core.sys.posix.unistd;
+enum SIGRTMIN = 27;
+enum SIGRTMAX = 31;
 
-    @property int SIGRTMIN() nothrow @nogc {
-        __gshared static int sig = -1;
-        if (sig == -1) {
-            sig = cast(int)sysconf(_SC_SIGRT_MIN);
-        }
-        return sig;
-    }
+// TODO: FINISH
 
-    @property int SIGRTMAX() nothrow @nogc {
-        __gshared static int sig = -1;
-        if (sig == -1) {
-            sig = cast(int)sysconf(_SC_SIGRT_MAX);
-        }
-        return sig;
-    }
-}
-else version (FreeBSD)
-{
-    // Note: it appears that FreeBSD (prior to 7) and OSX do not support realtime signals
-    // https://github.com/freebsd/freebsd/blob/e79c62ff68fc74d88cb6f479859f6fae9baa5101/sys/sys/signal.h#L117
-    enum SIGRTMIN = 65;
-    enum SIGRTMAX = 126;
-}
-else version (DragonFlyBSD)
-{
-    enum SIGRTMIN = 35;
-    enum SIGRTMAX = 126;
-}
-else version (NetBSD)
-{
-    enum SIGRTMIN = 33;
-    enum SIGRTMAX = 63;
-}
-else version (linux)
-{
-    // Note: CRuntime_Bionic switched to calling these functions
-    // since Lollipop, and Glibc, UClib and Musl all implement them
-    // the same way since it's part of LSB.
-    private extern (C) nothrow @nogc
-    {
-        int __libc_current_sigrtmin();
-        int __libc_current_sigrtmax();
-    }
-
-    @property int SIGRTMIN() nothrow @nogc {
-        __gshared static int sig = -1;
-        if (sig == -1) {
-            sig = __libc_current_sigrtmin();
-        }
-        return sig;
-    }
-
-    @property int SIGRTMAX() nothrow @nogc {
-        __gshared static int sig = -1;
-        if (sig == -1) {
-            sig = __libc_current_sigrtmax();
-        }
-        return sig;
-    }
-}
 
 version (linux)
 {

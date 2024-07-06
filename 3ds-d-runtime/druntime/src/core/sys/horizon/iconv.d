@@ -19,7 +19,7 @@
 
 *******************************************************************************/
 
-module core.sys.posix.iconv;
+module core.sys.horizon.iconv;
 
 enum
 {

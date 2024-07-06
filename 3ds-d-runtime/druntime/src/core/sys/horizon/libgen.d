@@ -12,7 +12,7 @@
  *    (See accompanying file LICENSE or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
-module core.sys.posix.libgen;
+module core.sys.horizon.libgen;
 
 @nogc nothrow:
 extern (C):

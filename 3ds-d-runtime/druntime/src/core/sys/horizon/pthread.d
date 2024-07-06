@@ -12,7 +12,12 @@
  *    (See accompanying file LICENSE or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
-module core.sys.posix.pthread;
+module core.sys.horizon.pthread;
+
+// TODO: pthreads on 3ds?
+static assert(0, "no pthread.h on 3dskit.");
+
+/+
 
 import core.sys.posix.config;
 public import core.sys.posix.sys.types;
@@ -1775,3 +1780,4 @@ else
 {
     static assert(false, "Unsupported platform");
 }
++/
