@@ -4,8 +4,8 @@ module ys3ds.ctru.sys.socket;
 
 extern (C):
 
-// missing defs from the original header
-alias in_addr_t = uint; // uint32_t
+// defined in sys/types.h
+alias in_addr_t = uint;
 struct in_addr {
   in_addr_t s_addr;
 }

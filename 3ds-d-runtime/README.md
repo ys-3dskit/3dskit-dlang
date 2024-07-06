@@ -29,6 +29,7 @@ note that the toolchain is running in betterC mode which means
 - no static module constructors and destructors (`static this()`, `pragma(crt_constructor)` works fine)
 
 druntime:
+- druntime now depends on the libctru bindings.
 - disabling of some modules that won't work on the 3DS
   * `core.atomic` - atomic ops aren't a thing on its cpu
   * `core.cpuid` - this module only worked for x86 and IA-64
