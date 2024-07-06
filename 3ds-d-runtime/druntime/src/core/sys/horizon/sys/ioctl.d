@@ -14,9 +14,6 @@
  */
 module core.sys.horizon.sys.ioctl;
 
-import core.stdc.config;
-//public import core.sys.horizon.sys.ttycom;
-
 version (Horizon):
 
 extern (C) nothrow @nogc:

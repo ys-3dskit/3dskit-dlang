@@ -177,7 +177,7 @@ version (Horizon) // 3dskit
 {
   // no enums
 }
-version (CRuntime_DigitalMars)
+else version (CRuntime_DigitalMars)
 {
     enum EPERM              = 1;        /// Operation not permitted
     enum ENOENT             = 2;        /// No such file or directory

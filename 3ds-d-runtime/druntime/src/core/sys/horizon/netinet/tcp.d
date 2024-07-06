@@ -14,8 +14,6 @@
  */
 module core.sys.horizon.netinet.tcp;
 
-import core.sys.horizon.config;
-
 version (Horizon):
 extern (C):
 

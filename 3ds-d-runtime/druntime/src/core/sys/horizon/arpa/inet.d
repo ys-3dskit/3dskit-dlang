@@ -27,4 +27,3 @@ INET6_ADDRSTRLEN // from core.sys.posix.netinet.in_
 */
 
 enum INET_ADDRSTRLEN  = 16;
-enum INET6_ADDRSTRLEN = 46;

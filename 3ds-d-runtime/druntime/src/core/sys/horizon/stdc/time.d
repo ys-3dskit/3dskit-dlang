@@ -40,7 +40,7 @@ struct tm
     char*   tm_zone;    /// timezone abbreviation
 }
 
-public import core.sys.posix.sys.types : time_t, clock_t;
+public import core.sys.horizon.sys.types : time_t, clock_t;
 
 // referenced to dkp machine/time.h
 enum clock_t CLOCKS_PER_SEC = 100;

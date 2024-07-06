@@ -14,12 +14,6 @@
  */
 module core.sys.horizon.sys.socket;
 
-import core.sys.horizon.config;
-// ctru sys.socket defines ssize_t
-//public import core.sys.horizon.sys.types; // for ssize_t
-// not needed, no uio
-//public import core.sys.horizon.sys.uio;   // for iovec
-
 version (Horizon):
 extern (C) nothrow @nogc:
 
