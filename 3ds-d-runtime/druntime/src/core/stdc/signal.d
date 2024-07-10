@@ -26,9 +26,25 @@ private alias void function(int) sigfn_t;
 
 version (Horizon) // 3dskit
 {
+  // dkp stdc signal
   enum SIG_DFL = cast(sigfn_t) 0;
   enum SIG_IGN = cast(sigfn_t) 1;
   enum SIG_ERR = cast(sigfn_t) -1;
+
+  // dkp sys signal but here for reasons known only to the D people i guess
+
+  enum
+  {
+    // comment left in dkp sys signal:
+    // "these all need to be defined for ANSI C but I don't think they're meaningful."
+    // to be fair, they probably aren't meaningful for devkitARM targets -- sink
+    SIGABRT = 1,
+    SIGFPE = 1,
+    SIGILL = 1,
+    SIGINT = 1,
+    SIGSEGV = 1,
+    SIGTERM = 1
+  }
 }
 
 else version (Posix)
