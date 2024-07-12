@@ -12,21 +12,12 @@
  *    (See accompanying file LICENSE or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
-module core.sys.posix.unistd;
+module core.sys.horizon.unistd;
 
-import core.sys.posix.config;
+import core.sys.horizon.config;
 import core.stdc.stddef;
-public import core.sys.posix.inttypes;  // for intptr_t
-public import core.sys.posix.sys.types; // for ssize_t, uid_t, gid_t, off_t, pid_t, useconds_t
-
-version (OSX)
-    version = Darwin;
-else version (iOS)
-    version = Darwin;
-else version (TVOS)
-    version = Darwin;
-else version (WatchOS)
-    version = Darwin;
+public import core.sys.horizon.inttypes;  // for intptr_t
+public import core.sys.horizon.sys.types; // for ssize_t, uid_t, gid_t, off_t, pid_t, useconds_t
 
 version (Horizon):
 extern (C):
@@ -99,6 +90,8 @@ char*   ttyname(int) @trusted;
 int     ttyname_r(int, char*, size_t);
 int     unlink(const scope char*);
 ssize_t write(int, const scope void*, size_t);
+
+// TODO
 
 version (CRuntime_Glibc)
 {

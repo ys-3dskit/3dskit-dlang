@@ -13,21 +13,12 @@
  *    (See accompanying file LICENSE or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
-module core.sys.posix.time;
+module core.sys.horizon.time;
 
-import core.sys.posix.config;
+import core.sys.horizon.config;
 public import core.stdc.time;
-public import core.sys.posix.sys.types;
-public import core.sys.posix.signal; // for sigevent
-
-version (OSX)
-    version = Darwin;
-else version (iOS)
-    version = Darwin;
-else version (TVOS)
-    version = Darwin;
-else version (WatchOS)
-    version = Darwin;
+public import core.sys.horizon.sys.types;
+public import core.sys.horizon.signal; // for sigevent
 
 version (Horizon):
 extern (C):
@@ -49,51 +40,7 @@ size_t strftime(char*, size_t, const scope char*, const scope tm*);
 time_t time(time_t*);
 */
 
-version (CRuntime_Glibc)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (Darwin)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (FreeBSD)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (NetBSD)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (OpenBSD)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (DragonFlyBSD)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (Solaris)
-{
-    time_t timegm(tm*); // non-standard
-}
-else version (CRuntime_Bionic)
-{
-    // Not supported.
-}
-else version (CRuntime_Musl)
-{
-    pragma(mangle, muslRedirTime64Mangle!("timegm", "__timegm_time64"))
-    time_t timegm(tm*);
-}
-else version (CRuntime_UClibc)
-{
-    time_t timegm(tm*);
-}
-else
-{
-    static assert(false, "Unsupported platform");
-}
+// no timegm()
 
 //
 // C Extension (CX)
@@ -125,40 +72,7 @@ int clock_nanosleep(clockid_t, int, const scope timespec*, timespec*);
 CLOCK_MONOTONIC
 */
 
-version (linux)
-{
-    enum CLOCK_MONOTONIC          = 1;
-}
-else version (FreeBSD)
-{   // time.h
-    enum CLOCK_MONOTONIC         = 4;
-}
-else version (NetBSD)
-{
-    // time.h
-    enum CLOCK_MONOTONIC         = 3;
-}
-else version (OpenBSD)
-{
-    // time.h
-    enum CLOCK_MONOTONIC         = 3;
-}
-else version (DragonFlyBSD)
-{   // time.h
-    enum CLOCK_MONOTONIC         = 4;
-}
-else version (Darwin)
-{
-    // No CLOCK_MONOTONIC defined
-}
-else version (Solaris)
-{
-    enum CLOCK_MONOTONIC = 4;
-}
-else
-{
-    static assert(0);
-}
+enum CLOCK_MONOTONIC = 4;
 
 //
 // Timer (TMR)
@@ -196,343 +110,38 @@ int timer_getoverrun(timer_t);
 int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
 */
 
-version (linux)
+struct timespec
 {
-    struct timespec
-    {
-        time_t  tv_sec;
-        c_long  tv_nsec;
-    }
-}
-else version (Darwin)
-{
-    struct timespec
-    {
-        time_t  tv_sec;
-        c_long  tv_nsec;
-    }
-}
-else version (FreeBSD)
-{
-    struct timespec
-    {
-        time_t  tv_sec;
-        c_long  tv_nsec;
-    }
-}
-else version (NetBSD)
-{
-    struct timespec
-    {
-        time_t  tv_sec;
-        c_long  tv_nsec;
-    }
-}
-else version (OpenBSD)
-{
-    struct timespec
-    {
-        time_t  tv_sec;
-        c_long  tv_nsec;
-    }
-}
-else version (DragonFlyBSD)
-{
-    struct timespec
-    {
-        time_t  tv_sec;
-        c_long  tv_nsec;
-    }
-}
-else version (Solaris)
-{
-    struct timespec
-    {
-        time_t tv_sec;
-        c_long tv_nsec;
-    }
-
-    alias timespec timestruc_t;
-}
-else
-{
-    static assert(false, "Unsupported platform");
+  time_t tv_sec;
+  c_long tv_nsec;
 }
 
-version (CRuntime_Glibc)
+enum CLOCK_PROCESS_CPUTIME_ID = 2;
+enum CLOCK_THREAD_CPUTIME_ID = 3;
+
+struct itimerspec
 {
-    enum CLOCK_PROCESS_CPUTIME_ID = 2;
-    enum CLOCK_THREAD_CPUTIME_ID  = 3;
-
-    // NOTE: See above for why this is commented out.
-    //
-    //struct timespec
-    //{
-    //    time_t  tv_sec;
-    //    c_long  tv_nsec;
-    //}
-
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum CLOCK_REALTIME         = 0;
-    enum TIMER_ABSTIME          = 0x01;
-
-    alias int clockid_t;
-    alias void* timer_t;
-
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_getoverrun(timer_t);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
+  timespec it_interval;
+  timespec it_value;
 }
-else version (Darwin)
-{
-    int nanosleep(const scope timespec*, timespec*);
-}
-else version (FreeBSD)
-{
-    //enum CLOCK_PROCESS_CPUTIME_ID = ??;
-    enum CLOCK_THREAD_CPUTIME_ID  = 15;
 
-    // NOTE: See above for why this is commented out.
-    //
-    //struct timespec
-    //{
-    //    time_t  tv_sec;
-    //    c_long  tv_nsec;
-    //}
+enum CLOCK_REALTIME = 1;
+enum TIMER_ABSTIME = 4;
 
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
+alias clockid_t = c_ulong;
+alias timer_t = c_ulong;
 
-    enum CLOCK_REALTIME      = 0;
-    enum TIMER_ABSTIME       = 0x01;
+int clock_getres(clockid_t, timespec*);
+int clock_gettime(clockid_t, timespec*);
+int clock_settime(clockid_t, const scope timespec*);
 
-    alias int clockid_t; // <sys/_types.h>
-    alias int timer_t;
+int nanosleep(const scope timespec*, timespec*);
 
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_getoverrun(timer_t);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-}
-else version (DragonFlyBSD)
-{
-    enum CLOCK_THREAD_CPUTIME_ID  = 15;
-
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum CLOCK_REALTIME      = 0;
-    enum TIMER_ABSTIME       = 0x01;
-
-    alias int clockid_t; // <sys/_types.h>
-    alias int timer_t;
-
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_getoverrun(timer_t);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-}
-else version (NetBSD)
-{
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum CLOCK_REALTIME      = 0;
-    enum TIMER_ABSTIME       = 0x01;
-
-    alias int clockid_t; // <sys/_types.h>
-    alias int timer_t;
-
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_getoverrun(timer_t);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-}
-else version (OpenBSD)
-{
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum CLOCK_REALTIME      = 0;
-    enum TIMER_ABSTIME       = 0x1;
-
-    alias int clockid_t; // <sys/_types.h>
-    alias int timer_t;
-
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-}
-else version (Solaris)
-{
-    enum CLOCK_PROCESS_CPUTIME_ID = 5; // <sys/time_impl.h>
-    enum CLOCK_THREAD_CPUTIME_ID  = 2; // <sys/time_impl.h>
-
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum CLOCK_REALTIME = 3; // <sys/time_impl.h>
-    enum TIMER_ABSOLUTE = 0x1;
-
-    alias int clockid_t;
-    alias int timer_t;
-
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int clock_nanosleep(clockid_t, int, const scope timespec*, timespec*);
-
-    int nanosleep(const scope timespec*, timespec*);
-
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_getoverrun(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-}
-else version (CRuntime_Bionic)
-{
-    enum CLOCK_PROCESS_CPUTIME_ID = 2;
-    enum CLOCK_THREAD_CPUTIME_ID  = 3;
-
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum CLOCK_REALTIME    = 0;
-    enum CLOCK_REALTIME_HR = 4;
-    enum TIMER_ABSTIME     = 0x01;
-
-    alias int   clockid_t;
-    alias void* timer_t; // Updated since Lollipop
-
-    int clock_getres(int, timespec*);
-    int clock_gettime(int, timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-    int timer_create(int, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_getoverrun(timer_t);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-}
-else version (CRuntime_Musl)
-{
-    alias int clockid_t;
-    alias void* timer_t;
-
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum TIMER_ABSTIME = 1;
-
-    enum CLOCK_REALTIME = 0;
-    enum CLOCK_PROCESS_CPUTIME_ID = 2;
-    enum CLOCK_THREAD_CPUTIME_ID = 3;
-    enum CLOCK_REALTIME_COARSE = 5;
-    enum CLOCK_BOOTTIME = 7;
-    enum CLOCK_REALTIME_ALARM = 8;
-    enum CLOCK_BOOTTIME_ALARM = 9;
-    enum CLOCK_SGI_CYCLE = 10;
-    enum CLOCK_TAI = 11;
-
-    int nanosleep(const scope timespec*, timespec*);
-
-    pragma(mangle, muslRedirTime64Mangle!("clock_getres", "__clock_getres_time64"))
-    int clock_getres(clockid_t, timespec*);
-    pragma(mangle, muslRedirTime64Mangle!("clock_gettime", "__clock_gettime64"))
-    int clock_gettime(clockid_t, timespec*);
-    pragma(mangle, muslRedirTime64Mangle!("clock_settime", "__clock_settime64"))
-    int clock_settime(clockid_t, const scope timespec*);
-    pragma(mangle, muslRedirTime64Mangle!("clock_nanosleep", "__clock_nanosleep_time64"))
-    int clock_nanosleep(clockid_t, int, const scope timespec*, timespec*);
-    int clock_getcpuclockid(pid_t, clockid_t *);
-
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    pragma(mangle, muslRedirTime64Mangle!("timer_gettime", "__timer_gettime64"))
-    int timer_gettime(timer_t, itimerspec*);
-    pragma(mangle, muslRedirTime64Mangle!("timer_settime", "__timer_settime64"))
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-    int timer_getoverrun(timer_t);
-}
-else version (CRuntime_UClibc)
-{
-    enum CLOCK_REALTIME             = 0;
-    enum CLOCK_PROCESS_CPUTIME_ID   = 2;
-    enum CLOCK_THREAD_CPUTIME_ID    = 3;
-
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-
-    enum TIMER_ABSTIME          = 0x01;
-
-    alias int clockid_t;
-    alias void* timer_t;
-
-    int clock_getres(clockid_t, timespec*);
-    int clock_gettime(clockid_t, timespec*);
-    int clock_settime(clockid_t, const scope timespec*);
-    int nanosleep(const scope timespec*, timespec*);
-    int timer_create(clockid_t, sigevent*, timer_t*);
-    int timer_delete(timer_t);
-    int timer_gettime(timer_t, itimerspec*);
-    int timer_getoverrun(timer_t);
-    int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
-}
-else
-{
-    static assert(false, "Unsupported platform");
-}
+int timer_create(clockid_t, sigevent*, timer_t*);
+int timer_delete(timer_t);
+int timer_gettime(timer_t, itimerspec*);
+int timer_getoverrun(timer_t);
+int timer_settime(timer_t, int, const scope itimerspec*, itimerspec*);
 
 //
 // Thread-Safe Functions (TSF)
@@ -544,83 +153,10 @@ tm*   gmtime_r(const scope time_t*, tm*);
 tm*   localtime_r(const scope time_t*, tm*);
 */
 
-version (CRuntime_Glibc)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (Darwin)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (FreeBSD)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (NetBSD)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (OpenBSD)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (DragonFlyBSD)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (Solaris)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm* gmtime_r(const scope time_t*, tm*);
-    tm* localtime_r(const scope time_t*, tm*);
-}
-else version (CRuntime_Bionic)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm* gmtime_r(const scope time_t*, tm*);
-    tm* localtime_r(const scope time_t*, tm*);
-}
-else version (CRuntime_Musl)
-{
-    char* asctime_r(const scope tm*, char*);
-    pragma(mangle, muslRedirTime64Mangle!("ctime_r", "__ctime64_r"))
-    char* ctime_r(const scope time_t*, char*);
-    pragma(mangle, muslRedirTime64Mangle!("gmtime_r", "__gmtime64_r"))
-    tm*   gmtime_r(const scope time_t*, tm*);
-    pragma(mangle, muslRedirTime64Mangle!("localtime_r", "__localtime64_r"))
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else version (CRuntime_UClibc)
-{
-    char* asctime_r(const scope tm*, char*);
-    char* ctime_r(const scope time_t*, char*);
-    tm*   gmtime_r(const scope time_t*, tm*);
-    tm*   localtime_r(const scope time_t*, tm*);
-}
-else
-{
-    static assert(false, "Unsupported platform");
-}
+char* asctime_r(const scope tm*, char*);
+char* ctime_r(const scope time_t*, char*);
+tm* gmtime_r(const scope time_t*, tm*);
+tm* localtime_r(const scope time_t*, tm*);
 
 //
 // XOpen (XSI)
@@ -635,75 +171,8 @@ tm* getdate(const scope char*);
 char* strptime(const scope char*, const scope char*, tm*);
 */
 
-version (CRuntime_Glibc)
-{
-    extern __gshared int    daylight;
-    extern __gshared c_long timezone;
+pragma(mangle, "_timezone") extern __gshared c_ulong timezone; // TODO: mangle?
+pragma(mangle, "_daylight") extern __gshared int daylight; // TODO: mangle?
 
-    tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (Darwin)
-{
-    extern __gshared c_long timezone;
-    extern __gshared int    daylight;
-
-    tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (FreeBSD)
-{
-    //tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (NetBSD)
-{
-    tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (OpenBSD)
-{
-    //tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (DragonFlyBSD)
-{
-    //tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (Solaris)
-{
-    extern __gshared c_long timezone, altzone;
-    extern __gshared int daylight;
-
-    tm* getdate(const scope char*);
-    char* __strptime_dontzero(const scope char*, const scope char*, tm*);
-    alias __strptime_dontzero strptime;
-}
-else version (CRuntime_Bionic)
-{
-    extern __gshared int    daylight;
-    extern __gshared c_long timezone;
-
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (CRuntime_Musl)
-{
-    extern __gshared int daylight;
-    extern __gshared c_long timezone;
-
-    tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else version (CRuntime_UClibc)
-{
-    extern __gshared int    daylight;
-    extern __gshared c_long timezone;
-
-    tm*   getdate(const scope char*);
-    char* strptime(const scope char*, const scope char*, tm*);
-}
-else
-{
-    static assert(false, "Unsupported platform");
-}
+tm* getdate(const scope char*);
+char* strptime(const scope char*, const scope char*, tm*);

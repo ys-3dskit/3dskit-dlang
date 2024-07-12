@@ -150,8 +150,6 @@ void   srandom(uint);
 int    unlockpt(int);
 */
 
-// TODO: i am goddamn lazy and did not check that all of these are actually correct, do that, i'm eepy
-
 c_long a64l(const scope char*);
 double drand48();
 char* ecvt(double, int, int*, int*); // LEGACY
@@ -160,7 +158,7 @@ char* fcvt(double, int, int*, int*); // LEGACY
 char* gcvt(double, int, char*); // LEGACY
 // per spec: int getsubopt(char** char* const*, char**);
 int getsubopt(char**, const scope char**, char**);
-int grantpt(int);
+//int grantpt(int);
 char* initstate(uint, char*, size_t);
 c_long jrand48(ref ushort[3]);
 char* l64a(c_long);
@@ -171,8 +169,8 @@ int mkstemp(char*);
 int mkdtemp(char*); // Defined in IEEE 1003.1, 2008 Edition
 c_long mrand48();
 c_long nrand48(ref ushort[3]);
-int posix_openpt(int);
-char* ptsname(int);
+//int posix_openpt(int);
+//char* ptsname(int);
 int putenv(char*);
 c_long random();
 char* realpath(const scope char*, char*);
@@ -181,4 +179,4 @@ void setkey(const scope char*);
 char* setstate(const scope char*);
 void srand48(c_long);
 void srandom(uint);
-int unlockpt(int);
+//int unlockpt(int);

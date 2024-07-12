@@ -12,7 +12,7 @@
  * Standards: The Open Group Base Specifications Issue 7, 2018 edition
  * Source:    $(DRUNTIMESRC core/sys/posix/_string.d)
  */
-module core.sys.posix.string;
+module core.sys.horizon.string;
 
 version (Horizon):
 extern(C):
@@ -20,7 +20,7 @@ nothrow:
 @nogc:
 
 /// Exposes `locale_t` as defined in `core.sys.posix.locale` (`<locale.h>`)
-public import core.sys.posix.locale : locale_t;
+public import core.sys.horizon.locale : locale_t;
 
 /**
  * Exposes the C99 functions

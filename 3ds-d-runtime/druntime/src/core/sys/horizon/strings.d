@@ -11,7 +11,7 @@
  * Standards: The Open Group Base Specifications Issue 7, 2018 edition
  * Source:    $(DRUNTIMESRC core/sys/posix/_strings.d)
  */
-module core.sys.posix.strings;
+module core.sys.horizon.strings;
 
 version (Horizon):
 extern(C):
@@ -19,7 +19,7 @@ nothrow:
 @nogc:
 
 ///
-public import core.sys.posix.locale : locale_t;
+public import core.sys.horizon.locale : locale_t;
 
 /// Find first bit set in a word
 int ffs(int i) @safe pure;
