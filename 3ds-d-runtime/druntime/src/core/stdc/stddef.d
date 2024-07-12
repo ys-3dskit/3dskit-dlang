@@ -29,6 +29,10 @@ version (Windows)
     ///
     alias wchar wchar_t;
 }
+else version (Horizon)
+{
+  alias wchar_t = dchar;
+}
 else version (Posix)
 {
     ///

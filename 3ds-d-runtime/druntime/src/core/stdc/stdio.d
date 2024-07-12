@@ -46,14 +46,32 @@ private
   {
     import core.sys.posix.sys.types;
   }
-  // todo: [3dskit] come back here once `sys` ported
+  version (Horizon)
+  {
+    import core.sys.horizon.sys.types;
+  }
 }
 
 extern (C):
 nothrow:
 @nogc:
 
-version (CRuntime_DigitalMars)
+version (Horizon)
+{
+  enum
+  {
+    BUFSIZ = 1024,
+    EOF = -1,
+    FOPEN_MAX = 20,
+    FILENAME_MAX = 1024,
+    TMP_MAX = 26,
+    // SYS_OPEN
+  }
+
+  enum L_tmpnam = FILENAME_MAX;
+}
+
+else version (CRuntime_DigitalMars)
 {
     enum
     {
@@ -404,7 +422,56 @@ enum
     SEEK_END
 }
 
-version (CRuntime_DigitalMars)
+version (Horizon)
+{
+  alias fpos_t = off_t;
+
+  // sys reent.h
+  struct __sFILE
+  {
+    char* _p;
+    int _r;
+    int _w;
+    short _flags;
+    short _file;
+    __sbuf _bf;
+    int _lbfsize;
+
+    // ifdef _REENT_SMALL
+    // _reent* _data;
+
+    void* _cookie;
+    ssize_t function(_reent*, void*, char*, int) _read;
+    ssize_t function(_reent*, void*, scope const char*, int) _write;
+    fpos_t function(_reent*, void*, fpos_t, int) _seek;
+    int function(_reent*, void*) _close;
+
+    __sbuf _ub;
+    char* _up;
+    int _ur;
+
+    char[3] _ubuf;
+    char[1] _nbuf;
+
+    __sbuf _lb;
+
+    int _blksize;
+    off_t _offset;
+
+    // ifndef _REENT_SMALL
+    _reent* _data;
+
+    // ifndef __SINGLE_THREAD__
+    flock_t _lock;
+
+    mbstate_t _mbstate;
+    int _flags2;
+  }
+
+  alias FILE = shared(__sFILE); // `shared` following other oses
+}
+
+else version (CRuntime_DigitalMars)
 {
     ///
     alias c_long fpos_t;
@@ -927,7 +994,43 @@ enum
     _F_TERM = 0x0200, // non-standard
 }
 
-version (CRuntime_DigitalMars)
+version (Horizon)
+{
+  enum
+  {
+    _IOFBF = 0,
+    _IOLBF = 1,
+    _IONBF = 2,
+  }
+
+  // no _fcloseallp
+
+  // dkp sys reent
+  private
+  {
+    struct _reent_kinda_mostly
+    {
+      int _errno;
+      FILE* _stdin,
+        _stdout,
+        _stderr;
+
+      // this struct is absolutely huge, i am not binding all of it. we only access streams from it so this is fine:tm:
+    }
+
+    _reent_kinda_mostly* __getreent();
+  }
+
+  // dkp stdio, sys reent
+  pragma(inline, true) @property
+  {
+    shared(FILE*) stdin()  { return __getreent.stdin;  }
+    shared(FILE*) stdout() { return __getreent.stdout; }
+    shared(FILE*) stderr() { return __getreent.stderr; }
+  }
+}
+
+else version (CRuntime_DigitalMars)
 {
     enum
     {
@@ -1540,7 +1643,30 @@ size_t fwrite(scope const void* ptr, size_t size, size_t nmemb, FILE* stream);
     c_long ftell(FILE* stream);
 }
 
-version (CRuntime_DigitalMars)
+version (Horizon)
+{
+  // no unsafe pointer manipulation
+  @trusted
+  {
+    void rewind(FILE*);
+    pure void clearerr(FILE*);
+    pure int feof(FILE*);
+    pure int ferror(FILE*);
+    int fileno(FILE*);
+  }
+
+  pragma(printf)
+  int snprintf(scope char* s, size_t n, scope const char* format, scope const...);
+  ///
+  pragma(printf)
+  int vsnprintf(scope char* s, size_t n, scope const char* format, va_list arg);
+
+  int fputc_unlocked(int c, FILE* stream);
+  ///
+  int fgetc_unlocked(FILE* stream);
+}
+
+else version (CRuntime_DigitalMars)
 {
   // No unsafe pointer manipulation.
   extern (D) @trusted
