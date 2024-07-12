@@ -12,19 +12,10 @@
  *    (See accompanying file LICENSE or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
-module core.sys.posix.utime;
+module core.sys.horizon.utime;
 
-import core.sys.posix.config;
-public import core.sys.posix.sys.types; // for time_t
-
-version (OSX)
-    version = Darwin;
-else version (iOS)
-    version = Darwin;
-else version (TVOS)
-    version = Darwin;
-else version (WatchOS)
-    version = Darwin;
+import core.sys.horizon.config;
+public import core.sys.horizon.sys.types; // for time_t
 
 version (Horizon):
 extern (C):
@@ -44,104 +35,10 @@ struct utimbuf
 int utime(const scope char*, const scope utimbuf*);
 */
 
-version (CRuntime_Glibc)
+struct utimbuf
 {
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
+  time_t actime;
+  time_t modtime;
 }
-else version (CRuntime_Musl)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
 
-    pragma(mangle, muslRedirTime64Mangle!("utime", "__utime64"))
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (Darwin)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (FreeBSD)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (NetBSD)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (OpenBSD)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (DragonFlyBSD)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (Solaris)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (CRuntime_Bionic)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
-else version (CRuntime_UClibc)
-{
-    struct utimbuf
-    {
-        time_t  actime;
-        time_t  modtime;
-    }
-
-    int utime(const scope char*, const scope utimbuf*);
-}
+int utime(const scope char*, const scope utimbuf*);

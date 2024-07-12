@@ -134,7 +134,6 @@ FILE*   popen(const scope char*, const scope char*);
 char* ctermid(char*);
 int fseeko(FILE*, off_t, int);
 off_t ftello(FILE*);
-// TODO: check this links (why these are called this idk)
 pragma(mangle, "__getdelim") ssize_t getdelim(char**, size_t*, int, FILE*);
 pragma(mangle, "__getline")  ssize_t getline(char**, size_t*, FILE*);
 char* gets(char*);

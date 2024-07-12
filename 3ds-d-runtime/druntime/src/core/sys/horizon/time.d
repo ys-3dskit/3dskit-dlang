@@ -171,8 +171,8 @@ tm* getdate(const scope char*);
 char* strptime(const scope char*, const scope char*, tm*);
 */
 
-pragma(mangle, "_timezone") extern __gshared c_ulong timezone; // TODO: mangle?
-pragma(mangle, "_daylight") extern __gshared int daylight; // TODO: mangle?
+pragma(mangle, "_timezone") extern __gshared c_ulong timezone;
+pragma(mangle, "_daylight") extern __gshared int daylight;
 
 tm* getdate(const scope char*);
 char* strptime(const scope char*, const scope char*, tm*);
