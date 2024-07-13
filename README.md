@@ -30,3 +30,9 @@ The headers included in the `headers` directory are licensed according to the so
 The bindings in the `ys3ds` directory are released under the public domain by me.
 
 The ports of the D runtime libraries in `3ds-d-runtime` are licensed under Boost as noted there.
+
+## other things
+
+The `ys3ds.utility` module contains various functions potentially useful to a Dlang 3DS homebrew developer.
+
+I suggest using the `automem` library for RAII smart pointers due to the restrictions of betterC mode.

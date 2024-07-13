@@ -16,6 +16,7 @@ target("ys3ds-dlang")
 
 	add_files("ys3ds/**.d")
   add_files("3ds-d-runtime/druntime/src/**.d")
+  add_files("3ds-d-runtime/druntime/src/**.c")
 
   -- remove default runtime
   add_dcflags("--conf=", {force=true})

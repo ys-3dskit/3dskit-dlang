@@ -1164,11 +1164,10 @@ else
 {
     extern(C) private @nogc nothrow pure @system
     {
-      // [3dskit]: these are not called getErrno, setErrno.
-        pragma(mangle, __traits(identifier, core.stdc.errno.errno))
+        pragma(mangle, "getErrno"/* __traits(identifier, core.stdc.errno.errno) */)
         @property int fakePureErrno();
 
-        pragma(mangle, __traits(identifier, core.stdc.errno.errno))
+        pragma(mangle, "setErrno"/* __traits(identifier, core.stdc.errno.errno) */)
         @property int fakePureErrno(int);
     }
 }
