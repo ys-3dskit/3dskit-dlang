@@ -424,7 +424,18 @@ enum
 
 version (Horizon)
 {
+  import core.sys.horizon.sys.lock : flock_t;
+  import core.stdc.wchar_ : mbstate_t;
+
   alias fpos_t = off_t;
+
+  struct __sbuf
+  {
+    char* _base;
+    int _size;
+  }
+
+  struct _reent;
 
   // sys reent.h
   struct __sFILE
