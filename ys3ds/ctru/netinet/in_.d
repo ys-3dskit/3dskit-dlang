@@ -2,7 +2,7 @@ module ys3ds.ctru.netinet.in_;
 
 import ys3ds.ctru.sys.socket;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum INADDR_LOOPBACK = 0x7f000001;
 enum INADDR_ANY = 0x00000000;

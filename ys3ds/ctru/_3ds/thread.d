@@ -10,7 +10,7 @@ import ys3ds.ctru._3ds.errf;
 import ys3ds.ctru._3ds.svc;
 import ys3ds.ctru._3ds.synchronization;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Makes the exception handler reuse the stack of the faulting thread as-is
 enum RUN_HANDLER_ON_FAULTING_STACK = cast(void*) 1;
@@ -114,7 +114,7 @@ void threadExit (int rc);
  *
  * The current thread need not be a libctru thread.
  */
-void threadOnException (
+extern(D) void threadOnException (
     ExceptionHandler handler,
     void* stack_top,
     ERRF_ExceptionData* exception_data)

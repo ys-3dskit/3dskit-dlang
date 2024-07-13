@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Initializes pm:dbg.
 Result pmDbgInit ();

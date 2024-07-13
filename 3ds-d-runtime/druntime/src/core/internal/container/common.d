@@ -33,7 +33,7 @@ void* xmalloc(size_t sz) nothrow @nogc
 
 void destroy(T)(ref T t) if (is(T == struct) && dtorIsNothrow!T)
 {
-    scope (failure) assert(0); // nothrow hack
+    //scope (failure) assert(0); // nothrow hack
     object.destroy(t);
 }
 

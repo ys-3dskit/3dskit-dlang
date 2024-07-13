@@ -3,7 +3,7 @@ module ys3ds.ctru.netdb;
 import ys3ds.ctru.netinet.in_;
 import ys3ds.ctru.sys.socket;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum HOST_NOT_FOUND = 1;
 enum NO_DATA = 2;

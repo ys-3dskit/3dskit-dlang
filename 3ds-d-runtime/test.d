@@ -1,7 +1,7 @@
-module test_builds.druntime.test_druntime;
+module _3dsdruntime.test;
 
 // build with
-// ldc2 -c -mtriple=arm-freestanding-eabihf -float-abi=hard -mcpu=mpcore -mattr=armv6k -betterC -fvisibility=hidden -d-version=Horizon,N3DS -I/opt/devkitpro/libctru/include -I.. -Idruntime/src -oftest_druntime.o test_druntime.d
+// ldc2 -c -mtriple=arm-freestanding-eabihf -float-abi=hard -mcpu=mpcore -mattr=armv6k -betterC -fvisibility=hidden -d-version=Horizon,N3DS -I/opt/devkitpro/libctru/include -I.. -Idruntime/src -oftest.o test.d
 
 // then link with
 // /opt/devkitpro/devkitARM/bin/arm-none-eabi-g++ -o test_druntime test_druntime.o

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 ///@name Data types
 ///@{
@@ -182,7 +182,7 @@ Result fontEnsureMapped ();
 void fontFixPointers (CFNT_s* font);
 
 /// Gets the currently loaded system font
-CFNT_s* fontGetSystemFont ()
+extern(D) CFNT_s* fontGetSystemFont ()
 {
   // TODO: test extern
   extern __gshared CFNT_s* g_sharedFont;
@@ -194,7 +194,7 @@ CFNT_s* fontGetSystemFont ()
  * @brief Retrieves the font information structure of a font.
  * @param font Pointer to font structure. If NULL, the shared system font is used.
  */
-FINF_s* fontGetInfo (CFNT_s* font)
+extern(D) FINF_s* fontGetInfo (CFNT_s* font)
 {
   if (!font) font = fontGetSystemFont();
 
@@ -205,7 +205,7 @@ FINF_s* fontGetInfo (CFNT_s* font)
  * @brief Retrieves the texture sheet information of a font.
  * @param font Pointer to font structure. If NULL, the shared system font is used.
  */
-TGLP_s* fontGetGlyphInfo (CFNT_s* font)
+extern(D) TGLP_s* fontGetGlyphInfo (CFNT_s* font)
 {
   if (!font) font = fontGetSystemFont();
 
@@ -217,7 +217,7 @@ TGLP_s* fontGetGlyphInfo (CFNT_s* font)
  * @param font Pointer to font structure. If NULL, the shared system font is used.
  * @param sheetIndex Index of the texture sheet.
  */
-void* fontGetGlyphSheetTex (CFNT_s* font, int sheetIndex)
+extern(D) void* fontGetGlyphSheetTex (CFNT_s* font, int sheetIndex)
 {
   if (!font) font = fontGetSystemFont();
 

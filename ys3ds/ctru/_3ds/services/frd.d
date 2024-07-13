@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.mii;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum FRIEND_SCREEN_NAME_SIZE = 0xB; ///< 11-byte UTF-16 screen name
 enum FRIEND_COMMENT_SIZE = 0x21; ///< 33-byte UTF-16 comment

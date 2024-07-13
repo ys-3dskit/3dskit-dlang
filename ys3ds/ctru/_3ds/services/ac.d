@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Wifi security modes.
 enum acSecurityMode

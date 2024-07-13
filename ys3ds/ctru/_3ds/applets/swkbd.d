@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Keyboard types.
 enum SwkbdType
@@ -208,7 +208,7 @@ void swkbdInit (SwkbdState* swkbd, SwkbdType type, int numButtons, int maxTextLe
  * @param swkbd Pointer to swkbd state.
  * @param mode Password mode.
  */
-void swkbdSetPasswordMode (SwkbdState* swkbd, SwkbdPasswordMode mode)
+extern(D) void swkbdSetPasswordMode (SwkbdState* swkbd, SwkbdPasswordMode mode)
 {
   swkbd.password_mode = mode;
 }
@@ -220,7 +220,7 @@ void swkbdSetPasswordMode (SwkbdState* swkbd, SwkbdPasswordMode mode)
  * @param filterFlags Bitmask specifying which characters are disallowed (filtered).
  * @param maxDigits In case digits are disallowed, specifies how many digits are allowed at maximum in input strings (0 completely restricts digit input).
  */
-void swkbdSetValidation (
+extern(D) void swkbdSetValidation (
     SwkbdState* swkbd,
     SwkbdValidInput validInput,
     uint filterFlags,
@@ -237,7 +237,7 @@ void swkbdSetValidation (
  * @param left Unicode codepoint produced by the leftmost key in the bottom row (0 hides the key).
  * @param left Unicode codepoint produced by the rightmost key in the bottom row (0 hides the key).
  */
-void swkbdSetNumpadKeys (SwkbdState* swkbd, int left, int right)
+extern(D) void swkbdSetNumpadKeys (SwkbdState* swkbd, int left, int right)
 {
   swkbd.numpad_keys[0] = cast(ushort) left;
   swkbd.numpad_keys[1] = cast(ushort) right;
@@ -329,7 +329,7 @@ SwkbdButton swkbdInputText (SwkbdState* swkbd, char* buf, size_t bufsize);
  * @param swkbd Pointer to swkbd state.
  * @return The result value.
  */
-SwkbdResult swkbdGetResult (SwkbdState* swkbd)
+extern(D) SwkbdResult swkbdGetResult (SwkbdState* swkbd)
 {
   return swkbd.result;
 }

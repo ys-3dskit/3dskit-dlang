@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Configuration region values.
 enum CFG_Region

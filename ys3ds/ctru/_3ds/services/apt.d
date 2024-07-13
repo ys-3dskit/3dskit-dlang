@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /**
  * @brief NS Application IDs.
@@ -197,7 +197,7 @@ bool aptIsHomePressed ();
 void aptJumpToHomeMenu ();
 
 /// Handles incoming jump-to-HOME requests.
-void aptHandleJumpToHome ()
+extern(D) void aptHandleJumpToHome ()
 {
   if (aptShouldJumpToHome())
     aptJumpToHomeMenu();
@@ -310,7 +310,7 @@ Result APT_GetAppletManInfo (APT_AppletPos inpos, APT_AppletPos* outpos, NS_APPI
  * @brief Gets the menu's app ID.
  * @return The menu's app ID.
  */
-NS_APPID aptGetMenuAppID ()
+extern(D) NS_APPID aptGetMenuAppID ()
 {
   NS_APPID menu_appid = NS_APPID.APPID_NONE;
   APT_GetAppletManInfo(APT_AppletPos.APTPOS_NONE, null, null, &menu_appid, null);

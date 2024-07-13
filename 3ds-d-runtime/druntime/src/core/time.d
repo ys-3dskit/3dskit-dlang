@@ -2878,7 +2878,11 @@ deprecated:
 
     static pragma(crt_constructor) void time_initializer()
     {
-        version (Windows)
+        version (Horizon)
+        {
+          ticksPerSec = 268123480L; // see line 2554
+        }
+        else version (Windows)
         {
             if (QueryPerformanceFrequency(cast(long*)&ticksPerSec) == 0)
                 ticksPerSec = 0;
@@ -3433,7 +3437,13 @@ deprecated:
     static @property TickDuration currSystemTick() @trusted nothrow @nogc
     {
         import core.internal.abort : abort;
-        version (Windows)
+
+        version (Horizon)
+        {
+          import ys3ds.ctru._3ds.svc : svcGetSystemTick;
+          return TickDuration(svcGetSystemTick());
+        }
+        else version (Windows)
         {
             ulong ticks = void;
             QueryPerformanceCounter(cast(long*)&ticks);
@@ -3478,6 +3488,7 @@ deprecated:
                                     tv.tv_usec * TickDuration.ticksPerSec / 1000 / 1000);
             }
         }
+        else static assert(0);
     }
 
     version (CoreUnittest) @safe nothrow unittest

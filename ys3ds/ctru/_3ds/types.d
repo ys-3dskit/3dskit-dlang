@@ -6,7 +6,7 @@
 //import core.stdc.config;
 //import core.stdc.stdint;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 // missing aliases
 alias ssize_t = ptrdiff_t;

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// PDN wake events and MCU interrupts to select, combined with those of other processes
 struct PtmWakeEvents
@@ -38,7 +38,7 @@ enum
 }
 
 /// See @ref PTMSYSM_NotifySleepPreparationComplete. Corresponds to the number of potentially remaning notifs. until sleep/wakeup.
-int ptmSysmGetNotificationAckValue (uint id)
+extern(D) int ptmSysmGetNotificationAckValue (uint id)
 {
   immutable uint[] values = [3, -1, 1, 0, 0, -1, 2];
   if (id < PTMNOTIFID_SLEEP_REQUESTED || id > PTMNOTIFID_HALF_AWAKE)

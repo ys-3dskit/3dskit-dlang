@@ -7,7 +7,7 @@ import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;
 import ys3ds.ctru._3ds.exheader;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Launch flags for PM launch commands.
 enum

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// This is returned when the current state is invalid for this command.
 enum NFC_ERR_INVALID_STATE = 0xC8A17600;

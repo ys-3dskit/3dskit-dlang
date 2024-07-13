@@ -8,7 +8,7 @@
 
 module core.factory;
 
-static assert(0, "core.factory is not usable in 3dskit - classes and reflection aren't usable in betterc mode.");
+//static assert(0, "core.factory is not usable in 3dskit - classes and reflection aren't usable in betterc mode.");
 
 /**
  * Create instance of class specified by the module symbol and a string

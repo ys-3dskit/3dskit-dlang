@@ -5,7 +5,7 @@ module ys3ds.ctru._3ds.allocator.linear;
  * @brief Linear memory allocator.
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /**
  * @brief Allocates a 0x80-byte aligned buffer.

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum GSP_SCREEN_TOP = 0; ///< ID of the top screen.
 enum GSP_SCREEN_BOTTOM = 1; ///< ID of the bottom screen.
@@ -70,7 +70,7 @@ enum GSPGPU_Event
  * @param format See \ref GSPGPU_FramebufferFormat.
  * @return Bytes per pixel.
  */
-uint gspGetBytesPerPixel (GSPGPU_FramebufferFormat format)
+extern(D) uint gspGetBytesPerPixel (GSPGPU_FramebufferFormat format)
 {
   switch (format) with (GSPGPU_FramebufferFormat)
   {

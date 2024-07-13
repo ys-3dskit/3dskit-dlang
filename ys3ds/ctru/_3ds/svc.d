@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Pseudo handle for the current process
 enum CUR_PROCESS_HANDLE = 0xFFFF8001;
@@ -570,7 +570,7 @@ struct StartupInfo
  * @brief Gets the thread local storage buffer.
  * @return The thread local storage buffer.
  */
-void* getThreadLocalStorage ()
+extern(D) void* getThreadLocalStorage ()
 {
   // TODO: test inline asm output is identical to C ver
   void* ret;
@@ -586,7 +586,7 @@ void* getThreadLocalStorage ()
  * @brief Gets the thread command buffer.
  * @return The thread command buffer.
  */
-uint* getThreadCommandBuffer ()
+extern(D) uint* getThreadCommandBuffer ()
 {
   return cast(uint*)(cast(ubyte*)getThreadLocalStorage() + 0x80);
 }
@@ -595,7 +595,7 @@ uint* getThreadCommandBuffer ()
  * @brief Gets the thread static buffer.
  * @return The thread static buffer.
  */
-uint* getThreadStaticBuffers ()
+extern(D) uint* getThreadStaticBuffers ()
 {
   return cast(uint*)(cast(ubyte*) getThreadLocalStorage() + 0x180);
 }
@@ -606,7 +606,7 @@ uint* getThreadStaticBuffers ()
 /// Writes the default DMA device config that the kernel uses when DMACFG_*_IS_DEVICE and DMACFG_*_USE_CFG are not set
 
 // Kernel uses this default instance if _IS_DEVICE and _USE_CFG are not set
-void dmaDeviceConfigInitDefault (DmaDeviceConfig* cfg)
+extern(D) void dmaDeviceConfigInitDefault (DmaDeviceConfig* cfg)
 {
   *cfg = DmaDeviceConfig(
     -1,
@@ -619,7 +619,7 @@ void dmaDeviceConfigInitDefault (DmaDeviceConfig* cfg)
 }
 
 /// Initializes a \ref DmaConfig instance with sane defaults for RAM<>RAM tranfers
-void dmaConfigInitDefault (DmaConfig* cfg)
+extern(D) void dmaConfigInitDefault (DmaConfig* cfg)
 {
   *cfg = DmaConfig(
     -1,
@@ -1482,7 +1482,7 @@ Result svcGetDebugThreadParam (long* unused, uint* out_, Handle debug_, uint thr
 Result svcBackdoor (int function () callback);
 
 /// Stop point, does nothing if the process is not attached (as opposed to 'bkpt' instructions)
-void SVC_STOP_POINT()
+extern(D) void SVC_STOP_POINT()
 {
   // TODO: test inline assembly at usages is same as C
   asm

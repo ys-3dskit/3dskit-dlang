@@ -1,6 +1,6 @@
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 // Initializes NWMEXT.
 Result nwmExtInit ();

@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Card SPI wait operation type.
 enum PXIDEV_WaitType
@@ -46,7 +46,7 @@ void pxiDevExit ();
  * @param busMode Bus mode to use when transferring.
  * @return A packed card SPI transfer option value.
  */
-ubyte pxiDevMakeTransferOption (
+extern(D) ubyte pxiDevMakeTransferOption (
     FS_CardSpiBaudRate baudRate,
     FS_CardSpiBusMode busMode)
 {
@@ -60,7 +60,7 @@ ubyte pxiDevMakeTransferOption (
  * @param timeout Timeout, in nanoseconds, to wait, if applicable.
  * @return A packed card SPI wait operation value.
  */
-ulong pxiDevMakeWaitOperation (
+extern(D) ulong pxiDevMakeWaitOperation (
     PXIDEV_WaitType waitType,
     PXIDEV_DeassertType deassertType,
     ulong timeout)

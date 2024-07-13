@@ -13,7 +13,7 @@
 
 import ys3ds.ctru._3ds.services.gspgpu;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Converts red, green, and blue components to packed RGB565.
 extern (D) auto RGB565(T0, T1, T2)(auto ref T0 r, auto ref T1 g, auto ref T2 b)

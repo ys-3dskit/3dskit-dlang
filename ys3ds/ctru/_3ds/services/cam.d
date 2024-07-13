@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.y2r;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Camera connection target ports.
 enum

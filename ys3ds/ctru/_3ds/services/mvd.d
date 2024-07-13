@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 //New3DS-only, see also: http://3dbrew.org/wiki/MVD_Services
 

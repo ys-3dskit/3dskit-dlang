@@ -171,13 +171,13 @@ S_IFSOCK
 */
 
 enum S_IFMT   = octal!170_000; /* type of file */
-enum S_IFDIR  = octal!040_000; /* directory */
-enum S_IFCHR  = octal!020_000; /* character special */
-enum S_IFBLK  = octal!060_000; /* block special */
+enum S_IFDIR  = octal! 40_000; /* directory */
+enum S_IFCHR  = octal! 20_000; /* character special */
+enum S_IFBLK  = octal! 60_000; /* block special */
 enum S_IFREG  = octal!100_000; /* regular */
 enum S_IFLNK  = octal!120_000; /* symbolic link */
 enum S_IFSOCK = octal!140_000; /* socket */
-enum S_IFIFO  = octal!010_000; /* fifo */
+enum S_IFIFO  = octal! 10_000; /* fifo */
 
 /*
 int mknod(const scope char*, mode_t, dev_t);

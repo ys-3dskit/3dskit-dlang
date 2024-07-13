@@ -1,6 +1,6 @@
 module ys3ds.ctru.sys.ioctl;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum FIONBIO = 1;
 

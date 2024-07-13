@@ -17,7 +17,7 @@
 
 import ys3ds.ctru._3ds.gfx;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 extern (D) string CONSOLE_ESC(T)(auto ref T x)
 {

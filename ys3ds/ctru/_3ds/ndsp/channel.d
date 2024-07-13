@@ -8,7 +8,7 @@ module ys3ds.ctru._3ds.ndsp.channel;
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.ndsp.ndsp;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 ///@name Data types
 ///@{

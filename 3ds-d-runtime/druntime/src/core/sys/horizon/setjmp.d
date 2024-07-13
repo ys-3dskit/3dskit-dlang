@@ -30,7 +30,7 @@ int  setjmp(ref jmp_buf);
 void longjmp(ref jmp_buf, int);
 */
 
-enum jmp_buf = c_long[64]; // ?
+alias jmp_buf = c_long[64]; // ?
 
 int setjmp(ref jmp_buf);
 void longjmp(ref jmp_buf, int);

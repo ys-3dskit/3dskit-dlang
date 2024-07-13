@@ -3,7 +3,7 @@
  * @brief Mappable memory allocator.
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /**
  * @brief Initializes the mappable allocator.

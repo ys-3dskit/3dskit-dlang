@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// RomFS header.
 struct romfs_header
@@ -82,13 +82,13 @@ Result romfsMountFromTitle (ulong tid, FS_MediaType mediatype, const(char)* name
 Result romfsUnmount (const(char)* name);
 
 /// Wrapper for \ref romfsMountSelf with the default "romfs" device name.
-Result romfsInit ()
+extern(D) Result romfsInit ()
 {
   return romfsMountSelf("romfs");
 }
 
 /// Wrapper for \ref romfsUnmount with the default "romfs" device name.
-Result romfsExit ()
+extern(D) Result romfsExit ()
 {
   return romfsUnmount("romfs");
 }

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Types of errors that can be thrown by err:f.
 enum ERRF_ErrType

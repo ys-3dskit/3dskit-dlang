@@ -3,7 +3,7 @@
  * @brief 3DS result code tools
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Checks whether a result code indicates success.
 extern (D) auto R_SUCCEEDED(T)(auto ref T res)

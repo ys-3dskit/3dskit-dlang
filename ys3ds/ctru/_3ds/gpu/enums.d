@@ -7,7 +7,7 @@ module ys3ds.ctru._3ds.gpu.enums;
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Creates a texture magnification filter parameter from a @ref GPU_TEXTURE_FILTER_PARAM
 extern (D) auto GPU_TEXTURE_MAG_FILTER(T)(auto ref T v)

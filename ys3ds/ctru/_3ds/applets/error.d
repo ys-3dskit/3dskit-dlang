@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.services.cfgu;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum
 {

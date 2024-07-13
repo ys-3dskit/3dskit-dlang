@@ -8,7 +8,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.fs;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 alias FSPXI_Archive = c_ulong;
 alias FSPXI_File = c_ulong;

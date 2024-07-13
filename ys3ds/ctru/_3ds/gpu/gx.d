@@ -161,7 +161,7 @@ bool gxCmdQueueWait (gxCmdQueue_s* queue, long timeout);
  * @param callback The completion callback.
  * @param user User data.
  */
-void gxCmdQueueSetCallback (
+extern(D) void gxCmdQueueSetCallback (
     gxCmdQueue_s* queue,
     void function (gxCmdQueue_s*) callback,
     void* user)

@@ -17,7 +17,7 @@ public import core.sys.horizon.sys.types; // for pid_t
 public import core.sys.horizon.time; // for timespec
 
 // pretty sure we need to re-export this later for ucontext_t and mcontext_t -- sink
-public import core.sys.horizon.ucontext : ucontext_t, mcontext_t;
+//public import core.sys.horizon.sys.ucontext : ucontext_t, mcontext_t;
 
 version (Horizon):
 extern (C):

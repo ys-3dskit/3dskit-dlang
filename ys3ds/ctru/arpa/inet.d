@@ -4,26 +4,30 @@ import ys3ds.ctru.sys.socket;
 
 import std.bitmanip : swapEndian;
 
-extern (C):
+extern (C) @nogc nothrow:
 
-uint htonl (uint hostlong)
-{
-  return swapEndian(hostlong);
-}
 
-ushort htons (ushort hostshort)
+extern(D)
 {
-  return swapEndian(hostshort);
-}
+  uint htonl (uint hostlong)
+  {
+    return swapEndian(hostlong);
+  }
 
-uint ntohl (uint netlong)
-{
-  return swapEndian(netlong);
-}
+  ushort htons (ushort hostshort)
+  {
+    return swapEndian(hostshort);
+  }
 
-ushort ntohs (ushort netshort)
-{
-  return swapEndian(netshort);
+  uint ntohl (uint netlong)
+  {
+    return swapEndian(netlong);
+  }
+
+  ushort ntohs (ushort netshort)
+  {
+    return swapEndian(netshort);
+  }
 }
 
 in_addr_t inet_addr (const(char)* cp);

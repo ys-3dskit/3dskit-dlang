@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.gpu.shbin;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// 24-bit float uniforms.
 struct float24Uniform_s

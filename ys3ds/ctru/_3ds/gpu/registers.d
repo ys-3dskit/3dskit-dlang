@@ -3,7 +3,7 @@
  * @description GPU registers.
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 ///@name Miscellaneous registers (0x000-0x03F)
 ///@{

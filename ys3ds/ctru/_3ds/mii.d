@@ -5,7 +5,7 @@
  * @see https://www.3dbrew.org/wiki/Mii#Mii_format
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Shared Mii struct
 struct MiiData

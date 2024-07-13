@@ -10,7 +10,7 @@ module ys3ds.ctru._3ds.util.decompress;
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /** @brief Compression types */
 enum decompressType
@@ -104,7 +104,7 @@ bool decompressV (
  *  @param[in] insize   Size of userdata (see decompressV())
  *  @returns Whether succeeded
  */
-bool decompress (
+extern(D) bool decompress (
     void* output,
     size_t size,
     decompressCallback callback,
@@ -141,7 +141,7 @@ bool decompressV_LZSS (
  *  @param[in] insize   Size of userdata (see decompressV())
  *  @returns Whether succeeded
  */
-bool decompress_LZSS (
+extern(D) bool decompress_LZSS (
     void* output,
     size_t size,
     decompressCallback callback,
@@ -178,7 +178,7 @@ bool decompressV_LZ11 (
  *  @param[in] insize   Size of userdata (see decompressV())
  *  @returns Whether succeeded
  */
-bool decompress_LZ11 (
+extern(D) bool decompress_LZ11 (
     void* output,
     size_t size,
     decompressCallback callback,
@@ -218,7 +218,7 @@ bool decompressV_Huff (
  *  @param[in] insize   Size of userdata (see decompressV())
  *  @returns Whether succeeded
  */
-bool decompress_Huff (
+extern(D) bool decompress_Huff (
     size_t bits,
     void* output,
     size_t size,
@@ -256,7 +256,7 @@ bool decompressV_RLE (
  *  @param[in] insize   Size of userdata (see decompressV())
  *  @returns Whether succeeded
  */
-bool decompress_RLE (
+extern(D) bool decompress_RLE (
     void* output,
     size_t size,
     decompressCallback callback,

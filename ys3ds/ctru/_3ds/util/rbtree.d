@@ -5,7 +5,7 @@
 
 //import core.stdc.stdint;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Retrieves an rbtree item.
 extern(D) auto rbtree_item(type, T0, T2)(auto ref T0 ptr, auto ref T2 member)

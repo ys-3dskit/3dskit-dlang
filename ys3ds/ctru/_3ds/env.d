@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// System run-flags.
 enum
@@ -21,7 +21,7 @@ enum
  * @brief Gets whether the application was launched from a homebrew environment.
  * @return Whether the application was launched from a homebrew environment.
  */
-bool envIsHomebrew ()
+extern(D) bool envIsHomebrew ()
 {
   extern __gshared void* __service_ptr;
   return __service_ptr != null;
@@ -38,7 +38,7 @@ Handle envGetHandle (const(char)* name);
  * @brief Gets the environment-recommended app ID to use with APT.
  * @return The APT app ID.
  */
-uint envGetAptAppId ()
+extern(D) uint envGetAptAppId ()
 {
   extern __gshared uint __apt_appid;
   return __apt_appid;
@@ -48,7 +48,7 @@ uint envGetAptAppId ()
  * @brief Gets the size of the application heap.
  * @return The application heap size.
  */
-uint envGetHeapSize ()
+extern(D) uint envGetHeapSize ()
 {
   extern __gshared uint __ctru_heap_size;
   return __ctru_heap_size;
@@ -58,7 +58,7 @@ uint envGetHeapSize ()
  * @brief Gets the size of the linear heap.
  * @return The linear heap size.
  */
-uint envGetLinearHeapSize ()
+extern(D) uint envGetLinearHeapSize ()
 {
   extern __gshared uint __ctru_linear_heap_size;
   return __ctru_linear_heap_size;
@@ -68,7 +68,7 @@ uint envGetLinearHeapSize ()
  * @brief Gets the environment argument list.
  * @return The argument list.
  */
-const(char)* envGetSystemArgList ()
+extern(D) const(char)* envGetSystemArgList ()
 {
   extern __gshared const(char)* __system_arglist;
   return __system_arglist;
@@ -78,7 +78,7 @@ const(char)* envGetSystemArgList ()
  * @brief Gets the environment run flags.
  * @return The run flags.
  */
-uint envGetSystemRunFlags ()
+extern(D) uint envGetSystemRunFlags ()
 {
   extern __gshared uint __system_runflags;
   return __system_runflags;

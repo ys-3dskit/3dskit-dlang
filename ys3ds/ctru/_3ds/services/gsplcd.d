@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.gspgpu;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// LCD screens.
 enum

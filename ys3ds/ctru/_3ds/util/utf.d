@@ -7,7 +7,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /** Convert a UTF-8 sequence into a UTF-32 codepoint
  *

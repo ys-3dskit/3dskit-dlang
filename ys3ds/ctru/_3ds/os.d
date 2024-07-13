@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.svc;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 ///< The external clock rate for the SoC.
 enum SYSCLOCK_SOC = 16756991u;
@@ -193,7 +193,7 @@ const(char)* osStrError (Result error);
  *
  * This can be used to compare system versions easily with @ref SYSTEM_VERSION.
  */
-uint osGetFirmVersion ()
+extern(D) uint osGetFirmVersion ()
 {
   return OS_KernelConfig.firm_ver &~ 0xFF;
 }
@@ -208,19 +208,19 @@ uint osGetFirmVersion ()
  * if(osGetKernelVersion() > SYSTEM_VERSION(2,46,0)) printf("You are running 9.0 or higher\n");
  * @endcode
  */
-uint osGetKernelVersion ()
+extern(D) uint osGetKernelVersion ()
 {
   return OS_KernelConfig.kernel_ver & ~0xFF;
 }
 
 /// Gets the system's "core version" (2 on NATIVE_FIRM, 3 on SAFE_FIRM, etc.)
-uint osGetSystemCoreVersion ()
+extern(D) uint osGetSystemCoreVersion ()
 {
   return OS_KernelConfig.kernel_syscore_ver;
 }
 
 /// Gets the system's memory layout ID (0-5 on Old 3DS, 6-8 on New 3DS)
-uint osGetApplicationMemType ()
+extern(D) uint osGetApplicationMemType ()
 {
   return OS_KernelConfig.app_memtype;
 }
@@ -230,7 +230,7 @@ uint osGetApplicationMemType ()
  * @param region Memory region to check.
  * @return The size of the memory region, in bytes.
  */
-uint osGetMemRegionSize (MemRegion region)
+extern(D) uint osGetMemRegionSize (MemRegion region)
 {
   if (region == MemRegion.MEMREGION_ALL)
   {
@@ -249,7 +249,7 @@ uint osGetMemRegionSize (MemRegion region)
  * @param region Memory region to check.
  * @return The number of used bytes of memory.
  */
-uint osGetMemRegionUsed (MemRegion region)
+extern(D) uint osGetMemRegionUsed (MemRegion region)
 {
   long mem_used;
   svcGetSystemInfo(&mem_used, 0, region);
@@ -261,7 +261,7 @@ uint osGetMemRegionUsed (MemRegion region)
  * @param region Memory region to check.
  * @return The number of free bytes of memory.
  */
-uint osGetMemRegionFree (MemRegion region)
+extern(D) uint osGetMemRegionFree (MemRegion region)
 {
   return osGetMemRegionSize(region) - osGetMemRegionUsed(region);
 }
@@ -282,7 +282,7 @@ ulong osGetTime ();
  * @brief Starts a tick counter.
  * @param cnt The tick counter.
  */
-void osTickCounterStart (TickCounter* cnt)
+extern(D) void osTickCounterStart (TickCounter* cnt)
 {
   cnt.reference = svcGetSystemTick();
 }
@@ -291,7 +291,7 @@ void osTickCounterStart (TickCounter* cnt)
  * @brief Updates the elapsed time in a tick counter.
  * @param cnt The tick counter.
  */
-void osTickCounterUpdate (TickCounter* cnt)
+extern(D) void osTickCounterUpdate (TickCounter* cnt)
 {
   ulong now = svcGetSystemTick();
   cnt.elapsed = now - cnt.reference;
@@ -320,7 +320,7 @@ double osTickCounterRead (const(TickCounter)* cnt);
  *
  * These values correspond with the number of wifi bars displayed by Home Menu.
  */
-ubyte osGetWifiStrength ()
+extern(D) ubyte osGetWifiStrength ()
 {
   return OS_SharedConfig.wifi_strength;
 }
@@ -329,7 +329,7 @@ ubyte osGetWifiStrength ()
  * @brief Gets the state of the 3D slider.
  * @return The state of the 3D slider (0.0~1.0)
  */
-float osGet3DSliderState ()
+extern(D) float osGet3DSliderState ()
 {
   return OS_SharedConfig.slider_3d;
 }
@@ -338,7 +338,7 @@ float osGet3DSliderState ()
  * @brief Checks whether a headset is connected.
  * @return true or false.
  */
-bool osIsHeadsetConnected ()
+extern(D) bool osIsHeadsetConnected ()
 {
   return OS_SharedConfig.headset_connected != 0;
 }

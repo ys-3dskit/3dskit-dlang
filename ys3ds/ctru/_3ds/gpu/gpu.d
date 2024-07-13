@@ -3,7 +3,7 @@
  * @brief Barebones GPU communications driver.
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Creates a GPU command header from its write increments, mask, and register.
 extern (D) auto GPUCMD_HEADER(T0, T1, T2)(auto ref T0 incremental, auto ref T1 mask, auto ref T2 reg)
@@ -21,7 +21,7 @@ extern __gshared uint gpuCmdBufOffset; ///< GPU command buffer offset.
  * @param size Size of the command buffer.
  * @param offset Offset of the command buffer.
  */
-void GPUCMD_SetBuffer (uint* adr, uint size, uint offset)
+extern(D) void GPUCMD_SetBuffer (uint* adr, uint size, uint offset)
 {
   gpuCmdBuf = adr;
   gpuCmdBufSize = size;
@@ -32,7 +32,7 @@ void GPUCMD_SetBuffer (uint* adr, uint size, uint offset)
  * @brief Sets the offset of the GPU command buffer.
  * @param offset Offset of the command buffer.
  */
-void GPUCMD_SetBufferOffset (uint offset)
+extern(D) void GPUCMD_SetBufferOffset (uint offset)
 {
   gpuCmdBufOffset = offset;
 }
@@ -43,7 +43,7 @@ void GPUCMD_SetBufferOffset (uint offset)
  * @param size Pointer to output the size (in words) of the command buffer to.
  * @param offset Pointer to output the offset of the command buffer to.
  */
-void GPUCMD_GetBuffer (uint** addr, uint* size, uint* offset)
+extern(D) void GPUCMD_GetBuffer (uint** addr, uint* size, uint* offset)
 {
   if (addr)
     *addr = gpuCmdBuf;
@@ -104,7 +104,7 @@ uint f32tof24 (float f);
 uint f32tof31 (float f);
 
 /// Adds a command with a single parameter to the current command buffer.
-void GPUCMD_AddSingleParam (uint header, uint param)
+extern(D) void GPUCMD_AddSingleParam (uint header, uint param)
 {
   GPUCMD_Add(header, &param, 1);
 }

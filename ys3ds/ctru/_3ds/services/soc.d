@@ -12,7 +12,7 @@ import ys3ds.ctru.sys.socket;
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// The config level to be used with @ref SOCU_GetNetworkOpt
 enum SOL_CONFIG = 0xfffe;

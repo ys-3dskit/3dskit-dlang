@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.services.sslc;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// HTTP context.
 struct httpcContext

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Maximum number of CSND channels.
 enum CSND_NUM_CHANNELS = 32;
@@ -22,7 +22,7 @@ extern (D) auto CSND_TIMER(T)(auto ref T n)
  * @param pan Pan to use.
  * @return A left/right volume pair for use by hardware.
  */
-uint CSND_VOL (float vol, float pan)
+extern(D) uint CSND_VOL (float vol, float pan)
 {
   float rpan;
   uint lvol, rvol;

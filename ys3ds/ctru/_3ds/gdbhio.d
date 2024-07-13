@@ -6,7 +6,7 @@
 //import core.sys.posix.fcntl;
 //import core.sys.posix.signal;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 // missing types, referenced against devkitarm headers
 alias off_t = long;

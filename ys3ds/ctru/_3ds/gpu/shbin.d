@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.gpu.enums;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// DVLE type.
 enum DVLE_type

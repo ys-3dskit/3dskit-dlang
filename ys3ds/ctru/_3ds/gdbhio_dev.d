@@ -3,7 +3,7 @@
  * @brief Luma3DS GDB HIO (called File I/O in GDB documentation) devoptab wrapper.
  */
 
-extern (C):
+extern (C) @nogc nothrow:
 
 struct timeval;
 

@@ -5,7 +5,7 @@
 
 import ys3ds.ctru._3ds.types;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Maximum number of nodes(devices) that can be connected to the network.
 enum UDS_MAXNODES = 16;

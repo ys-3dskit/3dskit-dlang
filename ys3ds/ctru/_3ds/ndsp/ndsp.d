@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.os;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum NDSP_SAMPLE_RATE = SYSCLOCK_SOC / 512.0;
 

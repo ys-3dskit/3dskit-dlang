@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.svc;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// A light lock.
 alias LightLock = int;
@@ -44,7 +44,7 @@ struct LightSemaphore
 // the alternative is ldc.llvmasm.__asm.
 
 /// Performs a Data Synchronization Barrier operation.
-void __dsb ()
+extern(D) void __dsb ()
 {
   asm
   {
@@ -54,7 +54,7 @@ void __dsb ()
 }
 
 /// Performs a Data Memory Barrier operation.
-void __dmb ()
+extern(D) void __dmb ()
 {
   asm
   {
@@ -64,7 +64,7 @@ void __dmb ()
 }
 
 /// Performs an Instruction Synchronization Barrier (officially "flush prefetch buffer") operation.
-void __isb ()
+extern(D) void __isb ()
 {
   asm
   {
@@ -74,7 +74,7 @@ void __isb ()
 }
 
 /// Performs a clrex operation.
-void __clrex ()
+extern(D) void __clrex ()
 {
   asm
   {
@@ -87,7 +87,7 @@ void __clrex ()
  * @param addr Address to perform the operation on.
  * @return The resulting value.
  */
-int __ldrex (int* addr)
+extern(D) int __ldrex (int* addr)
 {
   int val;
   asm
@@ -104,7 +104,7 @@ int __ldrex (int* addr)
  * @param val Value to store.
  * @return Whether the operation was successful.
  */
-bool __strex (int* addr, int val)
+extern(D) bool __strex (int* addr, int val)
 {
   bool res;
   asm
@@ -120,7 +120,7 @@ bool __strex (int* addr, int val)
  * @param addr Address to perform the operation on.
  * @return The resulting value.
  */
-ushort __ldrexh (ushort* addr)
+extern(D) ushort __ldrexh (ushort* addr)
 {
   ushort val;
   asm
@@ -137,7 +137,7 @@ ushort __ldrexh (ushort* addr)
  * @param val Value to store.
  * @return Whether the operation was successful.
  */
-bool __strexh (ushort* addr, ushort val)
+extern(D) bool __strexh (ushort* addr, ushort val)
 {
   bool res;
   asm
@@ -153,7 +153,7 @@ bool __strexh (ushort* addr, ushort val)
  * @param addr Address to perform the operation on.
  * @return The resulting value.
  */
-ubyte __ldrexb (ubyte* addr)
+extern(D) ubyte __ldrexb (ubyte* addr)
 {
   ubyte val;
   asm
@@ -170,7 +170,7 @@ ubyte __ldrexb (ubyte* addr)
  * @param val Value to store.
  * @return Whether the operation was successful.
  */
-bool __strexb (ubyte* addr, ubyte val)
+extern(D) bool __strexb (ubyte* addr, ubyte val)
 {
   bool res;
   asm
@@ -330,7 +330,7 @@ void CondVar_WakeUp (CondVar* cv, int num_threads);
  * @brief Wakes up a single thread waiting on a condition variable.
  * @param cv Pointer to the condition variable.
  */
-void CondVar_Signal (CondVar* cv)
+extern(D) void CondVar_Signal (CondVar* cv)
 {
   CondVar_WakeUp(cv, 1);
 }
@@ -339,7 +339,7 @@ void CondVar_Signal (CondVar* cv)
  * @brief Wakes up all threads waiting on a condition variable.
  * @param cv Pointer to the condition variable.
  */
-void CondVar_Broadcast (CondVar* cv)
+extern(D) void CondVar_Broadcast (CondVar* cv)
 {
   CondVar_WakeUp(cv, ARBITRATION_SIGNAL_ALL);
 }

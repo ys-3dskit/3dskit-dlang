@@ -6,7 +6,7 @@
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.mii;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 /// Magic value needed to launch the applet.
 enum MIISELECTOR_MAGIC = 0x13DE28CF;
@@ -153,7 +153,7 @@ void miiSelectorBlacklistUserMii (MiiSelectorConf* conf, uint index);
  * If there is no mii with that index, the the cursor will start at the Mii
  * with the index 0 (the personal Mii).
  */
-void miiSelectorSetInitialIndex (MiiSelectorConf* conf, uint index)
+extern(D) void miiSelectorSetInitialIndex (MiiSelectorConf* conf, uint index)
 {
   conf.initial_index = index;
 }

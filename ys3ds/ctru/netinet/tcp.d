@@ -1,6 +1,6 @@
 module ys3ds.ctru.netinet.tcp;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum SOL_TCP = 6; /* TCP level */
 

@@ -1,6 +1,6 @@
 module ys3ds.ctru.poll;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 enum POLLIN = 0x01;
 enum POLLPRI = 0x02;

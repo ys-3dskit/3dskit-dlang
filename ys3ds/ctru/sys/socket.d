@@ -2,7 +2,7 @@ module ys3ds.ctru.sys.socket;
 
 //import core.stdc.time;
 
-extern (C):
+extern (C) @nogc nothrow:
 
 // defined in sys/types.h
 alias in_addr_t = uint;
