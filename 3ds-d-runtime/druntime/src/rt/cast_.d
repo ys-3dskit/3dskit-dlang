@@ -21,7 +21,7 @@ pure:
 
 // Needed because ClassInfo.opEquals(Object) does a dynamic cast,
 // but we are trying to implement dynamic cast.
-extern (D) private bool areClassInfosEqual(scope const ClassInfo a, scope const ClassInfo b) @safe
+/* extern (D) private bool areClassInfosEqual(scope const ClassInfo a, scope const ClassInfo b) @safe
 {
     // same class if signatures match, works with potential duplicates across binaries
     if (a is b)
@@ -36,7 +36,7 @@ extern (D) private bool areClassInfosEqual(scope const ClassInfo a, scope const 
 
     // old slow way for temporary binary compatibility
     return a.name == b.name;
-}
+} */
 
 /******************************************
  * Given a pointer:
@@ -45,13 +45,13 @@ extern (D) private bool areClassInfosEqual(scope const ClassInfo a, scope const 
  *      If it is null, return null.
  *      Else, undefined crash
  */
-Object _d_toObject(return scope void* p)
+/+Object _d_toObject(return scope void* p)
 {
     if (!p)
         return null;
 
     Object o = cast(Object) p;
-    ClassInfo oc = typeid(o);
+    ClassInfo oc = typeid(o); // what is this for??
     Interface* pi = **cast(Interface***) p;
 
     /* Interface.offset lines up with ClassInfo.name.ptr,
@@ -64,13 +64,13 @@ Object _d_toObject(return scope void* p)
         return cast(Object)(p - pi.offset);
     }
     return o;
-}
+}+/
 
 /*************************************
  * Attempts to cast interface Object o to class c.
  * Returns o if successful, null if not.
  */
-void* _d_interface_cast(void* p, ClassInfo c)
+/* void* _d_interface_cast(void* p, ClassInfo c)
 {
     debug(cast_) printf("_d_interface_cast(p = %p, c = '%.*s')\n", p, c.name);
     if (!p)
@@ -89,7 +89,7 @@ void* _d_interface_cast(void* p, ClassInfo c)
     }
     debug(cast_) printf("\tresult = %p\n", res);
     return res;
-}
+} */
 
 /*****
  * Dynamic cast from a class object `o` to class or interface `c`, where `c` is a subtype of `o`.
@@ -99,7 +99,7 @@ void* _d_interface_cast(void* p, ClassInfo c)
  * Returns:
  *      null if o is null or c is not a subclass of o. Otherwise, return o.
  */
-void* _d_dynamic_cast(Object o, ClassInfo c)
+/* void* _d_dynamic_cast(Object o, ClassInfo c)
 {
     debug(cast_) printf("_d_dynamic_cast(o = %p, c = '%.*s')\n", o, c.name);
 
@@ -112,7 +112,7 @@ void* _d_dynamic_cast(Object o, ClassInfo c)
     }
     debug(cast_) printf("\tresult = %p\n", res);
     return res;
-}
+} */
 
 /*****
  * Dynamic cast from a class object o to class c, where c is a subclass of o.
@@ -122,7 +122,7 @@ void* _d_dynamic_cast(Object o, ClassInfo c)
  * Returns:
  *      null if o is null or c is not a subclass of o. Otherwise, return o.
  */
-void* _d_class_cast(Object o, ClassInfo c)
+/* void* _d_class_cast(Object o, ClassInfo c)
 {
     debug(cast_) printf("_d_cast_cast(o = %p, c = '%.*s', level %d)\n", o, c.name, level);
 
@@ -153,7 +153,7 @@ void* _d_class_cast(Object o, ClassInfo c)
         oc = oc.base;
     } while (oc);
     return null;
-}
+} */
 
 /**
  * Dynamic cast `o` to final class `c` only one level down
@@ -163,16 +163,16 @@ void* _d_class_cast(Object o, ClassInfo c)
  * Returns:
  *      o if it succeeds, null if it fails
  */
-void* _d_paint_cast(Object o, ClassInfo c)
+/+ void* _d_paint_cast(Object o, ClassInfo c)
 {
     /* If o is really an instance of c, just do a paint
      */
     auto p = (o && cast(void*)(areClassInfosEqual(typeid(o), c)) ? o : null);
     debug assert(cast(void*)p is cast(void*)_d_dynamic_cast(o, c));
     return cast(void*)p;
-}
+} +/
 
-int _d_isbaseof2(scope ClassInfo oc, scope const ClassInfo c, scope ref size_t offset) @safe
+/* int _d_isbaseof2(scope ClassInfo oc, scope const ClassInfo c, scope ref size_t offset) @safe
 {
     if (areClassInfosEqual(oc, c))
         return true;
@@ -197,10 +197,10 @@ int _d_isbaseof2(scope ClassInfo oc, scope const ClassInfo c, scope ref size_t o
     } while (oc);
 
     return false;
-}
+} */
 
-int _d_isbaseof(scope ClassInfo oc, scope const ClassInfo c) @safe
+/* int _d_isbaseof(scope ClassInfo oc, scope const ClassInfo c) @safe
 {
     size_t offset = 0;
     return _d_isbaseof2(oc, c, offset);
-}
+} */

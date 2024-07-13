@@ -143,7 +143,8 @@ class Object
      */
     string toString()
     {
-        return typeid(this).name;
+        // lol
+        return "[object Object]"; //typeid(this).name;
     }
 
     @system unittest
@@ -278,12 +279,13 @@ class Object
      */
     static Object factory(string classname)
     {
-        auto ci = TypeInfo_Class.find(classname);
+        assert(0);
+        /* auto ci = TypeInfo_Class.find(classname);
         if (ci)
         {
             return ci.create();
         }
-        return null;
+        return null; */
     }
 
     @system unittest
@@ -2713,8 +2715,9 @@ class Throwable : Object
      */
     void toString(scope void delegate(in char[]) sink) const
     {
+        assert(0);
         import core.internal.string : unsignedToTempString;
-
+/*
         char[20] tmpBuff = void;
 
         sink(typeid(this).name);
@@ -2739,7 +2742,7 @@ class Throwable : Object
             {
                 // ignore more errors
             }
-        }
+        } */
     }
 
     /**
@@ -2919,7 +2922,7 @@ class Error : Throwable
     }
 }
 
-extern (C)
+/+extern (C)
 {
     // from druntime/src/rt/aaA.d
 
@@ -3581,7 +3584,7 @@ ref V require(K, V)(ref V[K] aa, K key, lazy V value = V.init)
     assert(aa.require("k1", 0) == 1);
     assert(aa.require("k2", 0) == 0);
     assert(aa["k2"] == 0);
-}
+}+/
 
 // Tests whether T can be @safe-ly copied. Use a union to exclude destructor from the test.
 private enum bool isSafeCopyable(T) = is(typeof(() @safe { union U { T x; } T *x; auto u = U(*x); }));
@@ -3805,12 +3808,14 @@ else
 
 bool _xopEquals(in void*, in void*)
 {
-    throw new Error("TypeInfo.equals is not implemented");
+    //throw new Error("TypeInfo.equals is not implemented");
+    assert(0, "TypeInfo.equals is not implemented");
 }
 
 bool _xopCmp(in void*, in void*)
 {
-    throw new Error("TypeInfo.compare is not implemented");
+    //throw new Error("TypeInfo.compare is not implemented");
+    assert(0, "TypeInfo.compare is not implemented");
 }
 
 /******************************************
@@ -3845,7 +3850,7 @@ enum immutable(void)* rtinfoHasPointers = cast(void*)1;
 
 // Helper functions
 
-private inout(TypeInfo) getElement(return scope inout TypeInfo value) @trusted pure nothrow
+/* private inout(TypeInfo) getElement(return scope inout TypeInfo value) @trusted pure nothrow
 {
     TypeInfo element = cast() value;
     for (;;)
@@ -3862,9 +3867,9 @@ private inout(TypeInfo) getElement(return scope inout TypeInfo value) @trusted p
             break;
     }
     return cast(inout) element;
-}
+} */
 
-private size_t getArrayHash(const scope TypeInfo element, const scope void* ptr, const size_t count) @trusted nothrow
+/* private size_t getArrayHash(const scope TypeInfo element, const scope void* ptr, const size_t count) @trusted nothrow
 {
     if (!count)
         return 0;
@@ -3893,7 +3898,7 @@ private size_t getArrayHash(const scope TypeInfo element, const scope void* ptr,
     foreach (size_t i; 0 .. count)
         hash = hashOf(element.getHash(ptr + i * elementSize), hash);
     return hash;
-}
+} */
 
 /// Provide the .dup array property.
 @property auto dup(T)(T[] a)
@@ -3953,7 +3958,7 @@ private size_t getArrayHash(const scope TypeInfo element, const scope void* ptr,
 
 // HACK:  This is a lie.  `_d_arraysetcapacity` is neither `nothrow` nor `pure`, but this lie is
 // necessary for now to prevent breaking code.
-private extern (C) size_t _d_arraysetcapacity(const TypeInfo ti, size_t newcapacity, void[]* arrptr) pure nothrow;
+//private extern (C) size_t _d_arraysetcapacity(const TypeInfo ti, size_t newcapacity, void[]* arrptr) pure nothrow;
 
 /**
 (Property) Gets the current _capacity of a slice. The _capacity is the size
@@ -4052,7 +4057,7 @@ the requested capacity).
 
 // HACK:  This is a lie.  `_d_arrayshrinkfit` is not `nothrow`, but this lie is necessary
 // for now to prevent breaking code.
-private extern (C) void _d_arrayshrinkfit(const TypeInfo ti, void[] arr) nothrow;
+//private extern (C) void _d_arrayshrinkfit(const TypeInfo ti, void[] arr) nothrow;
 
 /**
 Assume that it is safe to append to this array. Appends made to this array

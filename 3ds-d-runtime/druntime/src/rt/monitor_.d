@@ -7,7 +7,7 @@
  * Source: $(DRUNTIMESRC rt/_monitor_.d)
  */
 module rt.monitor_;
-
+/+
 import core.atomic, core.stdc.stdlib, core.stdc.string;
 
 // NOTE: The dtor callback feature is only supported for monitors that are not
@@ -310,3 +310,4 @@ unittest
     assert(getMonitor(obj) !is null);
     assert(GC.getAttr(cast(void*) obj) & GC.BlkAttr.FINALIZE);
 }
++/

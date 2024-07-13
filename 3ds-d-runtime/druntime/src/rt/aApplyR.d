@@ -7,7 +7,7 @@
  * Source: $(DRUNTIMESRC rt/_aApplyR.d)
  */
 module rt.aApplyR;
-
+/+
 import core.internal.utf;
 
 /**********************************************/
@@ -963,3 +963,4 @@ unittest
     }
     assert(i == 5);
 }
++/

@@ -2517,7 +2517,15 @@ private:
 // here even when that bug is fixed.
 private immutable long[__traits(allMembers, ClockType).length] _ticksPerSecond;
 
-// TODO: [3dskit] test if _d_initMonoTime still gets called with betterc
+// [3dskit] _d_initMonoTime() is called from rt_init() in rt.dmain2
+// this is patched out in our uses because of betterc.
+// to get around this, we call it in a constructor.
+
+pragma(crt_constructor)
+extern(C) void _d_initMonoTimeConstructor3dskit() @nogc nothrow
+{
+  _d_initMonoTime();
+}
 
 // This is called directly from the runtime initilization function (rt_init),
 // instead of using a static constructor. Other subsystems inside the runtime

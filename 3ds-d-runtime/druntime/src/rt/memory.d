@@ -18,9 +18,9 @@ import rt.sections;
 
 void initStaticDataGC()
 {
-    foreach (ref sg; SectionGroup)
+    /* foreach (ref sg; SectionGroup)
     {
         foreach (rng; sg.gcRanges)
             GC.addRange(rng.ptr, rng.length);
-    }
+    } */
 }

@@ -17,7 +17,7 @@
 /**
  *
  */
-void _d_invariant(Object o)
+/* void _d_invariant(Object o)
 {   ClassInfo c;
 
     //printf("__d_invariant(%p)\n", o);
@@ -35,3 +35,4 @@ void _d_invariant(Object o)
         c = c.base;
     } while (c);
 }
+ */

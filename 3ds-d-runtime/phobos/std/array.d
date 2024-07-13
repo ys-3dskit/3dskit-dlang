@@ -1045,12 +1045,12 @@ if (isDynamicArray!T && allSatisfy!(isIntegral, I))
 }
 
 // from rt/lifetime.d
-private extern(C) void[] _d_newarrayU(const TypeInfo ti, size_t length) pure nothrow;
+//private extern(C) void[] _d_newarrayU(const TypeInfo ti, size_t length) pure nothrow;
 
 // from rt/tracegc.d
 version (D_ProfileGC)
-private extern (C) void[] _d_newarrayUTrace(string file, size_t line,
-    string funcname, const scope TypeInfo ti, size_t length) pure nothrow;
+/* private extern (C) void[] _d_newarrayUTrace(string file, size_t line,
+    string funcname, const scope TypeInfo ti, size_t length) pure nothrow; */
 
 private auto arrayAllocImpl(bool minimallyInitialized, T, I...)(I sizes) nothrow
 {

@@ -7,7 +7,6 @@
  * Source: $(DRUNTIMESRC core/internal/util/_array.d)
  */
 module core.internal.util.array;
-/+
 
 import core.internal.string;
 import core.stdc.stdint;
@@ -26,15 +25,17 @@ private char[] errorMessage(Args...)(scope const(char*) format,
 
 @safe /* pure dmd @@@BUG11461@@@ */ nothrow:
 
-void enforceRawArraysConformable(const char[] action, const size_t elementSize,
+alias enforceRawArraysConformable = enforceRawArraysConformableNogc;
+
+/* void enforceRawArraysConformable(const char[] action, const size_t elementSize,
     const void[] a1, const void[] a2, const bool allowOverlap = false)
 {
     _enforceSameLength(action, a1.length, a2.length);
     if (!allowOverlap)
         _enforceNoOverlap(action, arrayToPtr(a1), arrayToPtr(a2), elementSize * a1.length);
-}
+} */
 
-private void _enforceSameLength(const char[] action,
+/* private void _enforceSameLength(const char[] action,
     const size_t length1, const size_t length2)
 {
     if (length1 == length2)
@@ -66,7 +67,7 @@ private void _enforceNoOverlap(const char[] action,
     msg ~= " byte(s) overlap of ";
     msg ~= bytes.unsignedToTempString(tmpBuff);
     assert(0, msg);
-}
+} */
 
 void enforceRawArraysConformableNogc(const char[] action, const size_t elementSize,
     const void[] a1, const void[] a2, const bool allowOverlap = false)
@@ -103,4 +104,3 @@ private uintptr_t arrayToPtr(const void[] array) @trusted
     // Ok because the user will never dereference the pointer
     return cast(uintptr_t)array.ptr;
 }
-+/

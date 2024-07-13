@@ -59,26 +59,26 @@ struct SectionGroup
         return dg(globalSectionGroup);
     }
 
-    @property immutable(ModuleInfo*)[] modules() const nothrow @nogc
+    /* @property immutable(ModuleInfo*)[] modules() const nothrow @nogc
     {
         return _moduleGroup.modules;
-    }
+    } */
 
-    @property ref inout(ModuleGroup) moduleGroup() inout nothrow @nogc
+    /* @property ref inout(ModuleGroup) moduleGroup() inout nothrow @nogc
     {
         return _moduleGroup;
-    }
+    } */
 
-    @property inout(void[])[] gcRanges() inout nothrow @nogc
+    /* @property inout(void[])[] gcRanges() inout nothrow @nogc
     {
         return _gcRanges[];
-    }
+    } */
 
 private:
-    ModuleGroup _moduleGroup;
+//    ModuleGroup _moduleGroup;
 
-    import rt.util.container.array;
-    Array!(void[]) _gcRanges;
+    /* import rt.util.container.array;
+    Array!(void[]) _gcRanges; */
 
     version (Solaris)
     {
@@ -110,7 +110,7 @@ private
                     if (phdr.p_flags & PF_W) // writeable data segment
                     {
                         auto beg = cast(void*)(info.dlpi_addr + phdr.p_vaddr);
-                        pdso._gcRanges.insertBack(beg[0 .. phdr.p_memsz]);
+                        //pdso._gcRanges.insertBack(beg[0 .. phdr.p_memsz]);
                     }
                     break;
 
@@ -319,11 +319,11 @@ private
 void initSections() nothrow @nogc
 {
     debug(PRINTF) printf("initSections called\n");
-    globalSectionGroup.moduleGroup = ModuleGroup(getModuleInfos());
+//    globalSectionGroup.moduleGroup = ModuleGroup(getModuleInfos());
 
     static void pushRange(void* start, void* end) nothrow @nogc
     {
-        globalSectionGroup._gcRanges.insertBack(start[0 .. (end - start)]);
+        //globalSectionGroup._gcRanges.insertBack(start[0 .. (end - start)]);
     }
 
     version (UseELF)
@@ -342,13 +342,13 @@ void finiSections() nothrow @nogc
 {
     debug(PRINTF) printf("finiSections called\n");
     import core.stdc.stdlib : free;
-    free(cast(void*)globalSectionGroup.modules.ptr);
+//    free(cast(void*)globalSectionGroup.modules.ptr);
 }
 
 /***
  * Called once per thread; returns array of thread local storage ranges
  */
-void[] initTLSRanges() nothrow @nogc
+/* void[] initTLSRanges() nothrow @nogc
 {
     debug(PRINTF) printf("initTLSRanges called\n");
     version (UseELF)
@@ -359,7 +359,7 @@ void[] initTLSRanges() nothrow @nogc
     }
     else static assert(0, "TLS range detection not implemented for this OS.");
 
-}
+} */
 
 void finiTLSRanges(void[] rng) nothrow @nogc
 {
@@ -381,10 +381,10 @@ private:
 struct ModuleReference
 {
     ModuleReference* next;
-    immutable(ModuleInfo)* mod;
+    //immutable(ModuleInfo)* mod;
 }
 
-immutable(ModuleInfo*)[] getModuleInfos() nothrow @nogc
+/* immutable(ModuleInfo*)[] getModuleInfos() nothrow @nogc
 out (result)
 {
     foreach(m; result)
@@ -409,3 +409,4 @@ do
 
     return cast(immutable)result;
 }
+ */

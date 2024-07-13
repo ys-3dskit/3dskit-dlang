@@ -10,7 +10,7 @@
  */
 
 module rt.cover;
-
+/+
 import core.internal.util.math : min, max;
 
 private
@@ -626,3 +626,4 @@ char[] expandTabs( char[] str, int tabsize = 8 )
     }
     return result;
 }
++/

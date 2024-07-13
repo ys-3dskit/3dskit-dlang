@@ -10,7 +10,7 @@
    Authors:   Martin Nowak, Steven Schveighoffer
 */
 module core.internal.newaa;
-
+/+
 import core.memory;
 
 // grow threshold
@@ -167,3 +167,4 @@ unittest
     assert(typeid(Foo).getHash(&k) != hashOf(k));
     assert(utaa[Foo(1, 2.0)] == 5);
 }
++/

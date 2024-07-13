@@ -11,7 +11,7 @@
  */
 
 module rt.minfo;
-
+/+
 import core.stdc.stdlib;  // alloca
 import core.stdc.string;  // memcpy
 import rt.sections;
@@ -929,3 +929,4 @@ version (CRuntime_Microsoft)
     // Dummy so Win32 code can still call it
     extern(C) void _minit() { }
 }
++/

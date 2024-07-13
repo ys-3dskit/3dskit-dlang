@@ -148,7 +148,7 @@ else version (CRuntime_UClibc)
 }
 else
 {
-    private TypeInfo tiglobal;
+    /* private TypeInfo tiglobal;
 
     extern (C) void[] _adSort(return scope void[] a, TypeInfo ti)
     {
@@ -159,7 +159,7 @@ else
         tiglobal = ti;
         qsort(a.ptr, a.length, ti.tsize, &cmp);
         return a;
-    }
+    } */
 }
 
 unittest

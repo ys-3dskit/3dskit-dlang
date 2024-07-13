@@ -25,7 +25,7 @@ private
  *      0       not equal
  */
 
-extern (C) int _adEq2(void[] a1, void[] a2, TypeInfo ti)
+/* extern (C) int _adEq2(void[] a1, void[] a2, TypeInfo ti)
 {
     debug(adi) printf("_adEq2(a1.length = %d, a2.length = %d)\n", a1.length, a2.length);
     if (a1.length != a2.length)
@@ -33,7 +33,7 @@ extern (C) int _adEq2(void[] a1, void[] a2, TypeInfo ti)
     if (!ti.equals(&a1, &a2))
         return 0;
     return 1;
-}
+} */
 
 @safe unittest
 {

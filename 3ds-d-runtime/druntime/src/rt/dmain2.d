@@ -10,7 +10,7 @@
  */
 
 module rt.dmain2;
-
+/+
 import rt.memory;
 import rt.sections;
 import core.atomic;
@@ -108,6 +108,8 @@ shared size_t _initCount;
  */
 extern (C) int rt_init()
 {
+    assert(0);
+/+
     /* @@BUG 11380 @@ Need to synchronize rt_init/rt_term calls for
        version (Shared) druntime, because multiple C threads might
        initialize different D libraries without knowing about the
@@ -145,7 +147,7 @@ extern (C) int rt_init()
         _d_print_throwable(t);
     }
     _d_critical_term();
-    _d_monitor_staticdtor();
+    _d_monitor_staticdtor();+/
     return 0;
 }
 
@@ -154,7 +156,8 @@ extern (C) int rt_init()
  */
 extern (C) int rt_term()
 {
-    if (atomicLoad!(MemoryOrder.raw)(_initCount) == 0) return 0; // was never initialized
+    assert(0);
+    /+if (atomicLoad!(MemoryOrder.raw)(_initCount) == 0) return 0; // was never initialized
     if (atomicOp!"-="(_initCount, 1)) return 1;
 
     try
@@ -175,7 +178,7 @@ extern (C) int rt_term()
         finiSections();
         _d_critical_term();
         _d_monitor_staticdtor();
-    }
+    }+/
     return 0;
 }
 
@@ -319,6 +322,12 @@ extern (C) int _d_run_main(int argc, char** argv, MainFunc mainFunc)
             arg = argv[i][0 .. strlen(argv[i])];
             totalArgsLength += arg.length;
         }
+    }
+    else version (Horizon)
+    {
+      assert(0);
+      char[][] args;
+      size_t totalArgsLength;
     }
     else
         static assert(0);
@@ -685,3 +694,4 @@ extern (C) void _d_print_throwable(Throwable t)
     }
     formatThrowable(t, &sink);
 }
++/

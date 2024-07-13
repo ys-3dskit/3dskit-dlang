@@ -13,7 +13,7 @@
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
 module rt.critical_;
-
+/+
 nothrow:
 
 import rt.monitor_, core.atomic;
@@ -89,3 +89,4 @@ void ensureMutex(shared(D_CRITICAL_SECTION)* cs)
         unlockMutex(cast(Mutex*)&gcs.mtx);
     }
 }
++/

@@ -12,7 +12,7 @@
  */
 
 module rt.profilegc;
-
+/+
 private:
 
 import core.stdc.errno;
@@ -175,3 +175,4 @@ shared static ~this()
         }
     }
 }
++/

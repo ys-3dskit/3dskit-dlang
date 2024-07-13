@@ -1,4 +1,4 @@
-import core.runtime, core.time : MonoTime;
+/+import core.runtime, core.time : MonoTime;
 import core.stdc.stdio;
 
 version (ARM)     version = ARM_Any;
@@ -185,3 +185,4 @@ void restoreFPUMode()
     else
         static assert(0);
 }
++/

@@ -3,3 +3,5 @@ build
 
 test
 test.o
+test.smdh
+test.3dsx

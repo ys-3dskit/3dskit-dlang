@@ -37,10 +37,11 @@ druntime:
   * `core.runtime` - the d runtime is disabled (betterC)
   * `core.simd` - simd isn't a thing on its cpu
 - adding Horizon support to many modules
-  * `core.time` - MonoTime is implemented using cpu ticks
+  * `core.time` - MonoTime is implemented using cpu ticks, `crt_constructor` replaces `rt_init`
 - adding `core.sys.horizon`, and removing irrelevant `core.sys` modules
   * note that the 3DS does not count as `version (Posix)` as this would require compiler patches.
 - adding devkitARM/3DS bindings for `core.stdc`
+- disable huge amounts of `rt` and other stuff that will only ever work with GC or a proper D runtime
 
 phobos:
  - //TODO

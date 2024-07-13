@@ -120,7 +120,7 @@ else version (WatchOS)
 
 private
 {
-    extern (C) uint gc_getAttr( void* p ) pure nothrow;
+    /* extern (C) uint gc_getAttr( void* p ) pure nothrow;
     extern (C) uint gc_setAttr( void* p, uint a ) pure nothrow;
     extern (C) uint gc_clrAttr( void* p, uint a ) pure nothrow;
 
@@ -136,7 +136,7 @@ private
 
     extern (C) BlkInfo_ gc_query(return scope void* p) pure nothrow;
     extern (C) GC.Stats gc_stats ( ) @safe nothrow @nogc;
-    extern (C) GC.ProfileStats gc_profileStats ( ) nothrow @nogc @safe;
+    extern (C) GC.ProfileStats gc_profileStats ( ) nothrow @nogc @safe; */
 }
 
 version (CoreDoc)
@@ -233,7 +233,7 @@ private extern (C) void _initialize() @system
  * This struct encapsulates all garbage collection functionality for the D
  * programming language.
  */
-struct GC
+/+struct GC
 {
     @disable this();
 
@@ -1035,7 +1035,7 @@ extern(C):
         assert(GC.allocatedInCurrentThread() == currentlyAllocated + 32);
         assert(GC.stats().allocatedInCurrentThread == currentlyAllocated + 32);
     }
-}
+}+/
 
 /**
  * Pure variants of C's memory allocation functions `malloc`, `calloc`, and
@@ -1519,7 +1519,7 @@ unittest
 }
 
 // in rt.lifetime:
-private extern (C) void* _d_newitemU(scope const TypeInfo _ti) @system pure nothrow;
+//private extern (C) void* _d_newitemU(scope const TypeInfo _ti) @system pure nothrow;
 
 /**
 Moves a value to a new GC allocation.

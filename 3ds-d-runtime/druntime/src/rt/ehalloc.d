@@ -10,7 +10,7 @@
  */
 
 module rt.ehalloc;
-
+/+
 //debug = PRINTF;
 
 debug(PRINTF)
@@ -78,3 +78,4 @@ nothrow extern (C) void _d_delThrowable(Throwable t)
         free(cast(void*) t);
     }
 }
++/
