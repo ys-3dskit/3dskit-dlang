@@ -50,7 +50,7 @@ enum uint FD_SETSIZE = 64;
 
 struct fd_set
 {
-  __fd_mask[(FD_SETSIZE + (_NFDBITS - 1)) / _NFDBITS] __fds_bits;
+  __fd_mask[(FD_SETSIZE + (_NFDBITS - 1)) / _NFDBITS] fds_bits;
 }
 
 extern (D) pure // macros

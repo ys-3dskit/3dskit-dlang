@@ -847,10 +847,10 @@ version (Posix) private class DefaultTraceInfo : Throwable.TraceInfo
             static void** getBasePtr() @nogc
             {
                 version (D_InlineAsm_X86)
-                    asm @nogc { naked; mov EAX, EBP; ret; }
+                    asm @nogc nothrow { naked; mov EAX, EBP; ret; }
                 else
                     version (D_InlineAsm_X86_64)
-                        asm @nogc { naked; mov RAX, RBP; ret; }
+                        asm @nogc nothrow { naked; mov RAX, RBP; ret; }
                 else
                     return null;
             }

@@ -816,7 +816,7 @@ do
     {
         size_t reqsize = void;
 
-        asm
+        asm @nogc nothrow
         {
             mov EAX, newcapacity;
             mul EAX, size;
@@ -828,7 +828,7 @@ do
     {
         size_t reqsize = void;
 
-        asm
+        asm @nogc nothrow
         {
             mov RAX, newcapacity;
             mul RAX, size;

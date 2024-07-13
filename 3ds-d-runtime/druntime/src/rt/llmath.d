@@ -29,7 +29,7 @@ void __ULDIV2__()
 {
     version (D_InlineAsm_X86)
     {
-        asm
+        asm @nogc nothrow
         {
             naked                   ;
             mov     EBX,4[ESP]      ;   // the only difference between this and __ULDIV__
@@ -198,7 +198,7 @@ void __ULDIV__()
 {
     version (D_InlineAsm_X86)
     {
-        asm
+        asm @nogc nothrow
         {
             naked                   ;
             test    ECX,ECX         ;
@@ -377,7 +377,7 @@ void __LDIV2__()
 {
     version (D_InlineAsm_X86)
     {
-        asm
+        asm @nogc nothrow
         {
             naked                   ;
             test    EDX,EDX         ;       // [EDX,EAX] negative?
@@ -443,7 +443,7 @@ void __LDIV__()
 {
     version (D_InlineAsm_X86)
     {
-        asm
+        asm @nogc nothrow
         {
             naked                   ;
             test    EDX,EDX         ;       // [EDX,EAX] negative?
@@ -508,7 +508,7 @@ version (Win32) version (CRuntime_Microsoft)
 
     void _ms_alldiv()
     {
-        asm
+        asm @nogc nothrow
         {
             naked            ;
             push ECX         ;
@@ -522,7 +522,7 @@ version (Win32) version (CRuntime_Microsoft)
 
     void _ms_aulldiv()
     {
-        asm
+        asm @nogc nothrow
         {
             naked            ;
             push ECX         ;
@@ -536,7 +536,7 @@ version (Win32) version (CRuntime_Microsoft)
 
     void _ms_allrem()
     {
-        asm
+        asm @nogc nothrow
         {
             naked            ;
             push ECX         ;
@@ -552,7 +552,7 @@ version (Win32) version (CRuntime_Microsoft)
 
     void _ms_aullrem()
     {
-        asm
+        asm @nogc nothrow
         {
             naked            ;
             push ECX         ;

@@ -316,6 +316,8 @@ version (Horizon)
   pragma(mangle, "__isnanf") pure int isnan(float x);
   pragma(mangle, "__isnand") pure int isnan(double x);
 
+  extern(D) pure int isnan(real x) { return isnan(cast(double) x); }
+
   pragma(mangle, "__fpclassifyf") pure int fpclassify(float x);
   pragma(mangle, "__fpclassifyd") pure int fpclassify(double x);
 

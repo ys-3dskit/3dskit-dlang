@@ -7,7 +7,7 @@
  * Source: $(DRUNTIMESRC core/internal/util/_array.d)
  */
 module core.internal.util.array;
-
+/+
 
 import core.internal.string;
 import core.stdc.stdint;
@@ -103,3 +103,4 @@ private uintptr_t arrayToPtr(const void[] array) @trusted
     // Ok because the user will never dereference the pointer
     return cast(uintptr_t)array.ptr;
 }
++/

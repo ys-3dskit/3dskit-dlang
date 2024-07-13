@@ -574,7 +574,7 @@ extern(D) void* getThreadLocalStorage ()
 {
   // TODO: test inline asm output is identical to C ver
   void* ret;
-  asm
+  asm @nogc nothrow
   {
     //"mrc p15, 0, %[data], c13, c0, 3" : [data] "=r" (ret);
     "mrc p15, 0, %0, c13, c0, 3" : "=r"(ret);
@@ -1485,7 +1485,7 @@ Result svcBackdoor (int function () callback);
 extern(D) void SVC_STOP_POINT()
 {
   // TODO: test inline assembly at usages is same as C
-  asm
+  asm @nogc nothrow
   {
     "svc 0xFF";
   }

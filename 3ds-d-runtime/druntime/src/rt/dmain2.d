@@ -386,7 +386,7 @@ private extern (C) int _d_run_main2(char[][] args, size_t totalArgsLength, MainF
          * Make it 64 bit extended.
          */
         ushort fpucw;
-        asm
+        asm @nogc nothrow
         {
             fstsw   fpucw;
             or      fpucw, 0b11_00_111111; // 11: use 64 bit extended-precision
@@ -399,7 +399,7 @@ private extern (C) int _d_run_main2(char[][] args, size_t totalArgsLength, MainF
         // enable full precision for reals
         version (D_InlineAsm_X86_64)
         {
-            asm
+            asm @nogc nothrow
             {
                 push    RAX;
                 fstcw   word ptr [RSP];
@@ -411,7 +411,7 @@ private extern (C) int _d_run_main2(char[][] args, size_t totalArgsLength, MainF
         }
         else version (D_InlineAsm_X86)
         {
-            asm
+            asm @nogc nothrow
             {
                 push    EAX;
                 fstcw   word ptr [ESP];

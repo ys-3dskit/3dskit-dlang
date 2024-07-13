@@ -36,7 +36,7 @@ void _Cmul()
 {
     // p.re = x.re * y.re - x.im * y.im;
     // p.im = x.im * y.re + x.re * y.im;
-    asm
+    asm @nogc nothrow
     {   naked                   ;
         fld     ST(1)           ; // x.re
         fmul    ST,ST(4)        ; // ST0 = x.re * y.re
@@ -125,7 +125,7 @@ void _Cdiv()
     real r;
     real den;
 
-    asm
+    asm @nogc nothrow
     {
         fstp    y_im    ;
         fstp    y_re    ;
@@ -178,7 +178,7 @@ void _Cdiv()
     }
     return q_re + q_im * 1.0i;
 +/
-    asm
+    asm @nogc nothrow
     {
         fld     q_re;
         fld     q_im;
@@ -200,7 +200,7 @@ void _Cdiv()
 void _Ccmp()
 {
   version (D_InlineAsm_X86)
-    asm
+    asm @nogc nothrow
     {   naked                   ;
         fucomp  ST(2)           ; // compare x.im and y.im
         fstsw   AX              ;
@@ -221,7 +221,7 @@ void _Ccmp()
         ret                     ;
     }
   else version (D_InlineAsm_X86_64)
-    asm
+    asm @nogc nothrow
     {   naked                   ;
         fucomip  ST(2)          ; // compare x.im and y.im
         jne     L1              ;

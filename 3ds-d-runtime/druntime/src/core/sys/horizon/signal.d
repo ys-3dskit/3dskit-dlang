@@ -246,7 +246,7 @@ nothrow @nogc
 
 enum
 {
-  SIGPOLL = SIGIO,
+  SIGPOLL = 23, //SIGIO,
   SIGPROF = 27,
   SIGSYS = 12,
   SIGTRAP = 5,
@@ -303,8 +303,6 @@ enum
   //POLL_PRI = ,
   //POLL_HUP = ,
 }
-
-// TODO: finish
 
 /*
 SS_ONSTACK
@@ -392,7 +390,7 @@ struct sigevent
 
   // ifdef _POSIX_THREADS (?)
   void* function(sigval) sigev_notify_function;
-  pthread_attr_t* sigev_notify_attributes;
+  /* pthread_attr_t */ void* sigev_notify_attributes;
 }
 
 /*
@@ -416,5 +414,6 @@ int pthread_kill(pthread_t, int);
 int pthread_sigmask(int, const scope sigset_t*, sigset_t*);
 */
 
-int pthread_kill(pthread_t, int);
+/* int pthread_kill(pthread_t, int);
 int pthread_sigmask(int, const scope sigset_t*, sigset_t*);
+ */

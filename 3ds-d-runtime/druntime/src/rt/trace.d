@@ -878,11 +878,11 @@ else version (AArch64)
     // ldc.intrinsics.llvm_readcyclecounter on AArch64.
     extern (D) void QueryPerformanceCounter(timer_t* ctr)
     {
-        asm { "mrs %0, cntvct_el0" : "=r" (*ctr); }
+        asm @nogc nothrow { "mrs %0, cntvct_el0" : "=r" (*ctr); }
     }
     extern (D) void QueryPerformanceFrequency(timer_t* freq)
     {
-        asm { "mrs %0, cntfrq_el0" : "=r" (*freq); }
+        asm @nogc nothrow { "mrs %0, cntfrq_el0" : "=r" (*freq); }
     }
 }
 else version (LDC)
@@ -899,7 +899,7 @@ else
     {
         version (D_InlineAsm_X86)
         {
-            asm
+            asm @nogc nothrow
             {
                 naked                   ;
                 mov       ECX,EAX       ;
@@ -911,7 +911,7 @@ else
         }
         else version (D_InlineAsm_X86_64)
         {
-            asm
+            asm @nogc nothrow
             {
                 naked                   ;
                 // rdtsc can produce skewed results without preceding lfence/mfence.

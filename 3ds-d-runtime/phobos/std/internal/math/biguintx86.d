@@ -1311,7 +1311,7 @@ void multibyteSquare(BigDigit[] result, const BigDigit [] x) pure @safe @nogc
 version (BignumPerformanceTest)
 {
 import core.stdc.stdio;
-int clock() { asm { push EBX; xor EAX, EAX; cpuid; pop EBX; rdtsc; } }
+int clock() { asm @nogc nothrow { push EBX; xor EAX, EAX; cpuid; pop EBX; rdtsc; } }
 
 __gshared uint [2200] X1;
 __gshared uint [2200] Y1;

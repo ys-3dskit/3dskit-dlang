@@ -191,7 +191,8 @@ class Object
         // BUG: this prevents a compacting GC from working, needs to be fixed
         //return cast(int)cast(void*)this - cast(int)cast(void*)o;
 
-        throw new Exception("need opCmp for class " ~ typeid(this).name);
+        //throw new Exception("need opCmp for class " ~ typeid(this).name);
+        assert(0, "need opCmp for class");
         //return this !is o;
     }
 
@@ -590,30 +591,30 @@ void setSameMutex(shared Object ownee, shared Object owner)
  * When an object is accessed via an interface, an Interface* appears as the
  * first entry in its vtbl.
  */
-struct Interface
+/* struct Interface
 {
     /// Class info returned by `typeid` for this interface (not for containing class)
     TypeInfo_Class   classinfo;
     void*[]     vtbl;
     size_t      offset;     /// offset to Interface 'this' from Object 'this'
-}
+} */
 
 /**
  * Array of pairs giving the offset and type information for each
  * member in an aggregate.
  */
-struct OffsetTypeInfo
+/* struct OffsetTypeInfo
 {
     size_t   offset;    /// Offset of member from start of object
     TypeInfo ti;        /// TypeInfo for this member
-}
+} */
 
 /**
  * Runtime type information about a type.
  * Can be retrieved for any type using a
  * $(GLINK2 expression,TypeidExpression, TypeidExpression).
  */
-class TypeInfo
+/+class TypeInfo
 {
     override string toString() const @safe nothrow
     {
@@ -799,7 +800,7 @@ else
     /** Return info used by the garbage collector to do precise collection.
      */
     @property immutable(void)* rtInfo() nothrow pure const @trusted @nogc { return rtinfoHasPointers; } // better safe than sorry
-}
+}+/
 
 version (LDC) unittest
 {
@@ -884,7 +885,7 @@ version (LDC) unittest
     assert(dummy.getHash(null) == 0);
 }
 
-class TypeInfo_Enum : TypeInfo
+/* class TypeInfo_Enum : TypeInfo
 {
     override string toString() const pure { return name; }
 
@@ -1025,7 +1026,7 @@ class TypeInfo_Enum : TypeInfo
     TypeInfo base;
     string   name;
     void[]   m_init;
-}
+} */
 
 @safe unittest
 {
@@ -1047,7 +1048,7 @@ class TypeInfo_Enum : TypeInfo
 
 
 // Please make sure to keep this in sync with TypeInfo_P (src/rt/typeinfo/ti_ptr.d)
-class TypeInfo_Pointer : TypeInfo
+/* class TypeInfo_Pointer : TypeInfo
 {
     override string toString() const { return m_next.toString() ~ "*"; }
 
@@ -1098,8 +1099,8 @@ class TypeInfo_Pointer : TypeInfo
 
     TypeInfo m_next;
 }
-
-class TypeInfo_Array : TypeInfo
+ */
+/* class TypeInfo_Array : TypeInfo
 {
     override string toString() const { return value.toString() ~ "[]"; }
 
@@ -1189,9 +1190,9 @@ class TypeInfo_Array : TypeInfo
     }
 
     override @property immutable(void)* rtInfo() nothrow pure const @safe { return RTInfo!(void[]); }
-}
+} */
 
-class TypeInfo_StaticArray : TypeInfo
+/* class TypeInfo_StaticArray : TypeInfo
 {
     override string toString() const
     {
@@ -1312,7 +1313,7 @@ class TypeInfo_StaticArray : TypeInfo
 
     // just return the rtInfo of the element, we have no generic type T to run RTInfo!T on
     override @property immutable(void)* rtInfo() nothrow pure const @safe { return value.rtInfo(); }
-}
+} */
 
 // https://issues.dlang.org/show_bug.cgi?id=21315
 @system unittest
@@ -1331,7 +1332,7 @@ class TypeInfo_StaticArray : TypeInfo
     }
 }
 
-class TypeInfo_AssociativeArray : TypeInfo
+/* class TypeInfo_AssociativeArray : TypeInfo
 {
     override string toString() const
     {
@@ -1386,8 +1387,8 @@ class TypeInfo_AssociativeArray : TypeInfo
         return 0;
     }
 }
-
-class TypeInfo_Vector : TypeInfo
+ */
+/+class TypeInfo_Vector : TypeInfo
 {
     override string toString() const { return "__vector(" ~ base.toString() ~ ")"; }
 
@@ -1421,9 +1422,9 @@ class TypeInfo_Vector : TypeInfo
     }
 
     TypeInfo base;
-}
+}+/
 
-class TypeInfo_Function : TypeInfo
+/+class TypeInfo_Function : TypeInfo
 {
     override string toString() const pure @trusted
     {
@@ -1463,7 +1464,7 @@ class TypeInfo_Function : TypeInfo
     * Mangled function type string
     */
     string deco;
-}
+}+/
 
 @safe unittest
 {
@@ -1500,7 +1501,7 @@ class TypeInfo_Function : TypeInfo
     assert(typeid(functionTypes[0]).rtInfo() is null);
 }
 
-class TypeInfo_Delegate : TypeInfo
+/* class TypeInfo_Delegate : TypeInfo
 {
     override string toString() const pure @trusted
     {
@@ -1609,18 +1610,18 @@ class TypeInfo_Delegate : TypeInfo
     }
 
     override @property immutable(void)* rtInfo() nothrow pure const @safe { return RTInfo!(int delegate()); }
-}
+} */
 
-private extern (C) Object _d_newclass(const TypeInfo_Class ci);
+/* private extern (C) Object _d_newclass(const TypeInfo_Class ci);
 private extern (C) int _d_isbaseof(scope TypeInfo_Class child,
-    scope const TypeInfo_Class parent) @nogc nothrow pure @safe; // rt.cast_
+    scope const TypeInfo_Class parent) @nogc nothrow pure @safe; // rt.cast_ */
 
 /**
  * Runtime type information about a class.
  * Can be retrieved from an object instance by using the
  * $(DDSUBLINK spec/expression,typeid_expressions,typeid expression).
  */
-class TypeInfo_Class : TypeInfo
+/+class TypeInfo_Class : TypeInfo
 {
     override string toString() const pure { return name; }
 
@@ -1793,7 +1794,7 @@ class TypeInfo_Class : TypeInfo
     }
 }
 
-alias ClassInfo = TypeInfo_Class;
+alias ClassInfo = TypeInfo_Class;+/
 
 @safe unittest
 {
@@ -1809,7 +1810,7 @@ alias ClassInfo = TypeInfo_Class;
     assert(typeid(X).initializer.length == typeid(immutable(X)).initializer.length);
 }
 
-class TypeInfo_Interface : TypeInfo
+/+class TypeInfo_Interface : TypeInfo
 {
     override string toString() const pure { return info.name; }
 
@@ -1912,7 +1913,7 @@ class TypeInfo_Interface : TypeInfo
     {
         return child !is null && _d_isbaseof(cast() child.info, this.info);
     }
-}
+}+/
 
 @safe unittest
 {
@@ -1926,7 +1927,7 @@ class TypeInfo_Interface : TypeInfo
     assert(typeid(I).toHash() == typeid(I).hashOf());
 }
 
-class TypeInfo_Struct : TypeInfo
+/* class TypeInfo_Struct : TypeInfo
 {
     override string toString() const { return name; }
 
@@ -2115,7 +2116,7 @@ class TypeInfo_Struct : TypeInfo
             }
         }
     }
-}
+} */
 
 @system unittest
 {
@@ -2130,7 +2131,7 @@ class TypeInfo_Struct : TypeInfo
     assert(!typeid(S).equals(&s, &s));
 }
 
-class TypeInfo_Tuple : TypeInfo
+/* class TypeInfo_Tuple : TypeInfo
 {
     TypeInfo[] elements;
 
@@ -2214,9 +2215,9 @@ class TypeInfo_Tuple : TypeInfo
     {
         assert(0);
     }
-}
+} */
 
-class TypeInfo_Const : TypeInfo
+/* class TypeInfo_Const : TypeInfo
 {
     override string toString() const
     {
@@ -2282,7 +2283,7 @@ class TypeInfo_Inout : TypeInfo_Const
     {
         return cast(string) ("inout(" ~ base.toString() ~ ")");
     }
-}
+} */
 
 // Contents of Moduleinfo._flags
 enum
@@ -2309,7 +2310,7 @@ enum
  * It provides access to various aspects of the module.
  * It is not generated for betterC.
  */
-struct ModuleInfo
+/+struct ModuleInfo
 {
     uint _flags; // MIxxxx
     uint _index; // index into _moduleinfo_array[]
@@ -2506,7 +2507,7 @@ const:
         return moduleinfos_apply(
             (immutable(ModuleInfo*)m) => dg(cast(ModuleInfo*)m));
     }
-}
+}+/
 
 @system unittest
 {
@@ -4001,13 +4002,13 @@ reallocated or extended.
 Returns: The new capacity of the array (which may be larger than
 the requested capacity).
 */
-size_t reserve(T)(ref T[] arr, size_t newcapacity) pure nothrow @trusted
+/* size_t reserve(T)(ref T[] arr, size_t newcapacity) pure nothrow @trusted
 {
     if (__ctfe)
         return newcapacity;
     else
         return _d_arraysetcapacity(typeid(T[]), newcapacity, cast(void[]*)&arr);
-}
+} */
 
 ///
 @safe unittest
@@ -4751,12 +4752,12 @@ public import core.internal.array.construction : _d_arrayctor;
 public import core.internal.array.construction : _d_arraysetctor;
 public import core.internal.array.construction : _d_newarrayT;
 public import core.internal.array.construction : _d_newarraymTX;
-public import core.internal.array.arrayassign : _d_arrayassign_l;
-public import core.internal.array.arrayassign : _d_arrayassign_r;
-public import core.internal.array.arrayassign : _d_arraysetassign;
+//public import core.internal.array.arrayassign : _d_arrayassign_l;
+//public import core.internal.array.arrayassign : _d_arrayassign_r;
+//public import core.internal.array.arrayassign : _d_arraysetassign;
 public import core.internal.array.capacity: _d_arraysetlengthTImpl;
 
-public import core.internal.dassert: _d_assert_fail;
+//public import core.internal.dassert: _d_assert_fail;
 
 public import core.internal.destruction: __ArrayDtor;
 

@@ -137,7 +137,7 @@ void disableFPUFastMode()
     int dummy;
     version (ARM)
     {
-        asm
+        asm @nogc nothrow
         {
             "vmrs %0, fpscr
              bic %0, #(3 << 24)
@@ -147,7 +147,7 @@ void disableFPUFastMode()
     }
     else version (AArch64)
     {
-        asm
+        asm @nogc nothrow
         {
             "mrs %0, fpcr
              and %0, %0, #~(1 << 25)
@@ -164,7 +164,7 @@ void restoreFPUMode()
     int dummy;
     version (ARM)
     {
-        asm
+        asm @nogc nothrow
         {
             "vmrs %0, fpscr
              orr %0, #(3 << 24)
@@ -174,7 +174,7 @@ void restoreFPUMode()
     }
     else version (AArch64)
     {
-        asm
+        asm @nogc nothrow
         {
             "mrs %0, fpcr
              orr %0, %0, #(1 << 25)

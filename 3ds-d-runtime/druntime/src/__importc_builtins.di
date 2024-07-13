@@ -1,3 +1,4 @@
+/+
 /* This D file is implicitly imported by all ImportC source files.
  * It provides definitions for C compiler builtin functions and declarations.
  * The purpose is to make it unnecessary to hardwire them into the compiler.
@@ -186,3 +187,4 @@ else version (LDC)
     version (X86)    public import ldc.gccbuiltins_x86;
     version (X86_64) public import ldc.gccbuiltins_x86;
 }
++/

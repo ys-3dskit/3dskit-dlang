@@ -221,6 +221,10 @@ private extern (C) void _initialize() @system
         GetSystemInfo(&si);
         (cast() pageSize) = cast(size_t) si.dwPageSize;
     }
+    else version (Horizon)
+    {
+      (cast() pageSize) = cast(size_t) 4096; // 3DS has 4kb pages
+    }
     else
         static assert(false, __FUNCTION__ ~ " is not implemented on this platform");
 }

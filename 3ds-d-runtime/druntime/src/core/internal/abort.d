@@ -8,7 +8,15 @@ void abort(scope string msg, scope string filename = __FILE__, size_t line = __L
 {
     import core.stdc.stdlib: c_abort = abort;
     // use available OS system calls to print the message to stderr
-    version (Posix)
+    version (Horizon)
+    {
+      static void writeStr(scope const(char)[][] m...) @nogc nothrow @trusted
+      {
+        // there is no stderr really, screw it we assert 0. [3dskit]
+      assert(0, m[0]);
+      }
+    }
+    else version (Posix)
     {
         import core.sys.posix.unistd: write;
         static void writeStr(scope const(char)[][] m...) @nogc nothrow @trusted

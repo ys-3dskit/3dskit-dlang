@@ -131,7 +131,7 @@ version (LDC) {} else:
 
 void terminate()
 {
-    asm
+    asm @nogc nothrow
     {
         hlt ;
     }
@@ -253,12 +253,12 @@ extern (C) void _d_throwc(Throwable h)
     }
 
     version (D_InlineAsm_X86)
-        asm
+        asm @nogc nothrow
         {
             mov regebp,EBP  ;
         }
     else version (D_InlineAsm_X86_64)
-        asm
+        asm @nogc nothrow
         {
             mov regebp,RBP  ;
         }
@@ -407,7 +407,7 @@ extern (C) void _d_throwc(Throwable h)
                             catch_addr = cast(fp_t)(funcoffset + pcb.codeoffset);
                             catch_esp = regebp - handler_table.espoffset - fp_t.sizeof;
                             version (D_InlineAsm_X86)
-                                asm
+                                asm @nogc nothrow
                                 {
                                     mov     EAX,catch_esp   ;
                                     mov     ECX,catch_addr  ;
@@ -417,7 +417,7 @@ extern (C) void _d_throwc(Throwable h)
                                     ret                     ; // jump to catch block
                                 }
                             else version (D_InlineAsm_X86_64)
-                                asm
+                                asm @nogc nothrow
                                 {
                                     mov     RAX,catch_esp   ;
                                     mov     RCX,catch_esp   ;
@@ -451,7 +451,7 @@ extern (C) void _d_throwc(Throwable h)
                 version (Darwin)
                 {
                     version (D_InlineAsm_X86)
-                        asm
+                        asm @nogc nothrow
                         {
                             sub     ESP,4           ;
                             push    EBX             ;
@@ -464,7 +464,7 @@ extern (C) void _d_throwc(Throwable h)
                             add     ESP,4           ;
                         }
                     else version (D_InlineAsm_X86_64)
-                        asm
+                        asm @nogc nothrow
                         {
                             sub     RSP,8           ;
                             push    RBX             ;
@@ -482,7 +482,7 @@ extern (C) void _d_throwc(Throwable h)
                 else
                 {
                     version (D_InlineAsm_X86)
-                        asm
+                        asm @nogc nothrow
                         {
                             push    EBX             ;
                             mov     EBX,blockaddr   ;
@@ -493,7 +493,7 @@ extern (C) void _d_throwc(Throwable h)
                             pop     EBX             ;
                         }
                     else version (D_InlineAsm_X86_64)
-                        asm
+                        asm @nogc nothrow
                         {
                             sub     RSP,8           ;
                             push    RBX             ;

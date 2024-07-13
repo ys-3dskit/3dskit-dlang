@@ -1054,7 +1054,7 @@ void cpuidPPC()
                  PPC604E, PPC620, PPCG3, PPCG4, PPCG5 }
 
     // TODO:
-    // asm { mfpvr; } returns the CPU version but unfortunately it can
+    // asm @nogc nothrow { mfpvr; } returns the CPU version but unfortunately it can
     // only be used in kernel mode. So OS support is required.
     int cputype = PPC603;
 

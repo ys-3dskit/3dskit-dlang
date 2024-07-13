@@ -244,7 +244,7 @@ EXCEPTION_DISPOSITION _except_handler3(EXCEPTION_RECORD *eRecord,
 void printHandlerChain()
 {
     DEstablisherFrame *head;
-    asm
+    asm @nogc nothrow
     {
         mov EAX, FS:[0];
         mov head, EAX;
@@ -423,7 +423,7 @@ EXCEPTION_DISPOSITION _d_framehandler(
 {
     DHandlerTable *handlerTable;
 
-    asm { mov handlerTable,EAX; }
+    asm @nogc nothrow { mov handlerTable,EAX; }
 
     if (exceptionRecord.ExceptionFlags & EXCEPTION_UNWIND)
     {
@@ -578,7 +578,7 @@ EXCEPTION_DISPOSITION _d_framehandler(
                             alias void function() fp_t; // generic function pointer
                             fp_t catch_addr = cast(fp_t)(pcb.code);
                             catch_esp = regebp - handlerTable.espoffset - fp_t.sizeof;
-                            asm
+                            asm @nogc nothrow
                             {
                                 mov     EAX,catch_esp;
                                 mov     ECX,catch_addr;
@@ -641,14 +641,14 @@ extern(C) void _d_throwc(Throwable h)
     // set up a stack frame for trace unwinding
     version (AsmX86)
     {
-        asm
+        asm @nogc nothrow
         {
             naked;
             enter 0, 0;
         }
         version (D_InlineAsm_X86)
-            asm { mov EAX, [EBP+8]; }
-        asm
+            asm @nogc nothrow { mov EAX, [EBP+8]; }
+        asm @nogc nothrow
         {
             call throwImpl;
             leave;
@@ -843,7 +843,7 @@ void _d_local_unwind(DHandlerTable *handler_table,
     DCatchInfo *pci;
     int i;
     // Set up a special exception handler to catch double-fault exceptions.
-    asm
+    asm @nogc nothrow
     {
         push    dword ptr -1;
         push    dword ptr 0;
@@ -862,7 +862,7 @@ void _d_local_unwind(DHandlerTable *handler_table,
             DWORD *catch_ebp = &frame.ebp;
             void *blockaddr = phi.finally_code;
 
-            asm
+            asm @nogc nothrow
             {
                 push    EBX;
                 mov     EBX,blockaddr;
@@ -875,7 +875,7 @@ void _d_local_unwind(DHandlerTable *handler_table,
         }
     }
 
-    asm
+    asm @nogc nothrow
     {
         pop     FS:_except_list;
         add     ESP,12;
@@ -898,7 +898,7 @@ This code seems to be calling RtlUnwind( pFrame, &__retlabel, eRecord, 0);
 extern(C)
 int _d_global_unwind(DEstablisherFrame *pFrame, EXCEPTION_RECORD *eRecord)
 {
-    asm {
+    asm @nogc nothrow {
         naked;
         push EBP;
         mov EBP,ESP;
@@ -934,7 +934,7 @@ int _d_global_unwind(DEstablisherFrame *pFrame, EXCEPTION_RECORD *eRecord)
 extern(C)
 void _d_local_unwind2()
 {
-    asm
+    asm @nogc nothrow
     {
         naked;
         jmp     _d_localUnwindForGoto;
@@ -977,13 +977,13 @@ EXCEPTION_DISPOSITION _d_monitor_handler(
 extern(C)
 void _d_monitor_prolog(void *x, void *y, Object h)
 {
-    asm
+    asm @nogc nothrow
     {
         push    EAX;
     }
     //printf("_d_monitor_prolog(x=%p, y=%p, h=%p)\n", x, y, h);
     _d_monitorenter(h);
-    asm
+    asm @nogc nothrow
     {
         pop     EAX;
     }
@@ -995,13 +995,13 @@ extern(C)
 void _d_monitor_epilog(void *x, void *y, Object h)
 {
     //printf("_d_monitor_epilog(x=%p, y=%p, h=%p)\n", x, y, h);
-    asm
+    asm @nogc nothrow
     {
         push    EAX;
         push    EDX;
     }
     _d_monitorexit(h);
-    asm
+    asm @nogc nothrow
     {
         pop     EDX;
         pop     EAX;

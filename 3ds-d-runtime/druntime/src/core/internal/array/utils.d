@@ -41,10 +41,10 @@ ulong accumulatePure(string file, int line, string funcname, string name, ulong 
 {
     static ulong impureBypass(string file, int line, string funcname, string name, ulong size) @nogc nothrow
     {
-        import core.internal.traits : externDFunc;
+        /* import core.internal.traits : externDFunc;
 
         alias accumulate = externDFunc!("rt.profilegc.accumulate", void function(string file, uint line, string funcname, string type, ulong sz) @nogc nothrow);
-        accumulate(file, line, funcname, name, size);
+        accumulate(file, line, funcname, name, size); */
         return size;
     }
 

@@ -16,7 +16,10 @@
 module core.stdc.time;
 
 version (Horizon)
-    public import core.sys.horizon.stdc.time;
+{
+    public import core.sys.horizon.stdc.time: tm;
+    public import core.sys.horizon.sys.types : time_t;
+}
 else version (Posix)
     public import core.sys.posix.stdc.time;
 else version (Windows)

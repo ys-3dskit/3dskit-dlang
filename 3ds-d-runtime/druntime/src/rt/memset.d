@@ -40,7 +40,7 @@ int *_memset32(int *p, int value, size_t count)
 {
 version (D_InlineAsm_X86)
 {
-    asm
+    asm @nogc nothrow
     {
         mov     EDI,p           ;
         mov     EAX,value       ;

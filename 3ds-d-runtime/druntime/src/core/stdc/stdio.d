@@ -1035,9 +1035,9 @@ version (Horizon)
   // dkp stdio, sys reent
   pragma(inline, true) @property
   {
-    shared(FILE*) stdin()  { return __getreent.stdin;  }
-    shared(FILE*) stdout() { return __getreent.stdout; }
-    shared(FILE*) stderr() { return __getreent.stderr; }
+    shared(FILE*) stdin()  { return __getreent._stdin;  }
+    shared(FILE*) stdout() { return __getreent._stdout; }
+    shared(FILE*) stderr() { return __getreent._stderr; }
   }
 }
 

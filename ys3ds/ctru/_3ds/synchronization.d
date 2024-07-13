@@ -46,7 +46,7 @@ struct LightSemaphore
 /// Performs a Data Synchronization Barrier operation.
 extern(D) void __dsb ()
 {
-  asm
+  asm @nogc nothrow
   {
     //"mcr p15, 0, %[val], c7, c10, 4" :: [val] "r" (0) : "memory";
     "mcr p15, 0, %0, c7, c10, 4" :  : "r"(0) : "memory";
@@ -56,7 +56,7 @@ extern(D) void __dsb ()
 /// Performs a Data Memory Barrier operation.
 extern(D) void __dmb ()
 {
-  asm
+  asm @nogc nothrow
   {
     //"mcr p15, 0, %[val], c7, c10, 5" :: [val] "r" (0) : "memory";
     "mcr p15, 0, %0, c7, c10, 5" :  : "r"(0) : "memory";
@@ -66,7 +66,7 @@ extern(D) void __dmb ()
 /// Performs an Instruction Synchronization Barrier (officially "flush prefetch buffer") operation.
 extern(D) void __isb ()
 {
-  asm
+  asm @nogc nothrow
   {
     //"mcr p15, 0, %[val], c7, c5, 4" :: [val] "r" (0) : "memory";
     "mcr p15, 0, %0, c7, c5, 4" :  : "r"(0) : "memory";
@@ -76,7 +76,7 @@ extern(D) void __isb ()
 /// Performs a clrex operation.
 extern(D) void __clrex ()
 {
-  asm
+  asm @nogc nothrow
   {
     "clrex" ::: "memory";
   }
@@ -90,7 +90,7 @@ extern(D) void __clrex ()
 extern(D) int __ldrex (int* addr)
 {
   int val;
-  asm
+  asm @nogc nothrow
   {
     //"ldrex %[val], %[addr]" : [val] "=r" (val) : [addr] "Q" (*addr);
     "ldrex %0, %1" : "=r"(val) : "Q"(*addr);
@@ -107,7 +107,7 @@ extern(D) int __ldrex (int* addr)
 extern(D) bool __strex (int* addr, int val)
 {
   bool res;
-  asm
+  asm @nogc nothrow
   {
     //"strex %[res], %[val], %[addr]" : [res] "=&r" (res) : [val] "r" (val), [addr] "Q" (*addr);
     "strex %0, %1, %2" : "=&r"(res) : "r"(val), "Q"(*addr);
@@ -123,7 +123,7 @@ extern(D) bool __strex (int* addr, int val)
 extern(D) ushort __ldrexh (ushort* addr)
 {
   ushort val;
-  asm
+  asm @nogc nothrow
   {
     //"ldrexh %[val], %[addr]" : [val] "=r" (val) : [addr] "Q" (*addr);
     "ldrexh %0, %1" : "=r" (val) : "Q" (*addr);
@@ -140,7 +140,7 @@ extern(D) ushort __ldrexh (ushort* addr)
 extern(D) bool __strexh (ushort* addr, ushort val)
 {
   bool res;
-  asm
+  asm @nogc nothrow
   {
     //"strexh %[res], %[val], %[addr]" : [res] "=&r" (res) : [val] "r" (val), [addr] "Q" (*addr);
     "strexh %0, %1, %2" : "=&r"(res) : "r"(val), "Q"(*addr);
@@ -156,7 +156,7 @@ extern(D) bool __strexh (ushort* addr, ushort val)
 extern(D) ubyte __ldrexb (ubyte* addr)
 {
   ubyte val;
-  asm
+  asm @nogc nothrow
   {
     //"ldrexb %[val], %[addr]" : [val] "=r" (val) : [addr] "Q" (*addr);
     "ldrexb %0, %1" : "=r"(val) : "Q"(*addr);
@@ -173,7 +173,7 @@ extern(D) ubyte __ldrexb (ubyte* addr)
 extern(D) bool __strexb (ubyte* addr, ubyte val)
 {
   bool res;
-  asm
+  asm @nogc nothrow
   {
     //"strexb %[res], %[val], %[addr]" : [res] "=&r" (res) : [val] "r" (val), [addr] "Q" (*addr);
     "strexb %0, %1, %2" : "=&r"(res) : "r"(val), "Q"(*addr);

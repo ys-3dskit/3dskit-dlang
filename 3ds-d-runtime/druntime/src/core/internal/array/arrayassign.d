@@ -1,5 +1,5 @@
 module core.internal.array.arrayassign;
-
+/+
 // Force `enforceRawArraysConformable` to remain `pure` `@nogc`
 private void enforceRawArraysConformable(const char[] action, const size_t elementSize,
     const void[] a1, const void[] a2, const bool allowOverlap) @trusted @nogc pure nothrow
@@ -450,3 +450,4 @@ Tarr _d_arraysetassign(Tarr : T[], T)(return scope Tarr to, scope ref T value) @
     // The array `a` is destroyed when the `try` block ends.
     assert(counter == 4);
 }
++/

@@ -44,7 +44,7 @@ extern (C) void* __alloca(int nbytes)
 {
   version (D_InlineAsm_X86)
   {
-    asm
+    asm @nogc nothrow
     {
         naked                   ;
         mov     EDX,ECX         ;
@@ -65,7 +65,7 @@ extern (C) void* __alloca(int nbytes)
     }
     version (Win32)
     {
-    asm
+    asm @nogc nothrow
     {
         // We need to be careful about the guard page
         // Thus, for every 4k page, touch it to cause the OS to load it in.
@@ -78,7 +78,7 @@ extern (C) void* __alloca(int nbytes)
         test    [ECX],EBX       ; // bring in last page
     }
     }
-    asm
+    asm @nogc nothrow
     {
         // Copy down to [ESP] the temps on the stack.
         // The number of temps is (EBP - ESP - locals).
@@ -111,7 +111,7 @@ extern (C) void* __alloca(int nbytes)
   {
     version (Win64)
     {
-    asm
+    asm @nogc nothrow
     {
         /* RCX     nbytes
          * RDX     address of variable with # of bytes in locals
@@ -171,7 +171,7 @@ extern (C) void* __alloca(int nbytes)
     }
     else
     {
-    asm
+    asm @nogc nothrow
     {
         /* Parameter is passed in RDI
          * Must save registers RBX,R12..R15
