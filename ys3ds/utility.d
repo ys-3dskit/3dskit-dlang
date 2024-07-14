@@ -90,6 +90,12 @@ String fromStringzManaged(const char* s, bool freeInput = false)
   return target;
 }
 
+auto toStringzManaged(ref const String s)
+{
+  auto slice = s[];
+  return toStringzManaged(slice);
+}
+
 UniquePtr!(immutable char) toStringzManaged(ref const char[] s, bool freeInput = false)
 {
   import core.lifetime : move;

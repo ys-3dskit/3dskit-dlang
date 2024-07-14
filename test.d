@@ -26,6 +26,9 @@ extern(C) void main()
   import ys3ds.ctru._3ds.services.apt : aptMainLoop;
   import ys3ds.ctru._3ds.services.hid : hidScanInput, hidKeysDown, KEY_START;
   import ys3ds.ctru._3ds.services.gspgpu : gspWaitForVBlank;
+  import ys3ds.utility : toStringzManaged;
+
+  import btl.string : String;
 
   import core.time : MonoTime;
 
@@ -45,21 +48,11 @@ extern(C) void main()
     auto duration = thisTime - last;
     last = thisTime;
 
-    void toStringSink(string s)
-    {
-      if (s.length >= 512) return;
+    String str;
 
-      // convert to C string
-      char[512] buffer;
-      buffer[0 .. s.length] = s[];
-      buffer[s.length] = 0;
+    duration.toString((string s) { str.append(s); });
 
-      printf("%s", buffer.ptr);
-    }
-
-    printf("took: ");
-    duration.toString(&toStringSink);
-    printf("\n");
+    printf("took: %s\n", toStringzManaged(str).ptr);
   }
 
   gfxExit();
