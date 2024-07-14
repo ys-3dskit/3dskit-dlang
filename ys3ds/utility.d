@@ -1,6 +1,6 @@
 module ys3ds.utility;
 
-import btl.autoptr : UniquePtr, RcPtr;
+import btl.autoptr : UniquePtr, first;
 import btl.string : String;
 
 // useful helpers for 3DS development in D
@@ -44,7 +44,9 @@ template transmute(R)
   {
     static assert(R.sizeof == S.sizeof, "can only transmute between types of the same size");
 
-    return *(cast(R*) &src);
+    import core.lifetime : move;
+
+    return move(*(cast(R*) &src));
   }
 }
 
@@ -86,6 +88,22 @@ String fromStringzManaged(const char* s, bool freeInput = false)
   if (freeInput) dfree(s);
 
   return target;
+}
+
+UniquePtr!(immutable char) toStringzManaged(ref const char[] s, bool freeInput = false)
+{
+  import core.lifetime : move;
+
+  auto copy = UniquePtr!(char[]).make(s.length + 1);
+  // memcopy into it
+  auto tgt = (*copy).ptr;
+  tgt[0 .. s.length] = s[];
+  tgt[s.length] = 0; // append null terminator
+
+  if (freeInput) dfree(s);
+
+  // char[] -> immutable(char)
+  return transmute!(UniquePtr!(immutable char))(copy.move.first);
 }
 
 // phobos std.string.toStringz
