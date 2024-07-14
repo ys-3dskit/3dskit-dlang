@@ -39,7 +39,6 @@ struct LightSemaphore
     short max_count; ///< The maximum release count of the semaphore
 }
 
-// TODO: test that all inline assembly produces identical output to C headers
 // use GDC-style asm, which LDC supports unlike DMD-style.
 // the alternative is ldc.llvmasm.__asm.
 

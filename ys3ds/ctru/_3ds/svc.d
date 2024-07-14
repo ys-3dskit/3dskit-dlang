@@ -572,7 +572,6 @@ struct StartupInfo
  */
 extern(D) void* getThreadLocalStorage ()
 {
-  // TODO: test inline asm output is identical to C ver
   void* ret;
   asm @nogc nothrow
   {
@@ -1484,7 +1483,6 @@ Result svcBackdoor (int function () callback);
 /// Stop point, does nothing if the process is not attached (as opposed to 'bkpt' instructions)
 extern(D) void SVC_STOP_POINT()
 {
-  // TODO: test inline assembly at usages is same as C
   asm @nogc nothrow
   {
     "svc 0xFF";
