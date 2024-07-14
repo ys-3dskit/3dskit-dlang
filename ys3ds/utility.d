@@ -1,5 +1,8 @@
 module ys3ds.utility;
 
+import btl.autoptr : UniquePtr, RcPtr;
+import btl.string : String;
+
 // useful helpers for 3DS development in D
 
 T* dalloc(T)()
@@ -53,14 +56,37 @@ T[] slicedup(T)(const T[] src, bool freeSrc = false)
   return dst;
 }
 
-/* // designed specifically for automem's String
-immutable(char)* toStringz(T)(scope const T s)
+// makes a string null terminated
+char* nullTerminateInPlace(ref String s)
 {
-  static if (hasMember!(T, "opSlice")) // Vector
-    return toStringz(s[]);
-  else
-    return toStringz((*s)[]); // Expecting an RC!Vector or Unique!Vector
-} */
+  s.append('\0');
+  return s.ptr;
+}
+
+String nullTerminatedCopy(ref const String s)
+{
+  String copy;
+  copy.resize(s.length + 1);
+  copy.ptr[0 .. s.length] = s[];
+  copy[s.length] = '\0';
+
+  return copy;
+}
+
+String fromStringzManaged(const char* s, bool freeInput = false)
+{
+  // not the most efficient
+  size_t length;
+  while (s[length] != '\0') length++;
+
+  String target;
+  target.resize(length);
+  target.ptr[0 .. length] = s[0 .. length];
+
+  if (freeInput) dfree(s);
+
+  return target;
+}
 
 // phobos std.string.toStringz
 immutable(char)* toStringz(scope const(char)[] s, bool freeInput = false)

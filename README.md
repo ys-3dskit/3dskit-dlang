@@ -14,6 +14,18 @@ import ys3ds.citro2d;
 
 C headers manually edited -> [DStep](https://github.com/jacob-carlborg/dstep) -> Manually tweaked D module.
 
+## D runtime and standard library
+
+This distribution contains ported versions of the D Runtime, core library, and standard library (phobos).
+
+More information on these can be found in the 3ds-d-runtime directory.
+
+## BTL and other included pieces
+
+The `ys3ds.utility` module contains various functions potentially useful to a Dlang 3DS homebrew developer.
+
+The [BTL](https://github.com/submada/btl) library is included with this distribution, to aid in memory management.
+This is licensed under the Boost Software License and is included unmodified due to issues with package management.
 
 ## building
 
@@ -29,10 +41,5 @@ The headers included in the `headers` directory are licensed according to the so
 
 The bindings in the `ys3ds` directory are released under the public domain by me.
 
-The ports of the D runtime libraries in `3ds-d-runtime` are licensed under Boost as noted there.
+The ports of the D runtime libraries in `3ds-d-runtime` are licensed under Boost as noted there, as is BTL.
 
-## other things
-
-The `ys3ds.utility` module contains various functions potentially useful to a Dlang 3DS homebrew developer.
-
-I suggest using the `automem` library for RAII smart pointers due to the restrictions of betterC mode.

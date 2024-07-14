@@ -15,6 +15,7 @@ target("ys3ds-dlang")
 	add_ldflags("-specs=3dsx.specs", "-g", "-march=armv6k", "-mtune=mpcore", "-mtp=soft", "-mfloat-abi=hard", {force = true})
 
 	add_files("ys3ds/**.d")
+  add_files("btl/**.d")
   add_files("3ds-d-runtime/druntime/src/**.d")
   add_files("3ds-d-runtime/druntime/src/**.c")
 
@@ -22,6 +23,6 @@ target("ys3ds-dlang")
   add_dcflags("--conf=", {force=true})
 
 	-- fix imports
-	add_dcflags("-I.", "-I3ds-d-runtime/druntime/src", "-I3ds-d-runtime/phobos", {force = true})
+	add_dcflags("-g", "-I.", "-I3ds-d-runtime/druntime/src", "-I3ds-d-runtime/phobos", {force = true})
 
 	set_strip("debug")
