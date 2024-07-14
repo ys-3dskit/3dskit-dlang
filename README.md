@@ -27,6 +27,12 @@ The `ys3ds.utility` module contains various functions potentially useful to a Dl
 The [BTL](https://github.com/submada/btl) library is included with this distribution, to aid in memory management.
 This is licensed under the Boost Software License and is included unmodified due to issues with package management.
 
+BTL Tips:
+- For C++ developers: You should recognise `btl.automem.UniquePtr` and `btl.automem.SharedPtr`. Have fun.
+- For Rust developers: `UniquePtr` is basically your `Box<T>` and `SharedPtr` is like your `Rc<T>`.
+- Use the hell out of `btl.string.String`! It's great!
+- If the only memory allocation in your code is happening via BTL and not via `malloc`, you're probably not leaking!
+
 ## building
 
 ```
