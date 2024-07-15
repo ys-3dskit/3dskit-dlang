@@ -1,5 +1,6 @@
 #pragma once
 #include "maths.h"
+#include "../../ctru/3ds/gpu/enums.h"
 
 #define C3D_MTXSTACK_SIZE 8
 

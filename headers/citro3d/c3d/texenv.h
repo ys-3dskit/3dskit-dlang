@@ -1,6 +1,9 @@
 #pragma once
 #include "types.h"
 
+#include "../../ctru/3ds/types.h"
+#include "../../ctru/3ds/gpu/enums.h"
+
 typedef struct
 {
 	u16 srcRgb, srcAlpha;

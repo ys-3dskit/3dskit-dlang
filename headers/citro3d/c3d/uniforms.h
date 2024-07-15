@@ -1,6 +1,9 @@
 #pragma once
 #include "maths.h"
 
+#include "../../ctru/3ds/types.h"
+#include "../../ctru/3ds/gpu/enums.h"
+
 #define C3D_FVUNIF_COUNT 96
 #define C3D_IVUNIF_COUNT 4
 

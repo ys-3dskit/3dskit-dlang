@@ -1,3 +1,5 @@
+module ys3ds.citro3d.tex3ds;
+
 /*------------------------------------------------------------------------------
  * Copyright (c) 2017
  *     Michael Theall (mtheall)
@@ -23,37 +25,29 @@
 /** @file tex3ds.h
  *  @brief tex3ds support
  */
-#pragma once
-#ifdef CITRO3D_BUILD
-#include "c3d/texture.h"
-#else
-#include "citro3d.h"
-#endif
 
-#include <stdint.h>
-#include <stdio.h>
+import core.stdc.stdio;
+import ys3ds.citro3d.c3d.texture;
+import ys3ds.ctru._3ds.util.decompress;
 
-#include "../ctru/3ds/util/decompress.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+extern (C) @nogc nothrow:
 
 /** @brief Subtexture
  *  @note If top < bottom, the subtexture is rotated 1/4 revolution counter-clockwise
  */
-typedef struct Tex3DS_SubTexture
+struct Tex3DS_SubTexture
 {
-	u16   width;  ///< Sub-texture width (pixels)
-	u16   height; ///< Sub-texture height (pixels)
-	float left;   ///< Left u-coordinate
-	float top;    ///< Top v-coordinate
-	float right;  ///< Right u-coordinate
-	float bottom; ///< Bottom v-coordinate
-} Tex3DS_SubTexture;
+    ushort width; ///< Sub-texture width (pixels)
+    ushort height; ///< Sub-texture height (pixels)
+    float left; ///< Left u-coordinate
+    float top; ///< Top v-coordinate
+    float right; ///< Right u-coordinate
+    float bottom; ///< Bottom v-coordinate
+}
 
 /** @brief Texture */
-typedef struct Tex3DS_Texture_s* Tex3DS_Texture;
+struct Tex3DS_Texture_s;
+alias Tex3DS_Texture = Tex3DS_Texture_s*;
 
 /** @brief Import Tex3DS texture
  *  @param[in]  input   Input data
@@ -63,7 +57,7 @@ typedef struct Tex3DS_Texture_s* Tex3DS_Texture;
  *  @param[in]  vram    Whether to store textures in VRAM
  *  @returns Tex3DS texture
  */
-Tex3DS_Texture Tex3DS_TextureImport(const void* input, size_t insize, C3D_Tex* tex, C3D_TexCube* texcube, bool vram);
+Tex3DS_Texture Tex3DS_TextureImport (const(void)* input, size_t insize, C3D_Tex* tex, C3D_TexCube* texcube, bool vram);
 
 /** @brief Import Tex3DS texture
  *
@@ -78,7 +72,7 @@ Tex3DS_Texture Tex3DS_TextureImport(const void* input, size_t insize, C3D_Tex* t
  *  @param[in]  userdata User data passed to callback
  *  @returns Tex3DS texture
  */
-Tex3DS_Texture Tex3DS_TextureImportCallback(C3D_Tex* tex, C3D_TexCube* texcube, bool vram, decompressCallback callback, void* userdata);
+Tex3DS_Texture Tex3DS_TextureImportCallback (C3D_Tex* tex, C3D_TexCube* texcube, bool vram, decompressCallback callback, void* userdata);
 
 /** @brief Import Tex3DS texture
  *
@@ -92,7 +86,7 @@ Tex3DS_Texture Tex3DS_TextureImportCallback(C3D_Tex* tex, C3D_TexCube* texcube, 
  *  @param[in]  vram     Whether to store textures in VRAM
  *  @returns Tex3DS texture
  */
-Tex3DS_Texture Tex3DS_TextureImportFD(int fd, C3D_Tex* tex, C3D_TexCube* texcube, bool vram);
+Tex3DS_Texture Tex3DS_TextureImportFD (int fd, C3D_Tex* tex, C3D_TexCube* texcube, bool vram);
 
 /** @brief Import Tex3DS texture
  *
@@ -106,112 +100,123 @@ Tex3DS_Texture Tex3DS_TextureImportFD(int fd, C3D_Tex* tex, C3D_TexCube* texcube
  *  @param[in]  vram     Whether to store textures in VRAM
  *  @returns Tex3DS texture
  */
-Tex3DS_Texture Tex3DS_TextureImportStdio(FILE* fp, C3D_Tex* tex, C3D_TexCube* texcube, bool vram);
+Tex3DS_Texture Tex3DS_TextureImportStdio (FILE* fp, C3D_Tex* tex, C3D_TexCube* texcube, bool vram);
 
 /** @brief Get number of subtextures
  *  @param[in] texture Tex3DS texture
  *  @returns Number of subtextures
  */
-size_t Tex3DS_GetNumSubTextures(const Tex3DS_Texture texture);
+size_t Tex3DS_GetNumSubTextures (const Tex3DS_Texture texture);
 
 /** @brief Get subtexture
  *  @param[in] texture Tex3DS texture
  *  @param[in] index   Subtexture index
  *  @returns Subtexture info
  */
-const Tex3DS_SubTexture* Tex3DS_GetSubTexture(const Tex3DS_Texture texture, size_t index);
+const(Tex3DS_SubTexture)* Tex3DS_GetSubTexture (const Tex3DS_Texture texture, size_t index);
 
 /** @brief Check if subtexture is rotated
  *  @param[in] subtex Subtexture to check
  *  @returns whether subtexture is rotated
  */
-static inline bool
-Tex3DS_SubTextureRotated(const Tex3DS_SubTexture* subtex)
+extern(D)
 {
-	return subtex->top < subtex->bottom;
-}
+  bool Tex3DS_SubTextureRotated (const(Tex3DS_SubTexture)* subtex)
+  {
+    return subtex.top < subtex.bottom;
+  }
 
-/** @brief Get bottom-left texcoords
- *  @param[in]  subtex Subtexture
- *  @param[out] u      u-coordinate
- *  @param[out] v      v-coordinate
- */
-static inline void
-Tex3DS_SubTextureBottomLeft(const Tex3DS_SubTexture* subtex, float* u, float* v)
-{
-	if (!Tex3DS_SubTextureRotated(subtex))
-	{
-		*u = subtex->left;
-		*v = subtex->bottom;
-	} else
-	{
-		*u = subtex->bottom;
-		*v = subtex->left;
-	}
-}
+  /** @brief Get bottom-left texcoords
+  *  @param[in]  subtex Subtexture
+  *  @param[out] u      u-coordinate
+  *  @param[out] v      v-coordinate
+  */
+  void Tex3DS_SubTextureBottomLeft (
+      const(Tex3DS_SubTexture)* subtex,
+      float* u,
+      float* v)
+  {
+    if (!Tex3DS_SubTextureRotated(subtex))
+    {
+      *u = subtex.left;
+      *v = subtex.bottom;
+    }
+    else
+    {
+      *u = subtex.bottom;
+      *v = subtex.left;
+    }
+  }
 
-/** @brief Get bottom-right texcoords
- *  @param[in]  subtex Subtexture
- *  @param[out] u      u-coordinate
- *  @param[out] v      v-coordinate
- */
-static inline void
-Tex3DS_SubTextureBottomRight(const Tex3DS_SubTexture* subtex, float* u, float* v)
-{
-	if (!Tex3DS_SubTextureRotated(subtex))
-	{
-		*u = subtex->right;
-		*v = subtex->bottom;
-	} else
-	{
-		*u = subtex->bottom;
-		*v = subtex->right;
-	}
-}
+  /** @brief Get bottom-right texcoords
+  *  @param[in]  subtex Subtexture
+  *  @param[out] u      u-coordinate
+  *  @param[out] v      v-coordinate
+  */
+  void Tex3DS_SubTextureBottomRight (
+      const(Tex3DS_SubTexture)* subtex,
+      float* u,
+      float* v)
+  {
+    if (!Tex3DS_SubTextureRotated(subtex))
+    {
+      *u = subtex.right;
+      *v = subtex.bottom;
+    }
+    else
+    {
+      *u = subtex.bottom;
+      *v = subtex.right;
+    }
+  }
 
-/** @brief Get top-left texcoords
- *  @param[in]  subtex Subtexture
- *  @param[out] u      u-coordinate
- *  @param[out] v      v-coordinate
- */
-static inline void
-Tex3DS_SubTextureTopLeft(const Tex3DS_SubTexture* subtex, float* u, float* v)
-{
-	if (!Tex3DS_SubTextureRotated(subtex))
-	{
-		*u = subtex->left;
-		*v = subtex->top;
-	} else
-	{
-		*u = subtex->top;
-		*v = subtex->left;
-	}
-}
+  /** @brief Get top-left texcoords
+  *  @param[in]  subtex Subtexture
+  *  @param[out] u      u-coordinate
+  *  @param[out] v      v-coordinate
+  */
+  void Tex3DS_SubTextureTopLeft (
+      const(Tex3DS_SubTexture)* subtex,
+      float* u,
+      float* v)
+  {
+    if (!Tex3DS_SubTextureRotated(subtex))
+    {
+      *u = subtex.left;
+      *v = subtex.top;
+    }
+    else
+    {
+      *u = subtex.top;
+      *v = subtex.left;
+    }
+  }
 
-/** @brief Get top-right texcoords
- *  @param[in]  subtex Subtexture
- *  @param[out] u      u-coordinate
- *  @param[out] v      v-coordinate
- */
-static inline void
-Tex3DS_SubTextureTopRight(const Tex3DS_SubTexture* subtex, float* u, float* v)
-{
-	if (!Tex3DS_SubTextureRotated(subtex))
-	{
-		*u = subtex->right;
-		*v = subtex->top;
-	} else
-	{
-		*u = subtex->top;
-		*v = subtex->right;
-	}
+  /** @brief Get top-right texcoords
+  *  @param[in]  subtex Subtexture
+  *  @param[out] u      u-coordinate
+  *  @param[out] v      v-coordinate
+  */
+  void Tex3DS_SubTextureTopRight (
+      const(Tex3DS_SubTexture)* subtex,
+      float* u,
+      float* v)
+  {
+    if (!Tex3DS_SubTextureRotated(subtex))
+    {
+      *u = subtex.right;
+      *v = subtex.top;
+    }
+    else
+    {
+      *u = subtex.top;
+      *v = subtex.right;
+    }
+  }
+
 }
 
 /** @brief Free Tex3DS texture
- *  @param[in] texture Tex3DS texture to free
- */
+  *  @param[in] texture Tex3DS texture to free
+  */
 void Tex3DS_TextureFree(Tex3DS_Texture texture);
-
-#ifdef __cplusplus
-}
-#endif

@@ -1,6 +1,9 @@
 #pragma once
 #include "types.h"
 
+#include "../../ctru/3ds/gpu/enums.h"
+#include "../../ctru/3ds/types.h"
+
 typedef struct
 {
 	u32 color[256];
