@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include "../../ctru/3ds/gpu/enums.h"
 
 void C3D_DepthMap(bool bIsZBuffer, float zScale, float zOffset);
 void C3D_CullFace(GPU_CULLMODE mode);

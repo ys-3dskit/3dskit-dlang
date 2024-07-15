@@ -1,4 +1,9 @@
 #pragma once
+#include "../../ctru/3ds/types.h"
+#include "../../ctru/3ds/gpu/enums.h"
+#include "../../ctru/3ds/gpu/shaderProgram.h"
+#include "../../ctru/3ds/gpu/registers.h"
+
 #include "buffers.h"
 #include "maths.h"
 

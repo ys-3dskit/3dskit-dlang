@@ -1,5 +1,7 @@
 #pragma once
+#include "../../ctru/3ds/types.h"
 #include "types.h"
+#include "../../ctru/3ds/gpu/enums.h"
 
 typedef struct
 {

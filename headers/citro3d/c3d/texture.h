@@ -1,6 +1,10 @@
 #pragma once
 #include "types.h"
 
+#include "../../ctru/3ds/types.h"
+#include "../../ctru/3ds/gpu/enums.h"
+#include "../../ctru/3ds/gfx.h"
+
 typedef struct
 {
 	void* data[6];
