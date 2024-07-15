@@ -2,6 +2,7 @@ module ys3ds.citro3d.c3d.light;
 
 import ys3ds.citro3d.c3d.lightlut;
 import ys3ds.citro3d.c3d.maths;
+import ys3ds.citro3d.c3d.types;
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.gpu.enums;
 

@@ -1,6 +1,7 @@
 module ys3ds.citro3d.c3d.uniforms;
 
 import ys3ds.citro3d.c3d.maths;
+import ys3ds.citro3d.c3d.types;
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.gpu.enums;
 
@@ -79,7 +80,7 @@ extern(D)
   void C3D_IVUnifSet (GPU_SHADER_TYPE type, int id, int x, int y, int z, int w)
   {
     C3D_IVec* ptr = C3D_IVUnifWritePtr(type, id);
-    *ptr = IVec_Pack(x, y, z, w);
+    *ptr = IVec_Pack(cast(ubyte)x, cast(ubyte)y, cast(ubyte)z, cast(ubyte)w);
   }
 
   void C3D_BoolUnifSet (GPU_SHADER_TYPE type, int id, bool value)

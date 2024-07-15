@@ -1,6 +1,10 @@
 module ys3ds.citro3d.c3d.renderqueue;
 
 import ys3ds.citro3d.c3d.framebuffer;
+import ys3ds.ctru._3ds.gfx;
+import ys3ds.ctru._3ds.gpu.enums;
+import ys3ds.ctru._3ds.types;
+import ys3ds.citro3d.c3d.texture;
 
 extern (C) @nogc nothrow:
 
@@ -77,7 +81,7 @@ extern(D)
       uint clearColor,
       uint clearDepth)
   {
-    C3D_FrameBufClear(&target.framebuf, clearBits, clearColor, clearDepth);
+    C3D_FrameBufClear(&target.frameBuf, clearBits, clearColor, clearDepth);
   }
 }
 void C3D_SyncDisplayTransfer (uint* inadr, uint indim, uint* outadr, uint outdim, uint flags);

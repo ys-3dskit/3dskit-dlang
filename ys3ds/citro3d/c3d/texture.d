@@ -66,6 +66,17 @@ struct C3D_TexInitParams
         GPU_TEXTURE_MODE_PARAM, "type", 3,
         bool, "onVram", 1,
         uint, "", 4));
+
+    // D struct initializer syntax does not work with bitfields
+    this(ushort _width, ushort _height, ubyte _maxLevel, GPU_TEXCOLOR _format, GPU_TEXTURE_MODE_PARAM _type, bool _onVram) @nogc nothrow
+    {
+      width = _width;
+      height = _height;
+      maxLevel = _maxLevel;
+      format = _format;
+      type = _type;
+      onVram = _onVram;
+    }
 }
 
 bool C3D_TexInitWithParams (C3D_Tex* tex, C3D_TexCube* cube, C3D_TexInitParams p);
@@ -120,9 +131,9 @@ extern(D)
       GPU_TEXCOLOR format)
   {
     return C3D_TexInitWithParams(
-      text,
+      tex,
       null,
-      C3D_TexInitParams(width, height, 0, format, GPU_TEX_2D, false)
+      C3D_TexInitParams(width, height, 0, format, GPU_TEXTURE_MODE_PARAM.GPU_TEX_2D, false)
     );
   }
 
@@ -140,7 +151,7 @@ extern(D)
         height,
         cast(ubyte)C3D_TexCalcMaxLevel(width, height),
         format,
-        GPU_TEX_2D,
+        GPU_TEXTURE_MODE_PARAM.GPU_TEX_2D,
         false
       )
     );
@@ -156,7 +167,7 @@ extern(D)
     return C3D_TexInitWithParams(
       tex,
       null,
-      C3D_TexInitParams(width, height, 0, format, GPU_TEX_CUBE_MAP, false)
+      C3D_TexInitParams(width, height, 0, format, GPU_TEXTURE_MODE_PARAM.GPU_TEX_CUBE_MAP, false)
     );
   }
 
@@ -169,7 +180,7 @@ extern(D)
     return C3D_TexInitWithParams(
       tex,
       null,
-      C3D_TexInitParams(width, height, 0, format, GPU_TEX_2D, true)
+      C3D_TexInitParams(width, height, 0, format, GPU_TEXTURE_MODE_PARAM.GPU_TEX_2D, true)
     );
   }
 
@@ -178,7 +189,7 @@ extern(D)
     return C3D_TexInitWithParams(
       tex,
       null,
-      C3D_TexInitParams(width, height, 0, GPU_RGBA8, GPU_TEX_SHADOW_2D, true)
+      C3D_TexInitParams(width, height, 0, GPU_TEXCOLOR.GPU_RGBA8, GPU_TEXTURE_MODE_PARAM.GPU_TEX_SHADOW_2D, true)
     );
   }
 
@@ -191,7 +202,7 @@ extern(D)
     return C3D_TexInitWithParams(
       tex,
       cube,
-      C3D_TexInitParams(width, height, 0, GPU_RGBA8, GPU_TEX_SHADOW_CUBE, true)
+      C3D_TexInitParams(width, height, 0, GPU_TEXCOLOR.GPU_RGBA8, GPU_TEXTURE_MODE_PARAM.GPU_TEX_SHADOW_CUBE, true)
     );
   }
 
@@ -223,7 +234,7 @@ extern(D)
 
   void C3D_TexUpload (C3D_Tex* tex, const(void)* data)
   {
-    C3D_TexLoadImage(tex, data, GPU_TEXFACE_2D, 0);
+    C3D_TexLoadImage(tex, data, GPU_TEXFACE.GPU_TEXFACE_2D, 0);
   }
 
   void C3D_TexSetFilter (
@@ -231,13 +242,13 @@ extern(D)
       GPU_TEXTURE_FILTER_PARAM magFilter,
       GPU_TEXTURE_FILTER_PARAM minFilter)
   {
-    tex.param &= ~(GPU_TEXTURE_MAG_FILTER(GPU_LINEAR) | GPU_TEXTURE_MIN_FILTER(GPU_LINEAR));
+    tex.param &= ~(GPU_TEXTURE_MAG_FILTER(GPU_TEXTURE_FILTER_PARAM.GPU_LINEAR) | GPU_TEXTURE_MIN_FILTER(GPU_TEXTURE_FILTER_PARAM.GPU_LINEAR));
     tex.param |= GPU_TEXTURE_MAG_FILTER(magFilter) | GPU_TEXTURE_MIN_FILTER(minFilter);
   }
 
   void C3D_TexSetFilterMipmap (C3D_Tex* tex, GPU_TEXTURE_FILTER_PARAM filter)
   {
-    tex.param &= ~GPU_TEXTURE_MIP_FILTER(GPU_LINEAR);
+    tex.param &= ~GPU_TEXTURE_MIP_FILTER(GPU_TEXTURE_FILTER_PARAM.GPU_LINEAR);
     tex.param |= GPU_TEXTURE_MIP_FILTER(filter);
   }
 

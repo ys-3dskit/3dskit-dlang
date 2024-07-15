@@ -1,6 +1,7 @@
 module ys3ds.citro3d.c3d.mtxstack;
 
 import ys3ds.citro3d.c3d.maths;
+import ys3ds.citro3d.c3d.types;
 import ys3ds.ctru._3ds.gpu.enums;
 
 extern (C) @nogc nothrow:

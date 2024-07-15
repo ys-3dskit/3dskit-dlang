@@ -51,14 +51,14 @@ extern(D)
 {
   void C3D_TexEnvInit (C3D_TexEnv* env)
   {
-    env.srcRgb = GPU_TEVSOURCES(GPU_PREVIOUS, 0, 0);
+    env.srcRgb = cast(ushort) GPU_TEVSOURCES(GPU_TEVSRC.GPU_PREVIOUS, 0, 0);
     env.srcAlpha = env.srcRgb;
     env.opAll = 0;
-    env.funcRgb = GPU_REPLACE;
+    env.funcRgb = GPU_COMBINEFUNC.GPU_REPLACE;
     env.funcAlpha = env.funcRgb;
     env.color = 0xFFFFFFFF;
-    env.scaleRgb = GPU_TEVSCALE_1;
-    env.scaleAlpha = GPU_TEVSCALE_1;
+    env.scaleRgb = GPU_TEVSCALE.GPU_TEVSCALE_1;
+    env.scaleAlpha = GPU_TEVSCALE.GPU_TEVSCALE_1;
   }
 
   void C3D_TexEnvSrc (
@@ -69,10 +69,10 @@ extern(D)
       GPU_TEVSRC s3)
   {
     int param = GPU_TEVSOURCES(cast(int) s1, cast(int) s2, cast(int) s3);
-    if (cast(int)mode & C3D_RGB)
-      env.srcRgb = param;
-    if (cast(int)mode & C3D_Alpha)
-      env.srcAlpha = param;
+    if (cast(int)mode & C3D_TexEnvMode.C3D_RGB)
+      env.srcRgb = cast(ushort)param;
+    if (cast(int)mode & C3D_TexEnvMode.C3D_Alpha)
+      env.srcAlpha = cast(ushort)param;
   }
 
   void C3D_TexEnvOpRgb (
@@ -98,10 +98,10 @@ extern(D)
       C3D_TexEnvMode mode,
       GPU_COMBINEFUNC param)
   {
-    if(cast(int)mode & C3D_RGB)
-      env.funcRgb = param;
-    if (cast(int) mode & C3D_Alpha)
-      env.funcAlpha = param;
+    if(cast(int)mode & C3D_TexEnvMode.C3D_RGB)
+      env.funcRgb = cast(ushort)param;
+    if (cast(int) mode & C3D_TexEnvMode.C3D_Alpha)
+      env.funcAlpha = cast(ushort)param;
   }
 
   void C3D_TexEnvColor (C3D_TexEnv* env, uint color)
@@ -111,10 +111,10 @@ extern(D)
 
   void C3D_TexEnvScale (C3D_TexEnv* env, int mode, GPU_TEVSCALE param)
   {
-    if (cast(int) mode & C3D_RGB)
-      env.scaleRgb = param;
-    if (cast(int) mode & C3D_Alpha)
-      env.scaleAlpha = param;
+    if (cast(int) mode & C3D_TexEnvMode.C3D_RGB)
+      env.scaleRgb =cast(ushort) param;
+    if (cast(int) mode & C3D_TexEnvMode.C3D_Alpha)
+      env.scaleAlpha = cast(ushort)param;
   }
 
 }

@@ -1,7 +1,9 @@
 module ys3ds.citro3d.c3d.base;
 
+import ys3ds.citro3d.c3d.types;
 import ys3ds.ctru._3ds.types;
-import ys3ds.ctru._3ds.gpu;
+import ys3ds.ctru._3ds.gpu.enums;
+import ys3ds.ctru._3ds.gpu.shaderProgram;
 
 import ys3ds.citro3d.c3d.buffers;
 import ys3ds.citro3d.c3d.maths;

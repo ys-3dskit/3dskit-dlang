@@ -1,6 +1,9 @@
 module ys3ds.citro3d.c3d.framebuffer;
 
 import ys3ds.citro3d.c3d.texture;
+import ys3ds.ctru._3ds.gpu.enums;
+import ys3ds.ctru._3ds.gfx;
+import ys3ds.ctru._3ds.types;
 
 extern (C) @nogc nothrow:
 
@@ -54,14 +57,14 @@ extern(D)
   void C3D_FrameBufColor (C3D_FrameBuf* fb, void* buf, GPU_COLORBUF fmt)
   {
     fb.colorBuf = buf; // may be null
-    fb.colorFmt = buf ? fmt : GPU_RB_RGBA8;
+    fb.colorFmt = buf ? fmt : GPU_COLORBUF.GPU_RB_RGBA8;
     fb.colorMask = buf ? 0xF : 0;
   }
 
   void C3D_FrameBufDepth (C3D_FrameBuf* fb, void* buf, GPU_DEPTHBUF fmt)
   {
     fb.depthBuf = buf; // may be null
-    fb.depthFmt = buf ? fmt : GPU_RB_DEPTH24;
-    fb.depthMask = buf ? (fmt == GPU_RB_DEPTH24_STENCIL8 ? 0x3 : 0x2) : 0;
+    fb.depthFmt = buf ? fmt : GPU_DEPTHBUF.GPU_RB_DEPTH24;
+    fb.depthMask = buf ? (fmt == GPU_DEPTHBUF.GPU_RB_DEPTH24_STENCIL8 ? 0x3 : 0x2) : 0;
   }
 }

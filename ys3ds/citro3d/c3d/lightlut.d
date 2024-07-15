@@ -22,7 +22,7 @@ alias C3D_LightLutFuncDA = float function (float dist, float arg0, float arg1);
 
 extern(D) float quadratic_dist_attn (float dist, float linear, float quad)
 {
-  return 1.f / (1.f + linear*dist + quad*dist*dist);
+  return 1.0f / (1.0f + linear*dist + quad*dist*dist);
 }
 
 float spot_step (float angle, float cutoff);

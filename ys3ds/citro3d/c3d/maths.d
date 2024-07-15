@@ -123,7 +123,7 @@ extern(D) C3D_FVec FVec4_Scale (C3D_FVec v, float s)
 // divide by w
 extern(D) C3D_FVec FVec4_PerspDivide (C3D_FVec v)
 {
-  return FVec4_New(v.x/v.w, v.y/v.w, v.z/v.w, 1.f);
+  return FVec4_New(v.x/v.w, v.y/v.w, v.z/v.w, 1.0f);
 }
 
 /**
@@ -271,7 +271,7 @@ extern(D) float FVec3_Distance (C3D_FVec lhs, C3D_FVec rhs)
 // component-wise scaling
 extern(D) C3D_FVec FVec3_Scale (C3D_FVec v, float s)
 {
-  return FVec3_Scale(v.x*s, v.y*s, v.z*s);
+  return FVec3_New(v.x*s, v.y*s, v.z*s);
 }
 
 /**
@@ -354,7 +354,7 @@ extern(D) void Mtx_Diagonal (C3D_Mtx* out_, float x, float y, float z, float w)
  */
 extern(D) void Mtx_Identity (C3D_Mtx* out_)
 {
-  Mtx_Diagonal(out_, 1.f, 1.f, 1.f, 1.f);
+  Mtx_Diagonal(out_, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /**
@@ -429,7 +429,7 @@ C3D_FVec Mtx_MultiplyFVec4 (const(C3D_Mtx)* mtx, C3D_FVec v);
  */
 extern (D) C3D_FVec Mtx_MultiplyFVecH (const(C3D_Mtx)* mtx, C3D_FVec v)
 {
-  v.w = 1.f;
+  v.w = 1.0f;
   return Mtx_MultiplyFVec4(mtx, v);
 }
 
@@ -755,7 +755,7 @@ C3D_FQuat Quat_FromMtx (const(C3D_Mtx)* m);
 // r=1, i=j=k=0
 extern(D) C3D_FQuat Quat_Identity ()
 {
-  return Quat_New(0.f, 0.f, 0.f, 1.f);
+  return Quat_New(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 /**
