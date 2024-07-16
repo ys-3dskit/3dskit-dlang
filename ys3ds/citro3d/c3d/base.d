@@ -36,9 +36,19 @@ void C3D_ImmDrawBegin (GPU_Primitive_t primitive);
 void C3D_ImmSendAttrib (float x, float y, float z, float w);
 void C3D_ImmDrawEnd ();
 
-void C3D_ImmDrawRestartPrim ();
+extern(D) void C3D_ImmDrawRestartPrim ()
+{
+  GPUCMD_AddWrite(GPUREG_RESTART_PRIMITIVE, 1);
+}
 
 // Fixed vertex attributes
 C3D_FVec* C3D_FixedAttribGetWritePtr (int id);
 
-void C3D_FixedAttribSet (int id, float x, float y, float z, float w);
+extern(D) void C3D_FixedAttribSet (int id, float x, float y, float z, float w)
+{
+  auto ptr = C3D_FixedAttribGetWritePtr(id);
+  ptr.x = x;
+  ptr.y = y;
+  ptr.z = z;
+  ptr.w = w;
+}

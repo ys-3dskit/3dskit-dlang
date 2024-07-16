@@ -359,9 +359,9 @@ extern(D) bool C2D_DrawImageAt (
     float x,
     float y,
     float depth,
-    const(C2D_ImageTint)* tint,
-    float scaleX,
-    float scaleY)
+    const(C2D_ImageTint)* tint = null,
+    float scaleX = 1,
+    float scaleY = 1)
 {
   auto params = C2D_DrawParams(
     C2D_DrawParams._Anonymous_0(x, y, scaleX * img.subtex.width, scaleY * img.subtex.height),
@@ -388,9 +388,9 @@ extern(D) bool C2D_DrawImageAtRotated (
     float y,
     float depth,
     float angle,
-    const(C2D_ImageTint)* tint,
-    float scaleX,
-    float scaleY)
+    const(C2D_ImageTint)* tint = null,
+    float scaleX = 1,
+    float scaleY = 1)
 {
   auto params = C2D_DrawParams(
     C2D_DrawParams._Anonymous_0(x, y, scaleX * img.subtex.width, scaleY * img.subtex.height),
