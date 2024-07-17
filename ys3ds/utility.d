@@ -1,42 +1,10 @@
 module ys3ds.utility;
 
-import btl.autoptr : UniquePtr, first;
-import btl.string : String;
+import btl.autoptr : UniquePtr, RcPtr, first, isRcPtr;
+import btl.string : String, isBasicString;
+import ys3ds.memory : Mallocator;
 
 @nogc nothrow:
-
-// useful helpers for 3DS development in D
-
-T* dalloc(T)()
-{
-  import core.memory : pureMalloc;
-
-  auto ptr = cast(T*) pureMalloc(T.sizeof);
-  *ptr = T.init;
-  return ptr;
-}
-
-T[] dalloc_slice(T)(size_t len)
-{
-  import core.memory : pureMalloc;
-
-  auto ptr = cast(T*) pureMalloc(T.sizeof * len);
-  auto slice = ptr[0 .. len];
-  slice[] = T.init;
-  return slice;
-}
-
-void dfree(T)(T* ptr)
-{
-  import core.memory : pureFree;
-  pureFree(cast(void*) ptr);
-}
-
-void dfree(T)(T[] slice)
-{
-  import core.memory : pureFree;
-  pureFree(cast(void*) slice.ptr);
-}
 
 // finally i can make my crime dreams a reality
 template transmute(R)
@@ -52,24 +20,18 @@ template transmute(R)
   }
 }
 
-T[] slicedup(T)(const T[] src, bool freeSrc = false)
-{
-  auto dst = dalloc_slice!T(src.length);
-  dst[] = src[];
-  if (free) dfree(src);
-  return dst;
-}
-
 // makes a string null terminated
-char* nullTerminateInPlace(ref String s)
+char* nullTerminateInPlace(Str = String)(ref Str s)
+if (isBasicString!Str)
 {
   s.append('\0');
   return s.ptr;
 }
 
-String nullTerminatedCopy(const String s)
+SOut nullTerminatedCopy(SIn = String, SOut = SIn)(auto ref const SIn s)
+if (isBasicString!SIn && isBasicString!SOut)
 {
-  String copy;
+  SOut copy;
   copy.resize(s.length + 1);
   copy.ptr[0 .. s.length] = s[];
   copy[s.length] = '\0';
@@ -77,71 +39,43 @@ String nullTerminatedCopy(const String s)
   return copy;
 }
 
-String fromStringzManaged(const char* s, bool freeInput = false)
+Str fromStringzManaged(Str = String)(auto ref const char* s)
+if (isBasicString!Str)
 {
   // not the most efficient
   size_t length;
   while (s[length] != '\0') length++;
 
-  String target;
+  Str target;
   target.resize(length);
   target.ptr[0 .. length] = s[0 .. length];
-
-  if (freeInput) dfree(s);
 
   return target;
 }
 
-auto toStringzManaged(const String s)
+auto toStringzManaged(Str = String, Alloc = Mallocator, bool Unique = true)(auto ref const Str s)
+if (isBasicString!Str)
 {
   auto slice = s[];
-  return toStringzManaged(slice);
+  return toStringzManaged(Alloc, Unique)(slice);
 }
 
-UniquePtr!(immutable char) toStringzManaged(const char[] s, bool freeInput = false)
+auto toStringzManaged(Alloc = Mallocator, bool Unique = true)(auto ref const char[] s)
 {
   import core.lifetime : move;
 
-  auto copy = UniquePtr!(char[]).make(s.length + 1);
+  static if (Unique)
+    alias PtrType = UniquePtr;
+  else
+    alias PtrType = RcPtr;
+
+  auto copy = PtrType!(char[]).make!Alloc(s.length + 1);
   // memcopy into it
   auto tgt = (*copy).ptr;
   tgt[0 .. s.length] = s[];
   tgt[s.length] = 0; // append null terminator
 
-  if (freeInput) dfree(s);
-
-  // char[] -> immutable(char)
-  return transmute!(UniquePtr!(immutable char))(copy.move.first);
-}
-
-// phobos std.string.toStringz
-immutable(char)* toStringz(scope const(char)[] s, bool freeInput = false)
-{
-	if (s.length == 0) // empty
-		return "".ptr;
-
-	// make copy
-	auto copy = dalloc_slice!char(s.length + 1);
-	copy[0 .. s.length] = s[];
-	copy[s.length] = 0; // write null terminator
-
-	if (freeInput) dfree(s);
-
-	return &(cast(immutable) copy[0]);
-}
-
-immutable(char)[] fromStringz(const char* s, bool freeInput = false)
-{
-  // not the most efficient fromStringz in the world. sorry bout that.
-
-  size_t length;
-  while (s[length] != '\0') length++;
-
-  auto copy = dalloc_slice!char(length);
-  copy[] = s[0 .. length];
-
-  if (freeInput) dfree(s);
-
-  // make it immutable to satisfy the string gods
-  return transmute!(immutable(char)[])(copy);
+  // char[] -> char -> immutable(char)
+  // not modifying the destructor type and stuff should be fine for immutablizing so transmute is okay here
+  return transmute!(PtrType!(immutable char))(copy.move.first);
 }
