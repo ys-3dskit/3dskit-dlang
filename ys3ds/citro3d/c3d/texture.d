@@ -93,19 +93,10 @@ extern(D) pragma(inline, true)
 {
   int C3D_TexCalcMaxLevel (uint width, uint height)
   {
-    version (LDC)
-    {
-      import ldc.intrinsics : llvm_ctlz;
-
-      return (31-llvm_ctlz(width < height ? width : height)) - 3; // avoid sizes smaller than 8
-    }
-    else
-    {
-      import core.bitop : bsr;
-      // __builtin_clz() = 31-bsr()
-      // return (31-__builtin_clz(width < height ? width : height)) - 3;
-      return (bsr(width < height ? width : height)) - 3; // avoid sizes smaller than 8
-    }
+    import core.bitop : bsr;
+    // __builtin_clz() = 31-bsr()
+    // return (31-__builtin_clz(width < height ? width : height)) - 3;
+    return (bsr(width < height ? width : height)) - 3; // avoid sizes smaller than 8
   }
 
   uint C3D_TexCalcLevelSize (uint size, int level)
