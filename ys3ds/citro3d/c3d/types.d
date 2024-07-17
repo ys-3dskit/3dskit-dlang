@@ -28,10 +28,10 @@ union C3D_FVec
     	 */
     struct
     {
-        float w = 0; ///< W-component
-        float z = 0; ///< Z-component
-        float y = 0; ///< Y-component
-        float x = 0; ///< X-component
+        float w; ///< W-component
+        float z; ///< Z-component
+        float y; ///< Y-component
+        float x; ///< X-component
     }
 
     /**
