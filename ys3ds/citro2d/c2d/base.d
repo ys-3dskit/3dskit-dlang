@@ -73,7 +73,7 @@ struct C2D_ImageTint
  *  @{
  */
 
-extern(D)
+extern(D) pragma(inline, true)
 {
   /** @brief Clamps a value between bounds
   *  @param[in] x The value to clamp
@@ -235,7 +235,8 @@ void C2D_SceneSize (uint width, uint height, bool tilt);
 /** @brief Configures the size of the 2D scene to match that of the specified render target.
  *  @param[in] target Render target
  */
-extern(D) void C2D_SceneTarget (C3D_RenderTarget* target)
+extern(D) pragma(inline, true)
+void C2D_SceneTarget (C3D_RenderTarget* target)
 {
   C2D_SceneSize(target.frameBuf.width, target.frameBuf.height, target.linked);
 }
@@ -267,7 +268,8 @@ void C2D_ViewRotate (float rotation);
 /** @brief Rotates everything drawn via the model matrix.
  * @param[in] rotation Rotation in the counterclockwise direction in degrees
  */
-extern(D) void C2D_ViewRotateDegrees (float rotation)
+extern (D) pragma(inline, true)
+void C2D_ViewRotateDegrees (float rotation)
 {
   C2D_ViewRotate(C3D_AngleFromDegrees(rotation));
 }
@@ -300,7 +302,8 @@ void C2D_TargetClear (C3D_RenderTarget* target, uint color);
 /** @brief Helper function to begin drawing a 2D scene on a render target
  *  @param[in] target Render target to draw the 2D scene to
  */
-extern(D) void C2D_SceneBegin (C3D_RenderTarget* target)
+extern (D) pragma(inline, true)
+void C2D_SceneBegin (C3D_RenderTarget* target)
 {
   C2D_Flush();
   C3D_FrameDrawOn(target);
@@ -475,7 +478,8 @@ bool C2D_DrawRectangle (
  *  @param[in] h Height of the rectangle
  *  @param[in] clr 32-bit RGBA color of the rectangle
  */
-extern(D) bool C2D_DrawRectSolid (float x, float y, float z, float w, float h, uint clr)
+extern (D) pragma(inline, true)
+bool C2D_DrawRectSolid (float x, float y, float z, float w, float h, uint clr)
 {
   return C2D_DrawRectangle(x, y, z, w, h, clr, clr, clr, clr);
 }
@@ -512,7 +516,8 @@ bool C2D_DrawEllipse (
  *  @param[in] clr 32-bit RGBA color of the ellipse
  *  @note Switching to and from "circle mode" internally requires an expensive state change. As such, the recommended usage of this feature is to draw all non-circular objects first, then draw all circular objects.
 */
-extern(D) bool C2D_DrawEllipseSolid (
+extern (D) pragma(inline, true)
+bool C2D_DrawEllipseSolid (
     float x,
     float y,
     float z,
@@ -534,7 +539,8 @@ extern(D) bool C2D_DrawEllipseSolid (
  *  @param[in] clr3 32-bit RGBA color of the bottom-right corner of the ellipse
  *  @note Switching to and from "circle mode" internally requires an expensive state change. As such, the recommended usage of this feature is to draw all non-circular objects first, then draw all circular objects.
 */
-extern(D) bool C2D_DrawCircle (
+extern (D) pragma(inline, true)
+bool C2D_DrawCircle (
     float x,
     float y,
     float z,
@@ -555,7 +561,8 @@ extern(D) bool C2D_DrawCircle (
  *  @param[in] clr 32-bit RGBA color of the ellipse
  *  @note Switching to and from "circle mode" internally requires an expensive state change. As such, the recommended usage of this feature is to draw all non-circular objects first, then draw all circular objects.
 */
-extern(D) bool C2D_DrawCircleSolid (float x, float y, float z, float radius, uint clr)
+extern (D) pragma(inline, true)
+bool C2D_DrawCircleSolid (float x, float y, float z, float radius, uint clr)
 {
   return C2D_DrawCircle(x, y, z, radius, clr, clr, clr, clr);
 }
