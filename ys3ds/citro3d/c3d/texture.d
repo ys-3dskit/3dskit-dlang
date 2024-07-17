@@ -68,6 +68,7 @@ struct C3D_TexInitParams
         uint, "", 4));
 
     // D struct initializer syntax does not work with bitfields
+    pragma(inline, true)
     this(ushort _width, ushort _height, ubyte _maxLevel, GPU_TEXCOLOR _format, GPU_TEXTURE_MODE_PARAM _type, bool _onVram) @nogc nothrow
     {
       width = _width;
@@ -88,14 +89,23 @@ void C3D_TexDelete (C3D_Tex* tex);
 
 void C3D_TexShadowParams(bool perspective, float bias);
 
-extern(D)
+extern(D) pragma(inline, true)
 {
   int C3D_TexCalcMaxLevel (uint width, uint height)
   {
-    import core.bitop : bsr;
-    // __builtin_clz() = 31-bsr()
-    // return (31-__builtin_clz(width < height ? width : height)) - 3; // avoid sizes smaller than 8
-    return (bsr(width < height ? width : height)) - 3; // avoid sizes smaller than 8
+    version (LDC)
+    {
+      import ldc.intrinsics : llvm_ctlz;
+
+      return (31-llvm_ctlz(width < height ? width : height)) - 3; // avoid sizes smaller than 8
+    }
+    else
+    {
+      import core.bitop : bsr;
+      // __builtin_clz() = 31-bsr()
+      // return (31-__builtin_clz(width < height ? width : height)) - 3;
+      return (bsr(width < height ? width : height)) - 3; // avoid sizes smaller than 8
+    }
   }
 
   uint C3D_TexCalcLevelSize (uint size, int level)

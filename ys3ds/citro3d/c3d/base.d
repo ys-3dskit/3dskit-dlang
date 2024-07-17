@@ -3,6 +3,8 @@ module ys3ds.citro3d.c3d.base;
 import ys3ds.citro3d.c3d.types;
 import ys3ds.ctru._3ds.types;
 import ys3ds.ctru._3ds.gpu.enums;
+import ys3ds.ctru._3ds.gpu.gpu;
+import ys3ds.ctru._3ds.gpu.registers;
 import ys3ds.ctru._3ds.gpu.shaderProgram;
 
 import ys3ds.citro3d.c3d.buffers;
@@ -36,7 +38,8 @@ void C3D_ImmDrawBegin (GPU_Primitive_t primitive);
 void C3D_ImmSendAttrib (float x, float y, float z, float w);
 void C3D_ImmDrawEnd ();
 
-extern(D) void C3D_ImmDrawRestartPrim ()
+extern(D) pragma(inline, true)
+void C3D_ImmDrawRestartPrim ()
 {
   GPUCMD_AddWrite(GPUREG_RESTART_PRIMITIVE, 1);
 }
@@ -44,7 +47,8 @@ extern(D) void C3D_ImmDrawRestartPrim ()
 // Fixed vertex attributes
 C3D_FVec* C3D_FixedAttribGetWritePtr (int id);
 
-extern(D) void C3D_FixedAttribSet (int id, float x, float y, float z, float w)
+extern (D)
+void C3D_FixedAttribSet (int id, float x, float y, float z, float w)
 {
   auto ptr = C3D_FixedAttribGetWritePtr(id);
   ptr.x = x;

@@ -121,7 +121,7 @@ void ProcTexLut_FromArray (C3D_ProcTexLut* lut, ref const(float)[129] in_);
 void C3D_ProcTexColorLutBind (C3D_ProcTexColorLut* lut);
 void ProcTexColorLut_Write (C3D_ProcTexColorLut* out_, const(uint)* in_, int offset, int length);
 
-extern(D)
+extern(D) pragma(inline, true)
 {
   void C3D_ProcTexClamp (
       C3D_ProcTex* pt,

@@ -53,14 +53,17 @@ union C3D_DEPTHTYPE
     GPU_DEPTHBUF __e;
 }
 
-extern (D) auto C3D_DEPTHTYPE_OK(T)(auto ref T _x)
+extern (D) pragma(inline, true)
 {
-    return _x.__i >= 0;
-}
+  auto C3D_DEPTHTYPE_OK(T)(auto ref T _x)
+  {
+      return _x.__i >= 0;
+  }
 
-extern (D) auto C3D_DEPTHTYPE_VAL(T)(auto ref T _x)
-{
-    return _x.__e;
+  auto C3D_DEPTHTYPE_VAL(T)(auto ref T _x)
+  {
+      return _x.__e;
+  }
 }
 
 C3D_RenderTarget* C3D_RenderTargetCreate (int width, int height, GPU_COLORBUF colorFmt, C3D_DEPTHTYPE depthFmt);
@@ -68,7 +71,7 @@ C3D_RenderTarget* C3D_RenderTargetCreateFromTex (C3D_Tex* tex, GPU_TEXFACE face,
 void C3D_RenderTargetDelete (C3D_RenderTarget* target);
 void C3D_RenderTargetSetOutput (C3D_RenderTarget* target, gfxScreen_t screen, gfx3dSide_t side, uint transferFlags);
 
-extern(D)
+extern(D) pragma(inline, true)
 {
   void C3D_RenderTargetDetachOutput (C3D_RenderTarget* target)
   {

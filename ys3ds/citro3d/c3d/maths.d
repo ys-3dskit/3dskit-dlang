@@ -48,313 +48,313 @@ enum C3D_AspectRatioBot = 320.0f / 240.0f; ///< Aspect ratio for 3DS bottom scre
  * @{
  */
 
-/**
- * @brief Create a new FVec4
- * @param[in] x X-component
- * @param[in] y Y-component
- * @param[in] z Z-component
- * @param[in] w W-component
- * @return New FVec4
- */
-extern(D) C3D_FVec FVec4_New (float x, float y, float z, float w)
+extern(D) pragma(inline, true)
 {
-  // gpu stores vectors backwards wheeeeeeee
-  return C3D_FVec(w, z, y, x);
-}
 
-/**
- * @brief Add two FVec4s
- * @param[in] lhs Augend
- * @param[in] rhs Addend
- * @return lhs+rhs (sum)
- */
+  /**
+  * @brief Create a new FVec4
+  * @param[in] x X-component
+  * @param[in] y Y-component
+  * @param[in] z Z-component
+  * @param[in] w W-component
+  * @return New FVec4
+  */
+  C3D_FVec FVec4_New (float x, float y, float z, float w)
+  {
+    // gpu stores vectors backwards wheeeeeeee
+    return C3D_FVec(w, z, y, x);
+  }
 
-// component-wise addition
-extern(D) C3D_FVec FVec4_Add (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return FVec4_New(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z, lhs.w+rhs.w);
-}
+  /**
+  * @brief Add two FVec4s
+  * @param[in] lhs Augend
+  * @param[in] rhs Addend
+  * @return lhs+rhs (sum)
+  */
 
-/**
- * @brief Subtract two FVec4s
- * @param[in] lhs Minuend
- * @param[in] rhs Subtrahend
- * @return lhs-rhs (difference)
- */
+  // component-wise addition
+  C3D_FVec FVec4_Add (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return FVec4_New(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z, lhs.w+rhs.w);
+  }
 
-// component-wise subtraction
-extern(D) C3D_FVec FVec4_Subtract (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return FVec4_New(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z, lhs.w-rhs.w);
-}
+  /**
+  * @brief Subtract two FVec4s
+  * @param[in] lhs Minuend
+  * @param[in] rhs Subtrahend
+  * @return lhs-rhs (difference)
+  */
 
-/**
- * @brief Negate a FVec4
- * @note This is equivalent to `FVec4_Scale(v, -1)`
- * @param[in] v Vector to negate
- * @return -v
- */
+  // component-wise subtraction
+  C3D_FVec FVec4_Subtract (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return FVec4_New(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z, lhs.w-rhs.w);
+  }
 
-// component-wise negation
-extern(D) C3D_FVec FVec4_Negate (C3D_FVec v)
-{
-  return FVec4_New(-v.x, -v.y, -v.z, -v.w);
-}
+  /**
+  * @brief Negate a FVec4
+  * @note This is equivalent to `FVec4_Scale(v, -1)`
+  * @param[in] v Vector to negate
+  * @return -v
+  */
 
-/**
- * @brief Scale a FVec4
- * @param[in] v Vector to scale
- * @param[in] s Scale factor
- * @return v*s
- */
+  // component-wise negation
+  C3D_FVec FVec4_Negate (C3D_FVec v)
+  {
+    return FVec4_New(-v.x, -v.y, -v.z, -v.w);
+  }
 
-// component-wise scaling
-extern(D) C3D_FVec FVec4_Scale (C3D_FVec v, float s)
-{
-  return FVec4_New(v.x*s, v.y*s, v.z*s, v.w*s);
-}
+  /**
+  * @brief Scale a FVec4
+  * @param[in] v Vector to scale
+  * @param[in] s Scale factor
+  * @return v*s
+  */
 
-/**
- * @brief Perspective divide
- * @param[in] v Vector to divide
- * @return v/v.w
- */
+  // component-wise scaling
+  C3D_FVec FVec4_Scale (C3D_FVec v, float s)
+  {
+    return FVec4_New(v.x*s, v.y*s, v.z*s, v.w*s);
+  }
 
-// divide by w
-extern(D) C3D_FVec FVec4_PerspDivide (C3D_FVec v)
-{
-  return FVec4_New(v.x/v.w, v.y/v.w, v.z/v.w, 1.0f);
-}
+  /**
+  * @brief Perspective divide
+  * @param[in] v Vector to divide
+  * @return v/v.w
+  */
 
-/**
- * @brief Dot product of two FVec4s
- * @param[in] lhs Left-side FVec4
- * @param[in] rhs Right-side FVec4
- * @return lhs∙rhs
- */
+  // divide by w
+  C3D_FVec FVec4_PerspDivide (C3D_FVec v)
+  {
+    return FVec4_New(v.x/v.w, v.y/v.w, v.z/v.w, 1.0f);
+  }
 
-// A∙B = sum of component-wise products
-extern(D) float FVec4_Dot (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z + lhs.w*rhs.w;
-}
+  /**
+  * @brief Dot product of two FVec4s
+  * @param[in] lhs Left-side FVec4
+  * @param[in] rhs Right-side FVec4
+  * @return lhs∙rhs
+  */
 
-/**
- * @brief Magnitude of a FVec4
- * @param[in] v Vector
- * @return ‖v‖
- */
+  // A∙B = sum of component-wise products
+  float FVec4_Dot (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z + lhs.w*rhs.w;
+  }
 
-// ‖v‖ = √(v∙v)
-extern(D) float FVec4_Magnitude (C3D_FVec v)
-{
-  return sqrtf(FVec4_Dot(v,v));
-}
+  /**
+  * @brief Magnitude of a FVec4
+  * @param[in] v Vector
+  * @return ‖v‖
+  */
 
-/**
- * @brief Normalize a FVec4
- * @param[in] v FVec4 to normalize
- * @return v/‖v‖
- */
+  // ‖v‖ = √(v∙v)
+  float FVec4_Magnitude (C3D_FVec v)
+  {
+    return sqrtf(FVec4_Dot(v,v));
+  }
 
-// get vector magnitude
+  /**
+  * @brief Normalize a FVec4
+  * @param[in] v FVec4 to normalize
+  * @return v/‖v‖
+  */
 
-// scale by inverse magnitude to get a unit vector
-extern(D) C3D_FVec FVec4_Normalize (C3D_FVec v)
-{
-  float m = FVec4_Magnitude(v);
-  // original c3d header constrcuts new vec elementwise,
-  // which is proabably a bit more efficient, but screw it
-  // you could always add pragma(inline, true) and -ffast-math
-  return FVec4_Scale(v, 1/m);
-}
+  // get vector magnitude
 
-/**
- * @brief Create a new FVec3
- * @param[in] x X-component
- * @param[in] y Y-component
- * @param[in] z Z-component
- * @return New FVec3
- */
-extern(D) C3D_FVec FVec3_New (float x, float y, float z)
-{
-  return FVec4_New(x, y, z, 0);
-}
+  // scale by inverse magnitude to get a unit vector
+  C3D_FVec FVec4_Normalize (C3D_FVec v)
+  {
+    float m = FVec4_Magnitude(v);
+    return FVec4_New(v.x/m, v.y/m, v.z/m, v.w/m);
+  }
 
-/**
- * @brief Dot product of two FVec3s
- * @param[in] lhs Left-side FVec3
- * @param[in] rhs Right-side FVec3
- * @return lhs∙rhs
- */
+  /**
+  * @brief Create a new FVec3
+  * @param[in] x X-component
+  * @param[in] y Y-component
+  * @param[in] z Z-component
+  * @return New FVec3
+  */
+  C3D_FVec FVec3_New (float x, float y, float z)
+  {
+    return FVec4_New(x, y, z, 0);
+  }
 
-// A∙B = sum of component-wise products
-extern(D) float FVec3_Dot (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
-}
+  /**
+  * @brief Dot product of two FVec3s
+  * @param[in] lhs Left-side FVec3
+  * @param[in] rhs Right-side FVec3
+  * @return lhs∙rhs
+  */
 
-/**
- * @brief Magnitude of a FVec3
- * @param[in] v Vector
- * @return ‖v‖
- */
+  // A∙B = sum of component-wise products
+  float FVec3_Dot (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
+  }
 
-// ‖v‖ = √(v∙v)
-extern(D) float FVec3_Magnitude (C3D_FVec v)
-{
-  return sqrtf(FVec3_Dot(v,v));
-}
+  /**
+  * @brief Magnitude of a FVec3
+  * @param[in] v Vector
+  * @return ‖v‖
+  */
 
-/**
- * @brief Normalize a FVec3
- * @param[in] v FVec3 to normalize
- * @return v/‖v‖
- */
+  // ‖v‖ = √(v∙v)
+  float FVec3_Magnitude (C3D_FVec v)
+  {
+    return sqrtf(FVec3_Dot(v,v));
+  }
 
-// get vector magnitude
+  /**
+  * @brief Normalize a FVec3
+  * @param[in] v FVec3 to normalize
+  * @return v/‖v‖
+  */
 
-// scale by inverse magnitude to get a unit vector
-extern(D) C3D_FVec FVec3_Normalize (C3D_FVec v)
-{
-  float m = FVec3_Magnitude(v);
+  // get vector magnitude
 
-  return FVec3_Scale(v, 1/m);
-}
+  // scale by inverse magnitude to get a unit vector
+  C3D_FVec FVec3_Normalize (C3D_FVec v)
+  {
+    float m = FVec3_Magnitude(v);
 
-/**
- * @brief Add two FVec3s
- * @param[in] lhs Augend
- * @param[in] rhs Addend
- * @return lhs+rhs (sum)
- */
+    return FVec3_New(v.x / m, v.y / m, v.z / m);
+  }
 
-// component-wise addition
-extern(D) C3D_FVec FVec3_Add (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return FVec3_New(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z);
-}
+  /**
+  * @brief Add two FVec3s
+  * @param[in] lhs Augend
+  * @param[in] rhs Addend
+  * @return lhs+rhs (sum)
+  */
 
-/**
- * @brief Subtract two FVec3s
- * @param[in] lhs Minuend
- * @param[in] rhs Subtrahend
- * @return lhs-rhs (difference)
- */
+  // component-wise addition
+  C3D_FVec FVec3_Add (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return FVec3_New(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z);
+  }
 
-// component-wise subtraction
-extern(D) C3D_FVec FVec3_Subtract (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return FVec3_New(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z);
-}
+  /**
+  * @brief Subtract two FVec3s
+  * @param[in] lhs Minuend
+  * @param[in] rhs Subtrahend
+  * @return lhs-rhs (difference)
+  */
 
-/**
- * @brief Distance between two 3D points
- * @param[in] lhs Relative origin
- * @param[in] rhs Relative point of interest
- * @return ‖lhs-rhs‖
- */
+  // component-wise subtraction
+  C3D_FVec FVec3_Subtract (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return FVec3_New(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z);
+  }
 
-// distance = ‖lhs-rhs‖
-extern(D) float FVec3_Distance (C3D_FVec lhs, C3D_FVec rhs)
-{
-  return FVec3_Magnitude(FVec3_Subtract(lhs, rhs));
-}
+  /**
+  * @brief Distance between two 3D points
+  * @param[in] lhs Relative origin
+  * @param[in] rhs Relative point of interest
+  * @return ‖lhs-rhs‖
+  */
 
-/**
- * @brief Scale a FVec3
- * @param[in] v Vector to scale
- * @param[in] s Scale factor
- * @return v*s
- */
+  // distance = ‖lhs-rhs‖
+  float FVec3_Distance (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    return FVec3_Magnitude(FVec3_Subtract(lhs, rhs));
+  }
 
-// component-wise scaling
-extern(D) C3D_FVec FVec3_Scale (C3D_FVec v, float s)
-{
-  return FVec3_New(v.x*s, v.y*s, v.z*s);
-}
+  /**
+  * @brief Scale a FVec3
+  * @param[in] v Vector to scale
+  * @param[in] s Scale factor
+  * @return v*s
+  */
 
-/**
- * @brief Negate a FVec3
- * @note This is equivalent to `FVec3_Scale(v, -1)`
- * @param[in] v Vector to negate
- * @return -v
- */
+  // component-wise scaling
+  C3D_FVec FVec3_Scale (C3D_FVec v, float s)
+  {
+    return FVec3_New(v.x*s, v.y*s, v.z*s);
+  }
 
-// component-wise negation
-extern(D) C3D_FVec FVec3_Negate (C3D_FVec v)
-{
-  return FVec3_New(-v.x, -v.y, -v.z);
-}
+  /**
+  * @brief Negate a FVec3
+  * @note This is equivalent to `FVec3_Scale(v, -1)`
+  * @param[in] v Vector to negate
+  * @return -v
+  */
 
-/**
- * @brief Cross product of two FVec3s
- * @note This returns a pseudo-vector which is perpendicular to the plane
- *       spanned by the two input vectors.
- * @param[in] lhs Left-side FVec3
- * @param[in] rhs Right-side FVec3
- * @return lhs×rhs
- */
+  // component-wise negation
+  C3D_FVec FVec3_Negate (C3D_FVec v)
+  {
+    return FVec3_New(-v.x, -v.y, -v.z);
+  }
 
-// A×B = (AyBz - AzBy, AzBx - AxBz, AxBy - AyBx)
-extern (D) C3D_FVec FVec3_Cross (C3D_FVec lhs, C3D_FVec rhs)
-{
+  /**
+  * @brief Cross product of two FVec3s
+  * @note This returns a pseudo-vector which is perpendicular to the plane
+  *       spanned by the two input vectors.
+  * @param[in] lhs Left-side FVec3
+  * @param[in] rhs Right-side FVec3
+  * @return lhs×rhs
+  */
+
   // A×B = (AyBz - AzBy, AzBx - AxBz, AxBy - AyBx)
-  return FVec3_New(lhs.y * rhs.z - lhs.z * rhs.y, lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x);
-}
-/** @} */
+  C3D_FVec FVec3_Cross (C3D_FVec lhs, C3D_FVec rhs)
+  {
+    // A×B = (AyBz - AzBy, AzBx - AxBz, AxBy - AyBx)
+    return FVec3_New(lhs.y * rhs.z - lhs.z * rhs.y, lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x);
+  }
+  /** @} */
 
-/**
- * @name Matrix Math
- * @note All matrices are 4x4 unless otherwise noted.
- * @{
- */
+  /**
+  * @name Matrix Math
+  * @note All matrices are 4x4 unless otherwise noted.
+  * @{
+  */
 
-/**
- * @brief Zero matrix
- * @param[out] out Matrix to zero
- */
-extern(D) void Mtx_Zeros (C3D_Mtx* out_)
-{
-  // unlike C, D gives us type initializers, and Mtx is all zeroes
-  // memset(out_, 0, typeof(*out_).sizeof)
-  *out_ = C3D_Mtx.init;
-}
+  /**
+  * @brief Zero matrix
+  * @param[out] out Matrix to zero
+  */
+  void Mtx_Zeros (C3D_Mtx* out_)
+  {
+    out_.m[] = 0;
+  }
 
-/**
- * @brief Copy a matrix
- * @param[out] out Output matrix
- * @param[in]  in  Input matrix
- */
-extern(D) void Mtx_Copy (C3D_Mtx* out_, const(C3D_Mtx)* in_)
-{
-  *out_ = *in_;
-}
+  /**
+  * @brief Copy a matrix
+  * @param[out] out Output matrix
+  * @param[in]  in  Input matrix
+  */
+  void Mtx_Copy (C3D_Mtx* out_, const(C3D_Mtx)* in_)
+  {
+    *out_ = *in_;
+  }
 
-/**
- * @brief Creates a matrix with the diagonal using the given parameters.
- * @param[out]  out    Output matrix.
- * @param[in]   x      The X component.
- * @param[in]   y      The Y component.
- * @param[in]   z      The Z component.
- * @param[in]   w      The W component.
- */
-extern(D) void Mtx_Diagonal (C3D_Mtx* out_, float x, float y, float z, float w)
-{
-  Mtx_Zeros(out_);
-  out_.r[0].x = x;
-  out_.r[1].y = y;
-  out_.r[2].z = z;
-  out_.r[3].w = w;
-}
+  /**
+  * @brief Creates a matrix with the diagonal using the given parameters.
+  * @param[out]  out    Output matrix.
+  * @param[in]   x      The X component.
+  * @param[in]   y      The Y component.
+  * @param[in]   z      The Z component.
+  * @param[in]   w      The W component.
+  */
+  void Mtx_Diagonal (C3D_Mtx* out_, float x, float y, float z, float w)
+  {
+    Mtx_Zeros(out_);
+    out_.r[0].x = x;
+    out_.r[1].y = y;
+    out_.r[2].z = z;
+    out_.r[3].w = w;
+  }
 
-/**
- * @brief Identity matrix
- * @param[out] out Matrix to fill
- */
-extern(D) void Mtx_Identity (C3D_Mtx* out_)
-{
-  Mtx_Diagonal(out_, 1.0f, 1.0f, 1.0f, 1.0f);
+  /**
+  * @brief Identity matrix
+  * @param[out] out Matrix to fill
+  */
+  void Mtx_Identity (C3D_Mtx* out_)
+  {
+    Mtx_Diagonal(out_, 1.0f, 1.0f, 1.0f, 1.0f);
+  }
+
 }
 
 /**
@@ -363,32 +363,34 @@ extern(D) void Mtx_Identity (C3D_Mtx* out_)
  */
 void Mtx_Transpose (C3D_Mtx* out_);
 
-/**
- * @brief Matrix addition
- * @param[out]   out    Output matrix.
- * @param[in]    lhs    Left matrix.
- * @param[in]    rhs    Right matrix.
- * @return lhs+rhs (sum)
- */
-extern(D) void Mtx_Add (C3D_Mtx* out_, const(C3D_Mtx)* lhs, const(C3D_Mtx)* rhs)
+extern(D) pragma(inline, true)
 {
-  for (int i = 0; i < 16; i++)
-    out_.m[i] = lhs.m[i] + rhs.m[i];
-}
+  /**
+  * @brief Matrix addition
+  * @param[out]   out    Output matrix.
+  * @param[in]    lhs    Left matrix.
+  * @param[in]    rhs    Right matrix.
+  * @return lhs+rhs (sum)
+  */
+  void Mtx_Add (C3D_Mtx* out_, const(C3D_Mtx)* lhs, const(C3D_Mtx)* rhs)
+  {
+    for (int i = 0; i < 16; i++)
+      out_.m[i] = lhs.m[i] + rhs.m[i];
+  }
 
-/**
- * @brief Matrix subtraction
- * @param[out]   out    Output matrix.
- * @param[in]    lhs    Left matrix.
- * @param[in]    rhs    Right matrix.
- * @return lhs-rhs (difference)
- */
-extern(D) void Mtx_Subtract (C3D_Mtx* out_, const(C3D_Mtx)* lhs, const(C3D_Mtx)* rhs)
-{
-  for (int i = 0; i < 16; i++)
-    out_.m[i] = lhs.m[i] - rhs.m[i];
+  /**
+  * @brief Matrix subtraction
+  * @param[out]   out    Output matrix.
+  * @param[in]    lhs    Left matrix.
+  * @param[in]    rhs    Right matrix.
+  * @return lhs-rhs (difference)
+  */
+  void Mtx_Subtract (C3D_Mtx* out_, const(C3D_Mtx)* lhs, const(C3D_Mtx)* rhs)
+  {
+    for (int i = 0; i < 16; i++)
+      out_.m[i] = lhs.m[i] - rhs.m[i];
+  }
 }
-
 /**
  * @brief Multiply two matrices
  * @param[out] out Output matrix
@@ -427,7 +429,8 @@ C3D_FVec Mtx_MultiplyFVec4 (const(C3D_Mtx)* mtx, C3D_FVec v);
  * @param[in] v   Vector
  * @return mtx*v (product)
  */
-extern (D) C3D_FVec Mtx_MultiplyFVecH (const(C3D_Mtx)* mtx, C3D_FVec v)
+extern(D) pragma(inline, true)
+C3D_FVec Mtx_MultiplyFVecH (const(C3D_Mtx)* mtx, C3D_FVec v)
 {
   v.w = 1.0f;
   return Mtx_MultiplyFVec4(mtx, v);
@@ -747,56 +750,60 @@ C3D_FQuat Quat_RotateZ (C3D_FQuat q, float r, bool bRightSide);
  */
 C3D_FQuat Quat_FromMtx (const(C3D_Mtx)* m);
 
-/**
- * @brief Identity Quaternion
- * @return Identity Quaternion
- */
-
-// r=1, i=j=k=0
-extern(D) C3D_FQuat Quat_Identity ()
+extern (D) pragma(inline, true)
 {
-  return Quat_New(0.0f, 0.0f, 0.0f, 1.0f);
-}
+  /**
+  * @brief Identity Quaternion
+  * @return Identity Quaternion
+  */
 
-/**
- * @brief Quaternion conjugate
- * @param[in] q Quaternion of which to get conjugate
- * @return q*
- */
+  // r=1, i=j=k=0
+  C3D_FQuat Quat_Identity ()
+  {
+    return Quat_New(0.0f, 0.0f, 0.0f, 1.0f);
+  }
 
-// q* = q.r - q.i - q.j - q.k
-extern(D) C3D_FQuat Quat_Conjugate (C3D_FQuat q)
-{
-  return Quat_New(-q.i, -q.j, -q.k, q.r);
-}
+  /**
+  * @brief Quaternion conjugate
+  * @param[in] q Quaternion of which to get conjugate
+  * @return q*
+  */
 
-/**
- * @brief Quaternion inverse
- * @note This is equivalent to `Quat_Pow(v, -1)`
- * @param[in] q Quaternion of which to get inverse
- * @return q<sup>-1</sup>
- */
+  // q* = q.r - q.i - q.j - q.k
+  C3D_FQuat Quat_Conjugate (C3D_FQuat q)
+  {
+    return Quat_New(-q.i, -q.j, -q.k, q.r);
+  }
 
-// q^-1 = (q.r - q.i - q.j - q.k) / (q.r^2 + q.i^2 + q.j^2 + q.k^2)
-//      = q* / (q∙q)
-extern(D) C3D_FQuat Quat_Inverse (C3D_FQuat q)
-{
-  C3D_FQuat c = Quat_Conjugate(q);
-  float d = Quat_Dot(q, q);
-  return Quat_New(c.i / d, c.j / d, c.k / d, c.r / d);
-}
+  /**
+  * @brief Quaternion inverse
+  * @note This is equivalent to `Quat_Pow(v, -1)`
+  * @param[in] q Quaternion of which to get inverse
+  * @return q<sup>-1</sup>
+  */
 
-/**
- * @brief Cross product of FVec3 and Quaternion
- * @param[in] v Base FVec3
- * @param[in] q Quaternion to cross
- * @return v×q
- */
+  // q^-1 = (q.r - q.i - q.j - q.k) / (q.r^2 + q.i^2 + q.j^2 + q.k^2)
+  //      = q* / (q∙q)
+  C3D_FQuat Quat_Inverse (C3D_FQuat q)
+  {
+    C3D_FQuat c = Quat_Conjugate(q);
+    float d = Quat_Dot(q, q);
+    return Quat_New(c.i / d, c.j / d, c.k / d, c.r / d);
+  }
 
-// v×q = (q^-1)×v
-extern(D) C3D_FVec FVec3_CrossQuat (C3D_FVec v, C3D_FQuat q)
-{
-  return Quat_CrossFVec3(Quat_Inverse(q), v);
+  /**
+  * @brief Cross product of FVec3 and Quaternion
+  * @param[in] v Base FVec3
+  * @param[in] q Quaternion to cross
+  * @return v×q
+  */
+
+  // v×q = (q^-1)×v
+  C3D_FVec FVec3_CrossQuat (C3D_FVec v, C3D_FQuat q)
+  {
+    return Quat_CrossFVec3(Quat_Inverse(q), v);
+  }
+
 }
 
 /**

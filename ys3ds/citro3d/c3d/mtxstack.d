@@ -18,7 +18,8 @@ struct C3D_MtxStack
     bool isDirty;
 }
 
-extern(D) C3D_Mtx* MtxStack_Cur (C3D_MtxStack* stk)
+extern(D) pragma(inline, true)
+C3D_Mtx* MtxStack_Cur (C3D_MtxStack* stk)
 {
   stk.isDirty = true;
   return &stk.m[stk.pos];

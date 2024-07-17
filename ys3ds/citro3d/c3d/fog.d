@@ -17,7 +17,8 @@ struct C3D_GasLut
     uint[8] color;
 }
 
-extern(D) float FogLut_CalcZ (float depth, float near, float far)
+extern (D) pragma(inline, true)
+float FogLut_CalcZ (float depth, float near, float far)
 {
   return far*near/(depth*(far-near)+near);
 }

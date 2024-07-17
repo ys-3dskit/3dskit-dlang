@@ -61,6 +61,8 @@ extern(D)
     env.scaleAlpha = GPU_TEVSCALE.GPU_TEVSCALE_1;
   }
 
+pragma(inline, true):
+
   void C3D_TexEnvSrc (
       C3D_TexEnv* env,
       C3D_TexEnvMode mode,
