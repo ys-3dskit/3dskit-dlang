@@ -57,7 +57,7 @@ auto toStringzManaged(Str = String, Alloc = Mallocator, bool Unique = true)(auto
 if (isBasicString!Str)
 {
   auto slice = s[];
-  return toStringzManaged(Alloc, Unique)(slice);
+  return toStringzManaged!(Alloc, Unique)(slice);
 }
 
 auto toStringzManaged(Alloc = Mallocator, bool Unique = true)(auto ref const char[] s)
