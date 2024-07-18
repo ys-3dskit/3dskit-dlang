@@ -53,16 +53,29 @@ uid_t
 
 alias blkcnt_t = c_long;
 alias blksize_t = c_long;
-alias dev_t = short;
+alias dev_t = uint;
 alias gid_t = ushort;
-alias ino_t = ushort;
+alias ino_t = uint;
 alias mode_t = uint;
 alias nlink_t = ushort;
-alias off_t = c_long;
+alias off_t = ulong;
 alias pid_t = int;
 alias ssize_t = ptrdiff_t;
-alias time_t = c_long;
+alias time_t = long;
 alias uid_t = ushort;
+
+static assert(blkcnt_t.sizeof == 4);
+static assert(blksize_t.sizeof == 4);
+static assert(dev_t.sizeof == 4);
+static assert(gid_t.sizeof == 2);
+static assert(ino_t.sizeof == 4);
+static assert(mode_t.sizeof == 4);
+static assert(nlink_t.sizeof == 2);
+static assert(off_t.sizeof == 8);
+static assert(pid_t.sizeof == 4);
+static assert(ssize_t.sizeof == 4);
+static assert(time_t.sizeof == 8);
+static assert(uid_t.sizeof == 2);
 
 //
 // XOpen (XSI)
@@ -84,6 +97,14 @@ alias id_t = uint;
 alias key_t = c_long;
 alias suseconds_t = c_long;
 alias useconds_t = c_ulong;
+
+static assert(clock_t.sizeof == 4);
+static assert(fsblkcnt_t.sizeof == 8);
+static assert(fsfilcnt_t.sizeof == 4);
+static assert(id_t.sizeof == 4);
+static assert(key_t.sizeof == 4);
+static assert(suseconds_t.sizeof == 4);
+static assert(useconds_t.sizeof == 4);
 
 //
 // Thread (THR)
@@ -132,6 +153,9 @@ timer_t
 
 alias clockid_t = c_ulong;
 alias timer_t = c_ulong;
+
+static assert(clockid_t.sizeof == 4);
+static assert(timer_t.sizeof == 4);
 
 //
 // Trace (TRC)
