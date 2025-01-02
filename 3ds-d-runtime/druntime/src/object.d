@@ -593,30 +593,30 @@ void setSameMutex(shared Object ownee, shared Object owner)
  * When an object is accessed via an interface, an Interface* appears as the
  * first entry in its vtbl.
  */
-/* struct Interface
+struct Interface
 {
     /// Class info returned by `typeid` for this interface (not for containing class)
     TypeInfo_Class   classinfo;
     void*[]     vtbl;
     size_t      offset;     /// offset to Interface 'this' from Object 'this'
-} */
+}
 
 /**
  * Array of pairs giving the offset and type information for each
  * member in an aggregate.
  */
-/* struct OffsetTypeInfo
+struct OffsetTypeInfo
 {
     size_t   offset;    /// Offset of member from start of object
     TypeInfo ti;        /// TypeInfo for this member
-} */
+}
 
 /**
  * Runtime type information about a type.
  * Can be retrieved for any type using a
  * $(GLINK2 expression,TypeidExpression, TypeidExpression).
  */
-/+class TypeInfo
+class TypeInfo
 {
     override string toString() const @safe nothrow
     {
@@ -802,7 +802,7 @@ else
     /** Return info used by the garbage collector to do precise collection.
      */
     @property immutable(void)* rtInfo() nothrow pure const @trusted @nogc { return rtinfoHasPointers; } // better safe than sorry
-}+/
+}
 
 version (LDC) unittest
 {
@@ -887,7 +887,7 @@ version (LDC) unittest
     assert(dummy.getHash(null) == 0);
 }
 
-/* class TypeInfo_Enum : TypeInfo
+class TypeInfo_Enum : TypeInfo
 {
     override string toString() const pure { return name; }
 
@@ -1028,7 +1028,7 @@ version (LDC) unittest
     TypeInfo base;
     string   name;
     void[]   m_init;
-} */
+}
 
 @safe unittest
 {
@@ -1050,9 +1050,10 @@ version (LDC) unittest
 
 
 // Please make sure to keep this in sync with TypeInfo_P (src/rt/typeinfo/ti_ptr.d)
-/* class TypeInfo_Pointer : TypeInfo
+class TypeInfo_Pointer : TypeInfo
 {
-    override string toString() const { return m_next.toString() ~ "*"; }
+    // TODO
+    //override string toString() const { return m_next.toString() ~ "*"; }
 
     override bool opEquals(Object o)
     {
@@ -1101,10 +1102,10 @@ version (LDC) unittest
 
     TypeInfo m_next;
 }
- */
-/* class TypeInfo_Array : TypeInfo
+
+class TypeInfo_Array : TypeInfo
 {
-    override string toString() const { return value.toString() ~ "[]"; }
+    //override string toString() const { return value.toString() ~ "[]"; }
 
     override bool opEquals(Object o)
     {
@@ -1192,11 +1193,11 @@ version (LDC) unittest
     }
 
     override @property immutable(void)* rtInfo() nothrow pure const @safe { return RTInfo!(void[]); }
-} */
+}
 
-/* class TypeInfo_StaticArray : TypeInfo
+class TypeInfo_StaticArray : TypeInfo
 {
-    override string toString() const
+    /* override string toString() const
     {
         import core.internal.string : unsignedToTempString;
 
@@ -1204,7 +1205,7 @@ version (LDC) unittest
         const lenString = unsignedToTempString(len, tmpBuff);
 
         return (() @trusted => cast(string) (value.toString() ~ "[" ~ lenString ~ "]"))();
-    }
+    } */
 
     override bool opEquals(Object o)
     {
@@ -1315,7 +1316,7 @@ version (LDC) unittest
 
     // just return the rtInfo of the element, we have no generic type T to run RTInfo!T on
     override @property immutable(void)* rtInfo() nothrow pure const @safe { return value.rtInfo(); }
-} */
+}
 
 // https://issues.dlang.org/show_bug.cgi?id=21315
 @system unittest
@@ -1334,12 +1335,12 @@ version (LDC) unittest
     }
 }
 
-/* class TypeInfo_AssociativeArray : TypeInfo
+class TypeInfo_AssociativeArray : TypeInfo
 {
-    override string toString() const
+    /* override string toString() const
     {
         return value.toString() ~ "[" ~ key.toString() ~ "]";
-    }
+    } */
 
     override bool opEquals(Object o)
     {
@@ -1389,10 +1390,10 @@ version (LDC) unittest
         return 0;
     }
 }
- */
-/+class TypeInfo_Vector : TypeInfo
+
+class TypeInfo_Vector : TypeInfo
 {
-    override string toString() const { return "__vector(" ~ base.toString() ~ ")"; }
+    //override string toString() const { return "__vector(" ~ base.toString() ~ ")"; }
 
     override bool opEquals(Object o)
     {
@@ -1424,11 +1425,11 @@ version (LDC) unittest
     }
 
     TypeInfo base;
-}+/
+}
 
-/+class TypeInfo_Function : TypeInfo
+class TypeInfo_Function : TypeInfo
 {
-    override string toString() const pure @trusted
+    /* override string toString() const pure @trusted
     {
         import core.demangle : demangleType;
 
@@ -1436,7 +1437,7 @@ version (LDC) unittest
         SafeDemangleFunctionType demangle = cast(SafeDemangleFunctionType) &demangleType;
 
         return cast(string) demangle(deco);
-    }
+    } */
 
     override bool opEquals(Object o)
     {
@@ -1466,7 +1467,7 @@ version (LDC) unittest
     * Mangled function type string
     */
     string deco;
-}+/
+}
 
 @safe unittest
 {
@@ -1503,9 +1504,9 @@ version (LDC) unittest
     assert(typeid(functionTypes[0]).rtInfo() is null);
 }
 
-/* class TypeInfo_Delegate : TypeInfo
+class TypeInfo_Delegate : TypeInfo
 {
-    override string toString() const pure @trusted
+    /* override string toString() const pure @trusted
     {
         import core.demangle : demangleType;
 
@@ -1513,7 +1514,7 @@ version (LDC) unittest
         SafeDemangleFunctionType demangle = cast(SafeDemangleFunctionType) &demangleType;
 
         return cast(string) demangle(deco);
-    }
+    } */
 
     @safe unittest
     {
@@ -1612,18 +1613,18 @@ version (LDC) unittest
     }
 
     override @property immutable(void)* rtInfo() nothrow pure const @safe { return RTInfo!(int delegate()); }
-} */
+}
 
-/* private extern (C) Object _d_newclass(const TypeInfo_Class ci);
+private extern (C) Object _d_newclass(const TypeInfo_Class ci);
 private extern (C) int _d_isbaseof(scope TypeInfo_Class child,
-    scope const TypeInfo_Class parent) @nogc nothrow pure @safe; // rt.cast_ */
+    scope const TypeInfo_Class parent) @nogc nothrow pure @safe; // rt.cast_
 
 /**
  * Runtime type information about a class.
  * Can be retrieved from an object instance by using the
  * $(DDSUBLINK spec/expression,typeid_expressions,typeid expression).
  */
-/+class TypeInfo_Class : TypeInfo
+class TypeInfo_Class : TypeInfo
 {
     override string toString() const pure { return name; }
 
@@ -1796,7 +1797,7 @@ private extern (C) int _d_isbaseof(scope TypeInfo_Class child,
     }
 }
 
-alias ClassInfo = TypeInfo_Class;+/
+alias ClassInfo = TypeInfo_Class;
 
 @safe unittest
 {
@@ -1812,7 +1813,7 @@ alias ClassInfo = TypeInfo_Class;+/
     assert(typeid(X).initializer.length == typeid(immutable(X)).initializer.length);
 }
 
-/+class TypeInfo_Interface : TypeInfo
+class TypeInfo_Interface : TypeInfo
 {
     override string toString() const pure { return info.name; }
 
@@ -1915,7 +1916,7 @@ alias ClassInfo = TypeInfo_Class;+/
     {
         return child !is null && _d_isbaseof(cast() child.info, this.info);
     }
-}+/
+}
 
 @safe unittest
 {
@@ -1929,7 +1930,7 @@ alias ClassInfo = TypeInfo_Class;+/
     assert(typeid(I).toHash() == typeid(I).hashOf());
 }
 
-/* class TypeInfo_Struct : TypeInfo
+class TypeInfo_Struct : TypeInfo
 {
     override string toString() const { return name; }
 
@@ -2038,7 +2039,7 @@ alias ClassInfo = TypeInfo_Class;+/
 
     final @property string name() nothrow const @trusted
     {
-        import core.demangle : demangleType;
+        /* import core.demangle : demangleType;
 
         if (mangledName is null) // e.g., opaque structs
             return null;
@@ -2054,7 +2055,8 @@ alias ClassInfo = TypeInfo_Class;+/
 
         const demangled = cast(string) demangleType(mangledName);
         demangledNamesCache[key] = demangled;
-        return demangled;
+        return demangled; */
+        return mangledName; // TODO: fix demangle
     }
 
     void[] m_init;      // initializer; m_init.ptr == null if 0 initialize
@@ -2118,7 +2120,7 @@ alias ClassInfo = TypeInfo_Class;+/
             }
         }
     }
-} */
+}
 
 @system unittest
 {
@@ -2133,11 +2135,11 @@ alias ClassInfo = TypeInfo_Class;+/
     assert(!typeid(S).equals(&s, &s));
 }
 
-/* class TypeInfo_Tuple : TypeInfo
+class TypeInfo_Tuple : TypeInfo
 {
     TypeInfo[] elements;
 
-    override string toString() const
+   /*  override string toString() const
     {
         string s = "(";
         foreach (i, element; elements)
@@ -2148,7 +2150,7 @@ alias ClassInfo = TypeInfo_Class;+/
         }
         s ~= ")";
         return s;
-    }
+    } */
 
     override bool opEquals(Object o)
     {
@@ -2217,14 +2219,14 @@ alias ClassInfo = TypeInfo_Class;+/
     {
         assert(0);
     }
-} */
+}
 
-/* class TypeInfo_Const : TypeInfo
+class TypeInfo_Const : TypeInfo
 {
-    override string toString() const
+    /* override string toString() const
     {
         return cast(string) ("const(" ~ base.toString() ~ ")");
-    }
+    } */
 
     //override bool opEquals(Object o) { return base.opEquals(o); }
     override bool opEquals(Object o)
@@ -2265,27 +2267,27 @@ alias ClassInfo = TypeInfo_Class;+/
 
 class TypeInfo_Invariant : TypeInfo_Const
 {
-    override string toString() const
+   /*  override string toString() const
     {
         return cast(string) ("immutable(" ~ base.toString() ~ ")");
-    }
+    } */
 }
 
 class TypeInfo_Shared : TypeInfo_Const
 {
-    override string toString() const
+   /*  override string toString() const
     {
         return cast(string) ("shared(" ~ base.toString() ~ ")");
-    }
+    } */
 }
 
 class TypeInfo_Inout : TypeInfo_Const
 {
-    override string toString() const
+   /*  override string toString() const
     {
         return cast(string) ("inout(" ~ base.toString() ~ ")");
-    }
-} */
+    } */
+}
 
 // Contents of Moduleinfo._flags
 enum
@@ -2312,7 +2314,7 @@ enum
  * It provides access to various aspects of the module.
  * It is not generated for betterC.
  */
-/+struct ModuleInfo
+struct ModuleInfo
 {
     uint _flags; // MIxxxx
     uint _index; // index into _moduleinfo_array[]
@@ -2502,14 +2504,15 @@ const:
 
     static int opApply(scope int delegate(ModuleInfo*) dg)
     {
-        import core.internal.traits : externDFunc;
+       /*  import core.internal.traits : externDFunc;
         alias moduleinfos_apply = externDFunc!("rt.minfo.moduleinfos_apply",
                                               int function(scope int delegate(immutable(ModuleInfo*))));
         // Bugzilla 13084 - enforcing immutable ModuleInfo would break client code
         return moduleinfos_apply(
-            (immutable(ModuleInfo*)m) => dg(cast(ModuleInfo*)m));
+            (immutable(ModuleInfo*)m) => dg(cast(ModuleInfo*)m)); */
+      return 0; // TODO: THIS IS REALLY BAD - hazel
     }
-}+/
+}
 
 @system unittest
 {
@@ -2717,7 +2720,7 @@ class Throwable : Object
     {
         assert(0);
         import core.internal.string : unsignedToTempString;
-/*
+
         char[20] tmpBuff = void;
 
         sink(typeid(this).name);
@@ -2730,19 +2733,19 @@ class Throwable : Object
         }
         if (info)
         {
-            try
-            {
+           /*  try
+            { */
                 sink("\n----------------");
                 foreach (t; info)
                 {
                     sink("\n"); sink(t);
                 }
-            }
+            /* }
             catch (Throwable)
             {
                 // ignore more errors
-            }
-        } */
+            } */ // TODO
+        }
     }
 
     /**
@@ -2922,7 +2925,7 @@ class Error : Throwable
     }
 }
 
-/+extern (C)
+extern (C)
 {
     // from druntime/src/rt/aaA.d
 
@@ -3584,7 +3587,7 @@ ref V require(K, V)(ref V[K] aa, K key, lazy V value = V.init)
     assert(aa.require("k1", 0) == 1);
     assert(aa.require("k2", 0) == 0);
     assert(aa["k2"] == 0);
-}+/
+}
 
 // Tests whether T can be @safe-ly copied. Use a union to exclude destructor from the test.
 private enum bool isSafeCopyable(T) = is(typeof(() @safe { union U { T x; } T *x; auto u = U(*x); }));
@@ -3850,7 +3853,7 @@ enum immutable(void)* rtinfoHasPointers = cast(void*)1;
 
 // Helper functions
 
-/* private inout(TypeInfo) getElement(return scope inout TypeInfo value) @trusted pure nothrow
+private inout(TypeInfo) getElement(return scope inout TypeInfo value) @trusted pure nothrow
 {
     TypeInfo element = cast() value;
     for (;;)
@@ -3867,9 +3870,9 @@ enum immutable(void)* rtinfoHasPointers = cast(void*)1;
             break;
     }
     return cast(inout) element;
-} */
+}
 
-/* private size_t getArrayHash(const scope TypeInfo element, const scope void* ptr, const size_t count) @trusted nothrow
+private size_t getArrayHash(const scope TypeInfo element, const scope void* ptr, const size_t count) @trusted nothrow
 {
     if (!count)
         return 0;
@@ -3898,7 +3901,7 @@ enum immutable(void)* rtinfoHasPointers = cast(void*)1;
     foreach (size_t i; 0 .. count)
         hash = hashOf(element.getHash(ptr + i * elementSize), hash);
     return hash;
-} */
+}
 
 /// Provide the .dup array property.
 @property auto dup(T)(T[] a)
@@ -3958,7 +3961,7 @@ enum immutable(void)* rtinfoHasPointers = cast(void*)1;
 
 // HACK:  This is a lie.  `_d_arraysetcapacity` is neither `nothrow` nor `pure`, but this lie is
 // necessary for now to prevent breaking code.
-//private extern (C) size_t _d_arraysetcapacity(const TypeInfo ti, size_t newcapacity, void[]* arrptr) pure nothrow;
+private extern (C) size_t _d_arraysetcapacity(const TypeInfo ti, size_t newcapacity, void[]* arrptr) pure nothrow;
 
 /**
 (Property) Gets the current _capacity of a slice. The _capacity is the size
@@ -4007,13 +4010,13 @@ reallocated or extended.
 Returns: The new capacity of the array (which may be larger than
 the requested capacity).
 */
-/* size_t reserve(T)(ref T[] arr, size_t newcapacity) pure nothrow @trusted
+size_t reserve(T)(ref T[] arr, size_t newcapacity) pure nothrow @trusted
 {
     if (__ctfe)
         return newcapacity;
     else
         return _d_arraysetcapacity(typeid(T[]), newcapacity, cast(void[]*)&arr);
-} */
+}
 
 ///
 @safe unittest
@@ -4757,13 +4760,13 @@ public import core.internal.array.construction : _d_arrayctor;
 public import core.internal.array.construction : _d_arraysetctor;
 public import core.internal.array.construction : _d_newarrayT;
 public import core.internal.array.construction : _d_newarraymTX;
-//public import core.internal.array.arrayassign : _d_arrayassign_l;
-//public import core.internal.array.arrayassign : _d_arrayassign_r;
-//public import core.internal.array.arrayassign : _d_arraysetassign;
+/* public import core.internal.array.arrayassign : _d_arrayassign_l;
+public import core.internal.array.arrayassign : _d_arrayassign_r;
+public import core.internal.array.arrayassign : _d_arraysetassign; */
 public import core.internal.array.capacity: _d_arraysetlengthTImpl;
 
-//public import core.internal.dassert: _d_assert_fail;
-
+/* public import core.internal.dassert: _d_assert_fail;
+ */
 public import core.internal.destruction: __ArrayDtor;
 
 public import core.internal.moving: __move_post_blt;
