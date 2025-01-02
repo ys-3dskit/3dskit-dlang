@@ -18,11 +18,11 @@ module core.thread.types;
 version (Windows)
     alias ThreadID = uint;
 else
-version (Posix)
+version (Horizon)
 {
-    import core.sys.posix.pthread;
+    //import core.sys.horizon.pthread;
 
-    alias ThreadID = pthread_t;
+    alias ThreadID = int;//pthread_t; // TODO: complete BS
 }
 
 struct ll_ThreadData

@@ -11,11 +11,11 @@
  */
 
 module core.thread.threadbase;
-
+/+
 import core.thread.context;
 import core.thread.types;
 import core.time;
-import core.sync.mutex;
+//import core.sync.mutex; // TODO
 import core.stdc.stdlib : free, realloc;
 
 // LDC: Unconditionally change ABI to support sanitizers (adds fields to data structures)
@@ -1458,3 +1458,4 @@ bool findLowLevelThread(ThreadID tid) nothrow @nogc
             return true;
     return false;
 }
++/

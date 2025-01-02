@@ -2346,10 +2346,11 @@ bool shrinkArray(T, Allocator)(auto ref Allocator alloc,
     // stuff with the default initializer.
     {
         size_t destroyed;
-        scope(failure)
+        // TODO: get exceptions working?
+        /* scope(failure)
         {
             array[$ - delta .. $][0 .. destroyed].uninitializedFillDefault;
-        }
+        } */
         foreach (ref e; array[$ - delta .. $])
         {
             e.destroy;
@@ -2815,7 +2816,7 @@ if (!isPointer!A)
         import std.traits : hasMember;
         static if (hasMember!(A, "deallocate"))
         {
-            scope(failure) a.deallocate(state);
+            //scope(failure) a.deallocate(state); // TODO
         }
         auto tmp = emplace!(shared CSharedAllocatorImpl!A)(state);
         move(a, tmp.impl);

@@ -6,11 +6,14 @@ Source: $(PHOBOSSRC std/experimental/allocator/_gc_allocator.d)
 */
 module std.experimental.allocator.gc_allocator;
 import std.experimental.allocator.common;
+import std.experimental.allocator.building_blocks.null_allocator : NullAllocator;
 
 /**
 D's built-in garbage-collected allocator.
 */
-struct GCAllocator
+alias GCAllocator = NullAllocator;
+
+/+struct GCAllocator
 {
     import core.memory : GC;
     import std.typecons : Ternary;
@@ -131,7 +134,7 @@ struct GCAllocator
     {
         GC.collect();
     }
-}
+}+/
 
 ///
 pure @system unittest

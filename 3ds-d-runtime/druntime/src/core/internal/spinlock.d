@@ -8,7 +8,7 @@
  */
 module core.internal.spinlock;
 
-import core.atomic, core.thread;
+import core.atomic/* , core.thread */;
 
 shared struct SpinLock
 {
@@ -53,8 +53,8 @@ shared struct SpinLock
         import core.time;
         if (k < pauseThresh)
             return core.atomic.pause();
-        else // if (k < 32)
-            return Thread.yield();
+        //else // if (k < 32)
+          //  return Thread.yield(); // TODO: enable this line again - hazel
         // Thread.sleep(1.msecs);
     }
 

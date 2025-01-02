@@ -11,7 +11,7 @@
  */
 
 module core.thread.osthread;
-
+/+
 import core.thread.threadbase;
 import core.thread.context;
 import core.thread.types;
@@ -1568,7 +1568,7 @@ in (fn)
             }}
             asm pure nothrow @nogc {
                 ("sd $gp, %0") : "=m" (regs[8]);
-                ("sd $fp, %0") : "=m" (regs[9]); 
+                ("sd $fp, %0") : "=m" (regs[9]);
                 ("sd $ra, %0") : "=m" (sp);
             }
         }
@@ -3020,3 +3020,4 @@ private size_t adjustStackSize(size_t sz) nothrow @nogc
 
     return sz;
 }
++/

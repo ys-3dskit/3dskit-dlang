@@ -10,7 +10,7 @@
  */
 
 module core.thread.fiber;
-
+/+
 import core.thread.threadbase;
 import core.thread.threadgroup;
 import core.thread.types;
@@ -2720,3 +2720,4 @@ version (D_InlineAsm_X86_64)
         fib.call();
     }
 }
++/+/

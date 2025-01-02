@@ -10,7 +10,7 @@
  */
 
 module core.thread.threadgroup;
-
+/+
 import core.thread.osthread;
 
 
@@ -160,3 +160,4 @@ class ThreadGroup
 private:
     Thread[Thread]  m_all;
 }
++/

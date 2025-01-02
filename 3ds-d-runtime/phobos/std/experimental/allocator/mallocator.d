@@ -233,12 +233,12 @@ struct AlignedMallocator
     $(HTTP msdn.microsoft.com/en-us/library/8z34s9c6(v=vs.80).aspx,
     `__aligned_malloc`) on Windows.
     */
-    version (Posix)
+    version (Horizon)
     @trusted @nogc nothrow
     void[] alignedAllocate(size_t bytes, uint a) shared
     {
         import core.stdc.errno : ENOMEM, EINVAL;
-        import core.sys.posix.stdlib : posix_memalign;
+        import core.sys.horizon.stdlib : posix_memalign;
         assert(a.isGoodDynamicAlignment);
         void* result;
         auto code = posix_memalign(&result, a, bytes);
@@ -279,7 +279,7 @@ version (LDC_AddressSanitizer)
     $(HTTP msdn.microsoft.com/en-US/library/17b5h8td(v=vs.80).aspx,
     `__aligned_free(b.ptr)`) on Windows.
     */
-    version (Posix)
+    version (Horizon)
     @system @nogc nothrow
     bool deallocate(void[] b) shared
     {
@@ -331,7 +331,7 @@ version (LDC_AddressSanitizer)
     }
 
     /// ditto
-    version (Posix)
+    version (Horizon)
     @system @nogc nothrow
     bool alignedReallocate(ref void[] b, size_t s, uint a) shared
     {
