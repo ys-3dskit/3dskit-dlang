@@ -1,0 +1,3 @@
+[submodule "ysbase"]
+	path = ysbase
+	url = git@github.com:yellowsink/ysbase

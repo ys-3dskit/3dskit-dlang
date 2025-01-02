@@ -16,6 +16,7 @@ target("ys3ds-dlang")
 
 	add_files("ys3ds/**.d")
   add_files("btl/**.d")
+  add_files("ysbase/source/ysbase/**.d")
   add_files("3ds-d-runtime/druntime/src/**.d")
   add_files("3ds-d-runtime/druntime/src/**.c")
 
@@ -23,6 +24,6 @@ target("ys3ds-dlang")
   add_dcflags("--conf=", {force=true})
 
 	-- fix imports
-	add_dcflags("-g", "-I.", "-I3ds-d-runtime/druntime/src", "-I3ds-d-runtime/phobos", {force = true})
+	add_dcflags("-g", "-I.", "-Iysbase/source", "-I3ds-d-runtime/druntime/src", "-I3ds-d-runtime/phobos", {force = true})
 
 	set_strip("debug")
