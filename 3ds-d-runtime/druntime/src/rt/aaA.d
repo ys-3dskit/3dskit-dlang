@@ -7,7 +7,7 @@
  * Source: $(DRUNTIMESRC rt/_aaA.d)
  */
 module rt.aaA;
-/+
+
 /// AA version for debuggers, bump whenever changing the layout
 extern (C) immutable int _aaVersion = 1;
 
@@ -1018,4 +1018,3 @@ unittest
         static assert(Impl.tupleof[i].offsetof == newaa.Impl.tupleof[i].offsetof);
     }
 }
-+/

@@ -13,7 +13,7 @@ module rt.dwarfeh;
 
 // debug = EH_personality;
 
-version (Posix):
+version (Horizon):
 
 import rt.dmain2: _d_print_throwable;
 import core.internal.backtrace.unwind;
@@ -475,7 +475,7 @@ version (ARM_EABI_UNWINDER)
         UNWIND_POINTER_REG = 12,
         UNWIND_STACK_REG = 13
     }
-    
+
     extern (C) _Unwind_Reason_Code _d_eh_personality(_Unwind_State state,
                    _Unwind_Exception* exceptionObject, _Unwind_Context* context)
     {

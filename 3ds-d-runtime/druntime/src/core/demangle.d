@@ -1,4 +1,4 @@
-/+/**
+/**
  * The demangle module converts mangled D symbols to a representation similar
  * to what would have existed in code.
  *
@@ -3280,4 +3280,4 @@ private struct BufSlice
     auto getSlice() inout nothrow scope { return buf[from .. to]; }
     size_t length() const scope { return to - from; }
 }
-+/
+

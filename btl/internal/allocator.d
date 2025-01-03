@@ -20,8 +20,8 @@ public template statelessAllcoator(T){
 
     static if(hasStaticMember!(T, "instance"))
         alias statelessAllcoator = T.instance;
-    else 
-        enum T statelessAllcoator = T.init;   
+    else
+        enum T statelessAllcoator = T.init;
 }
 
 
@@ -52,7 +52,7 @@ else{
 }
 
 //Mallocator:
-version(D_BetterC){
+/* version(D_BetterC){ */
     public struct Mallocator{
         import std.experimental.allocator.common : platformAlignment;
 
@@ -89,9 +89,9 @@ version(D_BetterC){
 
         static Mallocator instance;
     }
-}
+/* }
 else{
     public import std.experimental.allocator.mallocator : Mallocator;
 }
-
+ */
 

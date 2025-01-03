@@ -6,7 +6,7 @@
  * Authors:   Kenji Hara
  * Source: $(DRUNTIMESRC rt/util/_typeinfo.d)
  */
-module rt.util.typeinfo;/+
+module rt.util.typeinfo;
 import rt.util.utility : d_cfloat, d_cdouble, d_creal, isComplex;
 static import core.internal.hash;
 
@@ -697,4 +697,4 @@ unittest
         assert(flags == 1);
     }
 }
-+/
+

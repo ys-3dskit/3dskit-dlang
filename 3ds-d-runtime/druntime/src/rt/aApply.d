@@ -8,7 +8,7 @@
  */
 module rt.aApply;
 
-/+
+
 import core.internal.utf : decode, toUTF8;
 
 /**********************************************/
@@ -957,4 +957,4 @@ unittest
     }
     assert(i == 5);
 }
-+/
+

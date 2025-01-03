@@ -23,7 +23,7 @@ module core.internal.utf;
 
 // disable all of utf.d due to being completely betterc incompatible
 
-/+
+
 extern (C) void onUnicodeError( string msg, size_t idx, string file = __FILE__, size_t line = __LINE__ ) @safe pure;
 
 /*******************************
@@ -944,4 +944,4 @@ unittest
     auto ret = toUTF16(buf, '\U000BAAAA');
     assert(ret == "\U000BAAAA");
 }
-+/
+

@@ -8,7 +8,7 @@
 */
 
 module core.internal.parseoptions;
-/+
+
 import core.stdc.stdlib;
 import core.stdc.stdio;
 import core.stdc.ctype;
@@ -443,4 +443,4 @@ unittest
     // the config parse doesn't know all available GC names, so should accept unknown ones
     assert(conf.parseOptions("gc:whatever"));
 }
-+/
+

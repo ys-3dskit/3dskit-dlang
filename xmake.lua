@@ -19,6 +19,7 @@ target("ys3ds-dlang")
   add_files("ysbase/source/ysbase/**.d")
   add_files("3ds-d-runtime/druntime/src/**.d")
   add_files("3ds-d-runtime/druntime/src/**.c")
+  add_files("3ds-d-runtime/druntime/src/**.S")
   --add_files("3ds-d-runtime/phobos/phobos/**.d")
   --add_files("3ds-d-runtime/phobos/std/**.d")
 

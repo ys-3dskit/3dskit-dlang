@@ -12,11 +12,12 @@
 module test;
 
 version (Horizon) {}
-else
-{
-  version (N3DS) {}
-  else static assert(0, "build with the compiler options listed in the comment above!!");
-}
+else version = IncorrectBuildSetup;
+version (N3DS) {}
+else version = IncorrectBuildSetup;
+
+version (IncorrectBuildSetup)
+  static assert(0, "build with the compiler options listed in the comment above!!");
 
 extern(C) void main()
 {
