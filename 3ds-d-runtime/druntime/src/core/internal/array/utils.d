@@ -9,8 +9,6 @@
 */
 module core.internal.array.utils;
 
-/+
-
 import core.internal.traits : Parameters;
 import core.memory : GC;
 
@@ -373,4 +371,3 @@ bool __setArrayAllocLength(T)(ref BlkInfo info, size_t newLength, bool isShared,
     }
     return true; // resize succeeded
 }
-+/

@@ -2484,9 +2484,9 @@ if(isSomeChar!_Char && is(Unqual!_Char == _Char)){
 
 
 
-		public immutable(CharType)[] toGcString()scope const pure nothrow @trusted{
+		/* public immutable(CharType)[] toGcString()scope const pure nothrow @trusted{
 			return this[].idup;
-		}
+		} */
 
 
 
@@ -2830,13 +2830,13 @@ private {
 		enum bool hasCopyConstructor = true
 			&& !is(From == shared)
 			&& isConstructable!(From, To)
-			&& (From.hasStatelessAllocator 
+			&& (From.hasStatelessAllocator
 				|| isCopyConstructableElement!(
 					GetAllocatorType!From,
 					GetAllocatorType!To
 				)
 			)
-			&& (From.hasStatelessAllocator 
+			&& (From.hasStatelessAllocator
 				|| isCopyConstructableElement!(
 					GetAllocatorType!From,
 					To.AllocatorType
@@ -2854,7 +2854,7 @@ private {
 			&& is(GetCharType!From*: GetCharType!To*)
 			//&& (From.minimalCapacity == To.minimalCapacity)	//TODO remove
 			&& is(immutable From.AllocatorType == immutable To.AllocatorType)
-			&& (From.hasStatelessAllocator 
+			&& (From.hasStatelessAllocator
 				|| isMoveConstructableElement!(
 						GetAllocatorType!From,
 						GetAllocatorType!To
@@ -2868,18 +2868,18 @@ private {
 
 		enum isMoveAssignable = true
 			&& !isRef!from
-			&& isAssignable!(From, To)   
+			&& isAssignable!(From, To)
 			&& is(GetCharType!From*: GetCharType!To*)
 			//&& (From.minimalCapacity == To.minimalCapacity)	//TODO remove
 			&& is(immutable From.AllocatorType == immutable To.AllocatorType)
-			&& (From.hasStatelessAllocator 
+			&& (From.hasStatelessAllocator
 				|| isMoveAssignableElement!(
 						GetAllocatorType!From,
 						GetAllocatorType!To
 				)
 			);
 	}
-	
+
 	//Constructable:
 	template isConstructable(From, To){
 

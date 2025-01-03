@@ -5,11 +5,9 @@
 module btl.internal.gc;
 
 
-
-
 version(D_BetterC){
 }
-else{
+/* else{
     version(BTL_GC_RANGE_COUNT)
         public __gshared int _conter_gc_ranges = 0;
 
@@ -31,7 +29,7 @@ else{
                 assert(gcr.length == 0);
         }
     }
-}
+} */
 
 //same as GC.addRange but `pure nothrow @trusted @nogc` and with debug testing
 public void gcAddRange(T)(const T[] data)pure nothrow @trusted @nogc{
@@ -40,7 +38,7 @@ public void gcAddRange(T)(const T[] data)pure nothrow @trusted @nogc{
 public void gcAddRange(const void* data, const size_t length)pure nothrow @trusted @nogc{
     version(D_BetterC){
     }
-    else{
+   /*  else{
         import btl.traits.assume;
 
         assumePure(function void(const void* ptr, const size_t len){
@@ -83,7 +81,7 @@ public void gcAddRange(const void* data, const size_t length)pure nothrow @trust
             }
 
         })(data, length);
-    }
+    } */
 }
 
 //same as GC.removeRange but `pure nothrow @trusted @nogc` and with debug testing
@@ -94,7 +92,7 @@ public void gcRemoveRange(T)(const T[] data)pure nothrow @trusted @nogc{
 public void gcRemoveRange(const void* data)pure nothrow @trusted @nogc{
     version(D_BetterC){
     }
-    else{
+   /*  else{
         import btl.traits.assume;
 
         assumePure(function void(const void* ptr){
@@ -123,5 +121,5 @@ public void gcRemoveRange(const void* data)pure nothrow @trusted @nogc{
                 assert(0, "BTL_GC_RANGE_TRACK: missing gc range");
             }
         })(data);
-    }
+    } */
 }

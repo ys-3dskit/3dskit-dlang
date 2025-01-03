@@ -9,7 +9,7 @@
  */
 
 module rt.sections;
-/+
+
 version (LDC)
     public import rt.sections_ldc;
 
@@ -117,4 +117,4 @@ bool scanDataSegPrecisely() nothrow @nogc
             throw err;
     }
 }
-+/
+

@@ -19,15 +19,17 @@ import ys3ds.ctru._3ds.gfx;
 
 extern (C) @nogc nothrow:
 
+enum CONSOLE_ESC(alias x) = "\x1b[" ~ x;
+/*
 extern (D) string CONSOLE_ESC(T)(auto ref T x)
 {
     import std.conv : to;
 
     return "\x1b[" ~ to!string(x);
-}
+} */
 
-enum CONSOLE_RESET = CONSOLE_ESC("0m");
-enum CONSOLE_BLACK = CONSOLE_ESC("30m");
+enum CONSOLE_RESET = CONSOLE_ESC!"0m";
+enum CONSOLE_BLACK = CONSOLE_ESC!"30m";
 
 /// A callback for printing a character.
 alias ConsolePrint = bool function (void* con, int c);

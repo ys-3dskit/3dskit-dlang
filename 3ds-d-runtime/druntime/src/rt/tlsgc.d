@@ -12,7 +12,7 @@
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
 module rt.tlsgc;
-/+
+
 import core.stdc.stdlib;
 
 static import rt.lifetime, rt.sections;
@@ -80,4 +80,3 @@ void processGCMarks(void* data, scope IsMarkedDg dg) nothrow
     // do module specific sweeping
     rt.lifetime.processGCMarks(*(cast(Data*)data).blockInfoCache, dg);
 }
-+/

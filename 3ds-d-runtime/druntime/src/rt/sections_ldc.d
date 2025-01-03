@@ -59,26 +59,26 @@ struct SectionGroup
         return dg(globalSectionGroup);
     }
 
-    /* @property immutable(ModuleInfo*)[] modules() const nothrow @nogc
+    @property immutable(ModuleInfo*)[] modules() const nothrow @nogc
     {
         return _moduleGroup.modules;
-    } */
+    }
 
-    /* @property ref inout(ModuleGroup) moduleGroup() inout nothrow @nogc
+    @property ref inout(ModuleGroup) moduleGroup() inout nothrow @nogc
     {
         return _moduleGroup;
-    } */
+    }
 
-    /* @property inout(void[])[] gcRanges() inout nothrow @nogc
+    @property inout(void[])[] gcRanges() inout nothrow @nogc
     {
         return _gcRanges[];
-    } */
+    }
 
 private:
-//    ModuleGroup _moduleGroup;
+    ModuleGroup _moduleGroup;
 
-    /* import rt.util.container.array;
-    Array!(void[]) _gcRanges; */
+    import core.internal.container.array;
+    Array!(void[]) _gcRanges;
 
     version (Solaris)
     {
@@ -348,7 +348,7 @@ void finiSections() nothrow @nogc
 /***
  * Called once per thread; returns array of thread local storage ranges
  */
-/* void[] initTLSRanges() nothrow @nogc
+void[] initTLSRanges() nothrow @nogc
 {
     debug(PRINTF) printf("initTLSRanges called\n");
     version (UseELF)
@@ -359,7 +359,7 @@ void finiSections() nothrow @nogc
     }
     else static assert(0, "TLS range detection not implemented for this OS.");
 
-} */
+}
 
 void finiTLSRanges(void[] rng) nothrow @nogc
 {
@@ -384,7 +384,7 @@ struct ModuleReference
     //immutable(ModuleInfo)* mod;
 }
 
-/* immutable(ModuleInfo*)[] getModuleInfos() nothrow @nogc
+immutable(ModuleInfo*)[] getModuleInfos() nothrow @nogc
 out (result)
 {
     foreach(m; result)
@@ -409,4 +409,4 @@ do
 
     return cast(immutable)result;
 }
- */
+

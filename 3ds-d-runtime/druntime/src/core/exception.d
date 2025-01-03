@@ -37,8 +37,6 @@ void onOutOfMemoryError() @nogc nothrow
  */
 private alias dummy__switch_errorT = __switch_errorT!();
 
-/+
-
 /**
  * Thrown on a range error.
  */
@@ -570,12 +568,12 @@ alias AssertHandler = void function(string file, size_t line, string msg) nothro
  *  file = The name of the file that signaled this error.
  *  line = The line number on which this error occurred.
  */
-/* extern (C) void onAssertError( string file = __FILE__, size_t line = __LINE__ ) nothrow
+extern (C) void onAssertError( string file = __FILE__, size_t line = __LINE__ ) nothrow
 {
     if ( _assertHandler is null )
         throw staticError!AssertError(file, line);
     _assertHandler( file, line, null);
-} */
+}
 
 
 /**
@@ -588,12 +586,12 @@ alias AssertHandler = void function(string file, size_t line, string msg) nothro
  *  line = The line number on which this error occurred.
  *  msg  = An error message supplied by the user.
  */
-/* extern (C) void onAssertErrorMsg( string file, size_t line, string msg ) nothrow
+extern (C) void onAssertErrorMsg( string file, size_t line, string msg ) nothrow
 {
     if ( _assertHandler is null )
         throw staticError!AssertError(msg, file, line);
     _assertHandler( file, line, msg );
-} */
+}
 
 
 /**
@@ -626,11 +624,11 @@ extern (C) void onUnittestErrorMsg( string file, size_t line, string msg ) nothr
  * Throws:
  *  $(LREF RangeError).
  */
-/* extern (C) noreturn onRangeError( string file = __FILE__, size_t line = __LINE__ ) @trusted pure nothrow @nogc
+extern (C) noreturn onRangeError( string file = __FILE__, size_t line = __LINE__ ) @trusted pure nothrow @nogc
 {
     throw staticError!RangeError(file, line, null);
 }
- */
+
 /**
  * A callback for array slice out of bounds errors in D.
  *
@@ -644,11 +642,11 @@ extern (C) void onUnittestErrorMsg( string file, size_t line, string msg ) nothr
  * Throws:
  *  $(LREF ArraySliceError).
  */
-/* extern (C) noreturn onArraySliceError( size_t lower = 0, size_t upper = 0, size_t length = 0,
+extern (C) noreturn onArraySliceError( size_t lower = 0, size_t upper = 0, size_t length = 0,
                               string file = __FILE__, size_t line = __LINE__ ) @trusted pure nothrow @nogc
 {
     throw staticError!ArraySliceError(lower, upper, length, file, line, null);
-} */
+}
 
 /**
  * A callback for array index out of bounds errors in D.
@@ -662,11 +660,11 @@ extern (C) void onUnittestErrorMsg( string file, size_t line, string msg ) nothr
  * Throws:
  *  $(LREF ArrayIndexError).
  */
-/* extern (C) noreturn onArrayIndexError( size_t index = 0, size_t length = 0,
+extern (C) noreturn onArrayIndexError( size_t index = 0, size_t length = 0,
                               string file = __FILE__, size_t line = __LINE__ ) @trusted pure nothrow @nogc
 {
     throw staticError!ArrayIndexError(index, length, file, line, null);
-} */
+}
 
 /**
  * A callback for finalize errors in D.  A $(LREF FinalizeError) will be thrown.
@@ -680,12 +678,12 @@ extern (C) void onUnittestErrorMsg( string file, size_t line, string msg ) nothr
  * Throws:
  *  $(LREF FinalizeError).
  */
-/* extern (C) noreturn onFinalizeError( TypeInfo info, Throwable e, string file = __FILE__, size_t line = __LINE__ ) @trusted nothrow
+extern (C) noreturn onFinalizeError( TypeInfo info, Throwable e, string file = __FILE__, size_t line = __LINE__ ) @trusted nothrow
 {
     // This error is thrown during a garbage collection, so no allocation must occur while
     //  generating this object. So we use a preallocated instance
     throw staticError!FinalizeError(info, e, file, line);
-} */
+}
 
 version (D_BetterC)
 {
@@ -738,12 +736,12 @@ else
  * Throws:
  *  $(LREF InvalidMemoryOperationError).
  */
-/+extern (C) noreturn onInvalidMemoryOperationError(void* pretend_sideffect = null, string file = __FILE__, size_t line = __LINE__) @trusted pure nothrow @nogc /* dmd @@@BUG11461@@@ */
+extern (C) noreturn onInvalidMemoryOperationError(void* pretend_sideffect = null, string file = __FILE__, size_t line = __LINE__) @trusted pure nothrow @nogc /* dmd @@@BUG11461@@@ */
 {
     // The same restriction applies as for onOutOfMemoryError. The GC is in an
     // undefined state, thus no allocation must occur while generating this object.
     throw staticError!InvalidMemoryOperationError(file, line);
-}+/
+}
 
 
 /**
@@ -756,10 +754,10 @@ else
  * Throws:
  *  $(LREF ConfigurationError).
  */
-/* extern (C) noreturn onForkError( string file = __FILE__, size_t line = __LINE__ ) @trusted pure nothrow @nogc
+extern (C) noreturn onForkError( string file = __FILE__, size_t line = __LINE__ ) @trusted pure nothrow @nogc
 {
     throw staticError!ForkError( file, line, null );
-} */
+}
 
 /**
  * A callback for unicode errors in D.  A $(LREF UnicodeException) will be thrown.
@@ -773,10 +771,10 @@ else
  * Throws:
  *  $(LREF UnicodeException).
  */
-/* extern (C) noreturn onUnicodeError( string msg, size_t idx, string file = __FILE__, size_t line = __LINE__ ) @safe pure
+extern (C) noreturn onUnicodeError( string msg, size_t idx, string file = __FILE__, size_t line = __LINE__ ) @safe pure
 {
     throw new UnicodeException( msg, idx, file, line );
-} */
+}
 
 /***********************************
  * These functions must be defined for any D program linked
@@ -922,4 +920,4 @@ package class SuppressTraceInfo : Throwable.TraceInfo
         return cast(SuppressTraceInfo)it;
     }
 }
-+/
+
