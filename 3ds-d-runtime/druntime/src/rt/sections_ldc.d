@@ -319,11 +319,11 @@ private
 void initSections() nothrow @nogc
 {
     debug(PRINTF) printf("initSections called\n");
-//    globalSectionGroup.moduleGroup = ModuleGroup(getModuleInfos());
+    globalSectionGroup.moduleGroup = ModuleGroup(getModuleInfos());
 
     static void pushRange(void* start, void* end) nothrow @nogc
     {
-        //globalSectionGroup._gcRanges.insertBack(start[0 .. (end - start)]);
+        globalSectionGroup._gcRanges.insertBack(start[0 .. (end - start)]);
     }
 
     version (UseELF)
@@ -342,7 +342,7 @@ void finiSections() nothrow @nogc
 {
     debug(PRINTF) printf("finiSections called\n");
     import core.stdc.stdlib : free;
-//    free(cast(void*)globalSectionGroup.modules.ptr);
+    free(cast(void*)globalSectionGroup.modules.ptr);
 }
 
 /***
@@ -357,6 +357,8 @@ void[] initTLSRanges() nothrow @nogc
         debug(PRINTF) printf("Add range %p %d\n", rng ? rng.ptr : cast(void*)0, rng ? rng.length : 0);
         return rng;
     }
+    // TODO: does this cause issues?
+    else version (Horizon) {return [];}
     else static assert(0, "TLS range detection not implemented for this OS.");
 
 }
@@ -381,7 +383,7 @@ private:
 struct ModuleReference
 {
     ModuleReference* next;
-    //immutable(ModuleInfo)* mod;
+    immutable(ModuleInfo)* mod;
 }
 
 immutable(ModuleInfo*)[] getModuleInfos() nothrow @nogc

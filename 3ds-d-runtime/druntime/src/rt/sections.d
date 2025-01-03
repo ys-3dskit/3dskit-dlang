@@ -67,6 +67,8 @@ else version (CRuntime_Bionic)
     public import rt.sections_elf_shared;
 else version (CRuntime_UClibc)
     public import rt.sections_elf_shared;
+
+else version (Horizon) {} // 3dskit: does not support shared libraries anyway
 else
     static assert(0, "unimplemented");
 

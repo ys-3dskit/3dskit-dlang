@@ -19,7 +19,7 @@ void __switch_errorT()(string file = __FILE__, size_t line = __LINE__) @trusted
         assert(0, "No appropriate switch clause found");
 }
 
-void onOutOfMemoryError() @nogc nothrow
+void onOutOfMemoryError() @nogc nothrow pure
 {
   assert(0, "out of memory");
 }
@@ -685,8 +685,8 @@ extern (C) noreturn onFinalizeError( TypeInfo info, Throwable e, string file = _
     throw staticError!FinalizeError(info, e, file, line);
 }
 
-version (D_BetterC)
-{
+/* version (D_BetterC)
+{ */
     // When compiling with -betterC we use template functions so if they are
     // used the bodies are copied into the user's program so there is no need
     // for the D runtime during linking.
@@ -705,7 +705,7 @@ version (D_BetterC)
     {
         assert(0, "Invalid memory operation");
     }
-}
+/+ }
 else
 {
     /**
@@ -727,7 +727,7 @@ else
         // suppress stacktrace until they are @nogc
         throw staticError!OutOfMemoryError(false, file, line);
     }
-}
+} +/
 
 /**
  * A callback for invalid memory operations in D.  An
