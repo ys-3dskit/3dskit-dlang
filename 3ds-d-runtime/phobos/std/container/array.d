@@ -18,7 +18,7 @@
  */
 module std.container.array;
 
-import core.exception : RangeError;
+//import core.exception : RangeError;
 import std.range.primitives;
 import std.traits;
 

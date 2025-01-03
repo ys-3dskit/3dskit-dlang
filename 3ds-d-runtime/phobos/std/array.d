@@ -80,7 +80,7 @@ Authors:   $(HTTP erdani.org, Andrei Alexandrescu) and
 Source: $(PHOBOSSRC std/array.d)
 */
 module std.array;
-
+/+
 import std.functional;
 import std.meta;
 import std.traits;
@@ -4973,3 +4973,4 @@ version (StdUnittest) private void checkStaticArray(T, T1, T2)(T1 a, T2 b) nothr
     static assert(is(T1 == T[T1.length]));
     assert(a == b, "a must be equal to b");
 }
++/

@@ -75,7 +75,7 @@
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
 module std.concurrency;
-
+/+
 public import std.variant;
 
 import core.atomic;
@@ -2859,3 +2859,4 @@ auto ref initOnce(alias var)(lazy typeof(var) init, Mutex mutex)
         initOnce!n(noreturn.init);
     }));
 }
++/

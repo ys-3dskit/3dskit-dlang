@@ -23,7 +23,7 @@
     Source:     $(PHOBOSSRC std/complex.d)
 */
 module std.complex;
-
+/+
 import std.traits;
 
 /** Helper function that returns a complex number with the specified
@@ -1950,3 +1950,4 @@ Complex!T pow(T)(const T x, Complex!T n) @trusted pure nothrow @nogc
          assert(c.re == n.re && c.im == n.im);
     }}
 }
++/

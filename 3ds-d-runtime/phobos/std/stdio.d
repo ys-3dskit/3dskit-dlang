@@ -187,6 +187,10 @@ else version (Solaris)
 {
     version = GENERIC_IO;
 }
+else version (Horizon)
+{
+    version = GENERIC_IO;
+}
 else
 {
     static assert(0, "unsupported operating system");
@@ -216,9 +220,9 @@ version (Windows)
     import core.sys.windows.basetsd : HANDLE;
 }
 
-version (Posix)
+version (Horizon)
 {
-    static import core.sys.posix.stdio; // getdelim, flockfile
+    static import core.sys.horizon.stdio; // getdelim, flockfile
 }
 
 version (CRuntime_DigitalMars)
@@ -443,10 +447,10 @@ else version (GENERIC_IO)
         pragma(mangle, core.stdc.wchar_.fgetwc.mangleof) int _FGETWC(_iobuf* fp);
     }
 
-    version (Posix)
+    version (Horizon)
     {
-        private alias _FLOCK = core.sys.posix.stdio.flockfile;
-        private alias _FUNLOCK = core.sys.posix.stdio.funlockfile;
+        private alias _FLOCK = core.sys.horizon.stdio.flockfile;
+        private alias _FUNLOCK = core.sys.horizon.stdio.funlockfile;
     }
     else
     {
@@ -487,16 +491,16 @@ else version (GENERIC_IO)
                ~ "std.stdio and will be removed afer 2.107")
     alias FGETWC = fgetwc_unlocked;
 
-    version (Posix)
+    version (Horizon)
     {
         // @@@DEPRECATED_2.107@@@
         deprecated("internal alias FLOCK was unintentionally available from "
                    ~ "std.stdio and will be removed afer 2.107")
-        alias FLOCK = core.sys.posix.stdio.flockfile;
+        alias FLOCK = core.sys.horizon.stdio.flockfile;
         // @@@DEPRECATED_2.107@@@
         deprecated("internal alias FUNLOCK was unintentionally available from "
                    ~ "std.stdio and will be removed afer 2.107")
-        alias FUNLOCK = core.sys.posix.stdio.funlockfile;
+        alias FUNLOCK = core.sys.horizon.stdio.funlockfile;
     }
 }
 else
@@ -792,7 +796,7 @@ Throws: `ErrnoException` in case of error.
         }
 
         FILE* handle;
-        version (Posix)
+        version (Horizon)
         {
             if (isPopened)
             {
@@ -826,9 +830,9 @@ Throws: `ErrnoException` in case of error.
         assert(_p);
         import std.exception : errnoEnforce;
 
-        version (Posix)
+        version (Horizon)
         {
-            import core.sys.posix.stdio : pclose;
+            import core.sys.horizon.stdio : pclose;
             import std.format : format;
 
             if (_p.isPopened)
@@ -952,7 +956,7 @@ opengroup.org/onlinepubs/007908799/xsh/_popen.html, _popen).
 
 Throws: `ErrnoException` in case of error.
  */
-    version (Posix) void popen(string command, scope const(char)[] stdioOpenmode = "r") @safe
+    version (Horizon) void popen(string command, scope const(char)[] stdioOpenmode = "r") @safe
     {
         resetFile(command, stdioOpenmode ,true);
     }
@@ -1003,9 +1007,9 @@ Params:
             auto fp = _fdopen(fd, modez);
             errnoEnforce(fp);
         }
-        else version (Posix)
+        else version (Horizon)
         {
-            import core.sys.posix.stdio : fdopen;
+            import core.sys.horizon.stdio : fdopen;
             auto fp = fdopen(fd, modez);
             errnoEnforce(fp);
         }
@@ -1466,9 +1470,9 @@ Throws: `Exception` if the file is not opened.
                 alias off_t = int;
             }
         }
-        else version (Posix)
+        else version (Horizon)
         {
-            import core.sys.posix.stdio : fseeko, off_t;
+            import core.sys.horizon.stdio : fseeko, off_t;
             alias fseekFun = fseeko;
         }
         errnoEnforce(fseekFun(_p.handle, to!off_t(offset), origin) == 0,
@@ -1526,9 +1530,9 @@ Throws: `Exception` if the file is not opened.
             else
                 immutable result = ftell(cast(FILE*) _p.handle);
         }
-        else version (Posix)
+        else version (Horizon)
         {
-            import core.sys.posix.stdio : ftello;
+            import core.sys.horizon.stdio : ftello;
             immutable result = ftello(cast(FILE*) _p.handle);
         }
         errnoEnforce(result != -1,
@@ -1619,13 +1623,13 @@ Throws: `Exception` if the file is not opened.
                 liLength.HighPart, &overlapped);
         }
     }
-    version (Posix)
+    version (Horizon)
     {
         private int lockImpl(int operation, short l_type,
             ulong start, ulong length)
         {
-            import core.sys.posix.fcntl : fcntl, flock, off_t;
-            import core.sys.posix.unistd : getpid;
+            import core.sys.horizon.fcntl : fcntl, flock, off_t;
+            import core.sys.horizon.unistd : getpid;
             import std.conv : to;
 
             flock fl = void;
@@ -1658,9 +1662,9 @@ $(UL
         import std.exception : enforce;
 
         enforce(isOpen, "Attempting to call lock() on an unopened file");
-        version (Posix)
+        version (Horizon)
         {
-            import core.sys.posix.fcntl : F_RDLCK, F_SETLKW, F_WRLCK;
+            import core.sys.horizon.fcntl : F_RDLCK, F_SETLKW, F_WRLCK;
             import std.exception : errnoEnforce;
             immutable short type = lockType == LockType.readWrite
                 ? F_WRLCK : F_RDLCK;
@@ -1692,10 +1696,10 @@ specified file segment was already locked.
         import std.exception : enforce;
 
         enforce(isOpen, "Attempting to call tryLock() on an unopened file");
-        version (Posix)
+        version (Horizon)
         {
             import core.stdc.errno : EACCES, EAGAIN, errno;
-            import core.sys.posix.fcntl : F_RDLCK, F_SETLK, F_WRLCK;
+            import core.sys.horizon.fcntl : F_RDLCK, F_SETLK, F_WRLCK;
             import std.exception : errnoEnforce;
             immutable short type = lockType == LockType.readWrite
                 ? F_WRLCK : F_RDLCK;
@@ -1733,9 +1737,9 @@ Removes the lock over the specified file segment.
         import std.exception : enforce;
 
         enforce(isOpen, "Attempting to call unlock() on an unopened file");
-        version (Posix)
+        version (Horizon)
         {
-            import core.sys.posix.fcntl : F_SETLK, F_UNLCK;
+            import core.sys.horizon.fcntl : F_SETLK, F_UNLCK;
             import std.exception : errnoEnforce;
             errnoEnforce(lockImpl(F_SETLK, F_UNLCK, start, length) != -1,
                     "Could not remove lock for file `"~_name~"'");
@@ -3428,7 +3432,7 @@ is empty, throws an `Exception`. In case of an I/O error throws
                                     handle_);
                         }
                     }
-                    else version (Posix)
+                    else version (Horizon)
                     {
                         trustedFPUTWC(cast(wchar_t) c, handle_);
                     }
@@ -4792,7 +4796,7 @@ if ((isSomeFiniteCharInputRange!R1 || isSomeString!R1) &&
         {
             return _wfopen(namez, modez);
         }
-        else version (Posix)
+        else version (Horizon)
         {
             /*
              * The new opengroup large file support API is transparently
@@ -4802,7 +4806,7 @@ if ((isSomeFiniteCharInputRange!R1 || isSomeString!R1) &&
              * probably isn't available. Do not use the old transitional API
              * (the native extern(C) fopen64, http://www.unix.org/version2/whatsnew/lfs20mar.html#3.0)
              */
-            import core.sys.posix.stdio : fopen;
+            import core.sys.horizon.stdio : fopen;
             return fopen(namez, modez);
         }
         else
@@ -4813,7 +4817,7 @@ if ((isSomeFiniteCharInputRange!R1 || isSomeString!R1) &&
     return _fopenImpl(namez, modez);
 }
 
-version (Posix)
+version (Horizon)
 {
     /***********************************
      * Convenience function that forwards to `core.sys.posix.stdio.popen`
@@ -4830,7 +4834,7 @@ version (Posix)
 
         static popenImpl(const(FSChar)* namez, const(FSChar)* modez) @trusted nothrow @nogc
         {
-            import core.sys.posix.stdio : popen;
+            import core.sys.horizon.stdio : popen;
             return popen(namez, modez);
         }
         return popenImpl(namez, modez);
@@ -5808,7 +5812,7 @@ private size_t readlnImpl(FILE* fps, ref char[] buf, dchar terminator, File.Orie
                     StdioException();
                 return buf.length;
             }
-            else version (Posix)
+            else version (Horizon)
             {
                 buf.length = 0;
                 for (int c; (c = lf.fgetwc()) != -1; )
@@ -5909,7 +5913,7 @@ private size_t readlnImpl(FILE* fps, ref char[] buf, dchar terminator, File.Orie
                     StdioException();
                 return buf.length;
             }
-            else version (Posix)
+            else version (Horizon)
             {
                 import std.utf : encode;
                 buf.length = 0;
