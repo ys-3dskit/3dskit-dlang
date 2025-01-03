@@ -13,8 +13,6 @@
  */
 module core.gc.gcinterface;
 
-static assert(0, "core.gc is not usable in 3dskit - betterc");
-
 static import core.memory;
 alias BlkAttr = core.memory.GC.BlkAttr;
 alias BlkInfo = core.memory.GC.BlkInfo;

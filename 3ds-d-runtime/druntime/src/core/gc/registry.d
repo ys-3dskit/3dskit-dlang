@@ -7,8 +7,6 @@
  */
 module core.gc.registry;
 
-static assert(0, "core.gc is not usable in 3dskit - betterc");
-
 import core.gc.gcinterface : GC;
 
 /*@nogc nothrow:*/

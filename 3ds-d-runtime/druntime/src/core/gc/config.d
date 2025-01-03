@@ -10,8 +10,6 @@ module core.gc.config;
 import core.stdc.stdio;
 import core.internal.parseoptions;
 
-static assert(0, "core.gc is not usable in 3dskit - betterc");
-
 __gshared Config config;
 
 struct Config
