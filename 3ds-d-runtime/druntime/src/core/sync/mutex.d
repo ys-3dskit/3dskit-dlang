@@ -18,15 +18,9 @@ module core.sync.mutex;
 
 public import core.sync.exception;
 
-version (Windows)
+version (Horizon)
 {
-    import core.sys.windows.winbase /+: CRITICAL_SECTION, DeleteCriticalSection,
-        EnterCriticalSection, InitializeCriticalSection, LeaveCriticalSection,
-        TryEnterCriticalSection+/;
-}
-else version (Posix)
-{
-    import core.sys.posix.pthread;
+    import ys3ds.ctru._3ds.synchronization;
 }
 else
 {
@@ -48,8 +42,7 @@ else
  * Implemented using `pthread_mutex` on Posix and `CRITICAL_SECTION`
  * on Windows.
  */
-class Mutex :
-    Object.Monitor
+class Mutex : Object.Monitor
 {
     ////////////////////////////////////////////////////////////////////////////
     // Initialization
@@ -75,27 +68,10 @@ class Mutex :
     private this(this Q)(bool _unused_) @trusted nothrow @nogc
         if (is(Q == Mutex) || is(Q == shared Mutex))
     {
-        version (Windows)
-        {
-            InitializeCriticalSection(cast(CRITICAL_SECTION*) &m_hndl);
-        }
-        else version (Posix)
-        {
-            import core.internal.abort : abort;
-            pthread_mutexattr_t attr = void;
-
-            !pthread_mutexattr_init(&attr) ||
-                abort("Error: pthread_mutexattr_init failed.");
-
-            scope (exit) !pthread_mutexattr_destroy(&attr) ||
-                abort("Error: pthread_mutexattr_destroy failed.");
-
-            !pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE) ||
-                abort("Error: pthread_mutexattr_settype failed.");
-
-            !pthread_mutex_init(cast(pthread_mutex_t*) &m_hndl, &attr) ||
-                abort("Error: pthread_mutex_init failed.");
-        }
+        /* static if (UseLightLock)
+            LightLock_Init(&m_lock);
+        else */
+            RecursiveLock_Init(&m_lock);
 
         m_proxy.link = this;
         this.__monitor = cast(void*) &m_proxy;
@@ -138,16 +114,6 @@ class Mutex :
 
     ~this() @trusted nothrow @nogc
     {
-        version (Windows)
-        {
-            DeleteCriticalSection(&m_hndl);
-        }
-        else version (Posix)
-        {
-            import core.internal.abort : abort;
-            !pthread_mutex_destroy(&m_hndl) ||
-                abort("Error: pthread_mutex_destroy failed.");
-        }
         this.__monitor = null;
     }
 
@@ -180,19 +146,10 @@ class Mutex :
     final void lock_nothrow(this Q)() nothrow @trusted @nogc
         if (is(Q == Mutex) || is(Q == shared Mutex))
     {
-        version (Windows)
-        {
-            EnterCriticalSection(&m_hndl);
-        }
-        else version (Posix)
-        {
-            if (pthread_mutex_lock(&m_hndl) == 0)
-                return;
-
-            SyncError syncErr = cast(SyncError) __traits(initSymbol, SyncError).ptr;
-            syncErr.msg = "Unable to lock mutex.";
-            throw syncErr;
-        }
+        /* static if (UseLightLock)
+            LightLock_Lock(&m_lock);
+        else */
+            RecursiveLock_Lock(&m_lock);
     }
 
     /**
@@ -218,19 +175,10 @@ class Mutex :
     final void unlock_nothrow(this Q)() nothrow @trusted @nogc
         if (is(Q == Mutex) || is(Q == shared Mutex))
     {
-        version (Windows)
-        {
-            LeaveCriticalSection(&m_hndl);
-        }
-        else version (Posix)
-        {
-            if (pthread_mutex_unlock(&m_hndl) == 0)
-                return;
-
-            SyncError syncErr = cast(SyncError) __traits(initSymbol, SyncError).ptr;
-            syncErr.msg = "Unable to unlock mutex.";
-            throw syncErr;
-        }
+        /* static if (UseLightLock)
+            LightLock_Unlock(&m_lock);
+        else */
+            RecursiveLock_Unlock(&m_lock);
     }
 
     /**
@@ -260,26 +208,18 @@ class Mutex :
     final bool tryLock_nothrow(this Q)() nothrow @trusted @nogc
         if (is(Q == Mutex) || is(Q == shared Mutex))
     {
-        version (Windows)
-        {
-            return TryEnterCriticalSection(&m_hndl) != 0;
-        }
-        else version (Posix)
-        {
-            return pthread_mutex_trylock(&m_hndl) == 0;
-        }
+        /* static if (UseLightLock)
+            return LightLock_TryLock(&m_lock) == 0;
+        else */
+            return RecursiveLock_TryLock(&m_lock) == 0;
     }
 
 
-private:
-    version (Windows)
-    {
-        CRITICAL_SECTION    m_hndl;
-    }
-    else version (Posix)
-    {
-        pthread_mutex_t     m_hndl;
-    }
+package:
+    /* static if (UseLightLock)
+        LightLock m_lock;
+    else */
+        RecursiveLock m_lock;
 
     struct MonitorProxy
     {
@@ -287,16 +227,6 @@ private:
     }
 
     MonitorProxy            m_proxy;
-
-
-package:
-    version (Posix)
-    {
-        pthread_mutex_t* handleAddr() @nogc
-        {
-            return &m_hndl;
-        }
-    }
 }
 
 ///

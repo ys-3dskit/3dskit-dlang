@@ -11,7 +11,7 @@
  */
 
 module core.thread.osthread;
-/+
+
 import core.thread.threadbase;
 import core.thread.context;
 import core.thread.types;
@@ -3020,4 +3020,4 @@ private size_t adjustStackSize(size_t sz) nothrow @nogc
 
     return sz;
 }
-+/
+
