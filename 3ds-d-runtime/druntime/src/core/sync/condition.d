@@ -39,18 +39,19 @@ else
 private
 {
     pragma(inline)
-    void _beginWait(CondVar* cv, RecursiveLock* lock)
+    void _beginWait(M : Mutex)(CondVar* cv, M lock)
     {
         int val;
         do
             val = __ldrex(cv) - 1;
         while (__strex(cv, val));
 
-        LightLock_Unlock(lock);
+        //LightLock_Unlock(lock);
+        lock.unlock();
     }
 
     pragma(inline)
-    void _endWait(CondVar* cv, RecursiveLock* lock, int num_threads)
+    void _endWait(M : Mutex)(CondVar* cv, int num_threads)
     {
         bool hasWaiters;
         int val;
@@ -76,14 +77,15 @@ private
 
     // init is not necessary as it just sets the cond var to zero and thats default in D anyway.
 
-    void _wait(CondVar* cv, RecursiveLock* lock)
+    void _wait(M : Mutex)(CondVar* cv, M lock)
     {
         _beginWait(cv, lock);
         syncArbitrateAddress(cv, ArbitrationType.ARBITRATION_WAIT_IF_LESS_THAN, 0);
-        RecursiveLock_Lock(lock);
+        //RecursiveLock_Lock(lock);
+        lock.lock();
     }
 
-    int _waitTimeout(CondVar* cv, RecursiveLock* lock, long timeout_ns)
+    int _waitTimeout(M : Mutex)(CondVar* cv, M lock, long timeout_ns)
     {
         _beginWait(cv, lock);
 
@@ -95,7 +97,8 @@ private
             __dmb();
         }
 
-        RecursiveLock_Lock(lock);
+        //RecursiveLock_Lock(lock);
+        lock.lock();
 
         return timedOut;
     }
@@ -151,12 +154,8 @@ class Condition
         if ((is(Q == Condition) && is(M == Mutex)) ||
             (is(Q == shared Condition) && is(M == shared Mutex)))
     {
-        import core.atomic;
-
-        static if (is(Q == shared))
-            m_assocMutex = atomicLoad(m).m_lock;
-        else
-            m_assocMutex = m.m_lock;
+        import core.atomic : atomicStore;
+        atomicStore(m_assocMutex, m);
     }
 
 
@@ -315,7 +314,7 @@ class Condition
 private:
 
     CondVar m_cndvar;
-    RecursiveLock m_assocMutex;
+    Mutex m_assocMutex;
 }
 
 

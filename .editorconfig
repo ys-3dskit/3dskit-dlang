@@ -1,0 +1,27 @@
+root = true
+
+# my boilerplate editorconfig i put everywhere -- hazel
+# this applies to the headers, and to ysbase :)
+[*]
+charset = utf-8
+insert_final_newline = false
+trim_trailing_whitespace = true
+end_of_line = lf
+indent_style = tab
+max_line_length = 100
+tab_width = 3
+
+
+[btl/**]
+# btl mostly uses tabs but there are some spaces left in the codebase and its clearly 4 wide.
+tab_width = 4
+
+# wtf was past me doing?
+[ys3ds/**]
+indent_style = space
+tab_width = 2
+
+# druntime and phobos use 4 space indents
+[3ds-d-runtime/**]
+indent_style = space
+tab_width = 4

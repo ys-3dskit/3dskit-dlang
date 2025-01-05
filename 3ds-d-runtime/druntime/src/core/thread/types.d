@@ -20,9 +20,9 @@ version (Windows)
 else
 version (Horizon)
 {
-    //import core.sys.horizon.pthread;
+    import ys3ds.ctru._3ds.types : Handle;
 
-    alias ThreadID = int;//pthread_t; // TODO: complete BS
+    alias ThreadID = Handle;
 }
 
 struct ll_ThreadData

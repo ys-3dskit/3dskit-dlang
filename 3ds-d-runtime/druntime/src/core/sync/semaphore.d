@@ -49,6 +49,10 @@ else version (Posix)
     import core.sys.posix.pthread;
     import core.sys.posix.semaphore;
 }
+else version (Horizon)
+{
+    import ys3ds.ctru._3ds.synchronization;
+}
 else
 {
     static assert(false, "Platform not supported");
@@ -88,7 +92,11 @@ class Semaphore
      */
     this( uint count = 0 )
     {
-        version (Windows)
+        version (Horizon)
+        {
+            LightSemaphore_Init(&m_hndl);
+        }
+        else version (Windows)
         {
             m_hndl = CreateSemaphoreA( null, count, int.max, null );
             if ( m_hndl == m_hndl.init )
@@ -143,6 +151,10 @@ class Semaphore
      */
     void wait()
     {
+        version (Horizon)
+        {
+            LightSemaphore_Acquire(&m_hndl, 1);
+        }
         version (Windows)
         {
             DWORD rc = WaitForSingleObject( m_hndl, INFINITE );
@@ -174,6 +186,8 @@ class Semaphore
     }
 
 
+    version (Horizon) {} // TODO: see inside
+    else
     /**
      * Suspends the calling thread until the current count moves above zero or
      * until the supplied time period has elapsed.  If the count moves above
@@ -199,6 +213,11 @@ class Semaphore
     }
     do
     {
+        version (Horizon)
+        {
+            // TODO: libctru does not provide a timed wait for lightsephamores.
+            //       Either impement myself or use a KSephamore.
+        }
         version (Windows)
         {
             auto maxWaitMillis = dur!("msecs")( uint.max - 1 );
@@ -281,7 +300,11 @@ class Semaphore
      */
     void notify()
     {
-        version (Windows)
+        version (Horizon)
+        {
+            LightSemaphore_Release(&m_hndl, 1);
+        }
+        else version (Windows)
         {
             if ( !ReleaseSemaphore( m_hndl, 1, null ) )
                 throw new SyncError( "Unable to notify semaphore" );
@@ -313,7 +336,11 @@ class Semaphore
      */
     bool tryWait()
     {
-        version (Windows)
+        version (Horizon)
+        {
+            return LightSemaphore_TryAcquire(&m_hndl, 1) == 0;
+        }
+        else version (Windows)
         {
             switch ( WaitForSingleObject( m_hndl, 0 ) )
             {
@@ -352,6 +379,7 @@ protected:
     else version (Darwin)    alias Handle = semaphore_t;
     /// ditto
     else version (Posix)     alias Handle = sem_t;
+    else version (Horizon)   alias Handle = LightSemaphore;
 
     /// Handle to the system-specific semaphore.
     Handle m_hndl;

@@ -22,8 +22,28 @@ enum WRITE_DATA_TO_HANDLER_STACK = null;
 enum WRITE_DATA_TO_FAULTING_STACK = cast(ERRF_ExceptionData*) 1;
 
 /// libctru thread handle type
+// see internal.h
 struct Thread_tag;
+private struct Thread_tag_partial
+{
+  //import core.stdc.stdio : _reent; // i have not yet bound _reent so it is opaque.
+  // TODO: just make thread_tag have this body once it is correctly sized.
+
+  Handle handle;
+  ThreadFunc ep;
+  void* arg;
+  int rc;
+  bool detached, finished;
+  /* _reent reent;
+  void* stacktop; */
+}
 alias Thread = Thread_tag*;
+
+pragma(inline, true)
+extern (D) Handle _thread_tag_get_handle_jank(Thread t) => (cast(Thread_tag_partial*) t).handle;
+
+pragma(inline, true)
+extern (D) bool _thread_tag_get_finished_jank(Thread t) => (cast(Thread_tag_partial*) t).finished;
 
 /// Exception handler type, necessarily an ARM function that does not return.
 alias ExceptionHandler = void function (ERRF_ExceptionInfo* excep, CpuRegisters* regs);

@@ -142,6 +142,12 @@ version (GNU)
     import gcc.builtins;
 }
 
+version (Horizon)
+{
+    import ys3ds.ctru._3ds.thread;
+    import ys3ds.ctru._3ds.thread : CtruThread = Thread;
+}
+
 /**
  * Hook for whatever EH implementation is used to save/restore some data
  * per stack.
@@ -246,6 +252,11 @@ class Thread : ThreadBase
         private __gshared bool m_isRTClass;
     }
 
+    version (Horizon)
+    {
+        CtruThread m_thread;
+    }
+
     //
     // Standard types
     //
@@ -309,7 +320,14 @@ class Thread : ThreadBase
         if (super.destructBeforeDtor())
             return;
 
-        version (Windows)
+        version (Horizon)
+        {
+            // implicitly frees the thread if finished
+            // else when the thread exists, itll free itself.
+            threadDetach(m_thread);
+            m_addr = m_addr.init;
+        }
+        else version (Windows)
         {
             m_addr = m_addr.init;
             CloseHandle( m_hndl );
@@ -449,6 +467,20 @@ class Thread : ThreadBase
                 multiThreadedFlag = false;
         }
 
+        version (Shared) assert(0, "not supported");
+
+        version (Horizon)
+        {
+            slock.lock_nothrow();
+            scope (exit)
+                slock.unlock_nothrow();
+
+            m_thread = threadCreate(&thread_entryPoint, cast(void*) this, m_sz, 0x30, 0, false);
+            m_addr = _thread_tag_get_handle_jank(m_thread); // this is great
+
+            return this;
+        }
+
         version (Windows) {} else
         version (Posix)
         {
@@ -581,7 +613,21 @@ class Thread : ThreadBase
      */
     override final Throwable join( bool rethrow = true )
     {
-        version (Windows)
+        version (Horizon)
+        {
+            if (!threadJoin(m_thread, ulong.max))
+                throw new ThreadException("Unable to join thread");
+
+            assert(
+                _thread_tag_get_finished_jank(m_thread),
+                "Thread was not finished after being joined! Likely called svcExitThread instead of threadExit."
+            );
+            // we need not free this here as it would otherwise be freed on destruction, but whatever.
+            atomicStore!(MemoryOrder.raw)(*cast(shared)&m_addr, m_addr.init);
+            threadFree(m_thread);
+            m_thread = null;
+        }
+        else version (Windows)
         {
             if ( m_addr != m_addr.init && WaitForSingleObject( m_hndl, INFINITE ) != WAIT_OBJECT_0 )
                 throw new ThreadException( "Unable to join thread" );
@@ -667,6 +713,18 @@ class Thread : ThreadBase
         */
         private static Priority loadPriorities() @nogc nothrow @trusted
         {
+            import ys3ds.ctru._3ds.svc : svcGetThreadPriority, CUR_THREAD_HANDLE;
+
+            version (Horizon)
+            {
+                int mtprio = void;
+                auto res = svcGetThreadPriority(&mtprio, CUR_THREAD_HANDLE);
+                if (!res)
+                    mtprio = 0x30; // the main thread piority is *usually* 0x30.
+
+                return Priority(0x18, mtprio, 0x3F);
+            }
+
             Priority result;
             version (Solaris)
             {
@@ -794,7 +852,17 @@ class Thread : ThreadBase
      */
     final @property int priority()
     {
-        version (Windows)
+        import ys3ds.ctru._3ds.svc : svcGetThreadPriority;
+
+        version (Horizon)
+        {
+            int prio = void;
+            if (!svcGetThreadPriority(&prio, m_addr))
+                throw new ThreadException("Unable to get thread piority");
+
+            return prio;
+        }
+        else version (Windows)
         {
             return GetThreadPriority( m_hndl );
         }
@@ -835,7 +903,14 @@ class Thread : ThreadBase
     }
     do
     {
-        version (Windows)
+        import ys3ds.ctru._3ds.svc : svcSetThreadPriority;
+
+        version (Horizon)
+        {
+            if (!svcSetThreadPriority(m_addr, val))
+                throw new ThreadException("Unable to set thread priority");
+        }
+        else version (Windows)
         {
             if ( !SetThreadPriority( m_hndl, val ) )
                 throw new ThreadException( "Unable to set thread priority" );
@@ -943,7 +1018,11 @@ class Thread : ThreadBase
         if (!super.isRunning())
             return false;
 
-        version (Windows)
+        version (Horizon)
+        {
+            return m_thread && !atomicLoad(m_thread.finished);
+        }
+        else version (Windows)
         {
             uint ecode = 0;
             GetExitCodeThread( m_hndl, &ecode );
@@ -987,6 +1066,7 @@ class Thread : ThreadBase
     }
     do
     {
+        // TODO 3dskit: pretty sure this function is impossible?
         version (Windows)
         {
             auto maxSleepMillis = dur!("msecs")( uint.max - 1 );
@@ -1035,6 +1115,7 @@ class Thread : ThreadBase
      */
     static void yield() @nogc nothrow
     {
+        // TODO 3dskit
         version (Windows)
             SwitchToThread();
         else version (Posix)
