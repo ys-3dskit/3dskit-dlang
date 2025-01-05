@@ -40,10 +40,10 @@ private struct Thread_tag_partial
 alias Thread = Thread_tag*;
 
 pragma(inline, true)
-extern (D) Handle _thread_tag_get_handle_jank(Thread t) => (cast(Thread_tag_partial*) t).handle;
+extern (D) ref Handle _thread_tag_get_handle_jank(Thread t) => (cast(Thread_tag_partial*) t).handle;
 
 pragma(inline, true)
-extern (D) bool _thread_tag_get_finished_jank(Thread t) => (cast(Thread_tag_partial*) t).finished;
+extern (D) ref bool _thread_tag_get_finished_jank(Thread t) => (cast(Thread_tag_partial*) t).finished;
 
 /// Exception handler type, necessarily an ARM function that does not return.
 alias ExceptionHandler = void function (ERRF_ExceptionInfo* excep, CpuRegisters* regs);

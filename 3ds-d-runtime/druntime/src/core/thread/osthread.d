@@ -715,16 +715,6 @@ class Thread : ThreadBase
         {
             import ys3ds.ctru._3ds.svc : svcGetThreadPriority, CUR_THREAD_HANDLE;
 
-            version (Horizon)
-            {
-                int mtprio = void;
-                auto res = svcGetThreadPriority(&mtprio, CUR_THREAD_HANDLE);
-                if (!res)
-                    mtprio = 0x30; // the main thread piority is *usually* 0x30.
-
-                return Priority(0x18, mtprio, 0x3F);
-            }
-
             Priority result;
             version (Solaris)
             {
@@ -789,6 +779,15 @@ class Thread : ThreadBase
                 result.PRIORITY_MAX = sched_get_priority_max( policy );
                 result.PRIORITY_MAX != -1 ||
                     assert(0, "Internal error in sched_get_priority_max");
+            }
+            else version (Horizon)
+            {
+                int mtprio = void;
+                auto res = svcGetThreadPriority(&mtprio, CUR_THREAD_HANDLE);
+                if (!res)
+                    mtprio = 0x30; // the main thread piority is *usually* 0x30.
+
+                result = Priority(0x18, mtprio, 0x3F);
             }
             else
             {
@@ -1020,7 +1019,7 @@ class Thread : ThreadBase
 
         version (Horizon)
         {
-            return m_thread && !atomicLoad(m_thread.finished);
+            return m_thread && !atomicLoad(_thread_tag_get_finished_jank(m_thread));
         }
         else version (Windows)
         {
@@ -1066,8 +1065,21 @@ class Thread : ThreadBase
     }
     do
     {
-        // TODO 3dskit: pretty sure this function is impossible?
-        version (Windows)
+        import ys3ds.ctru._3ds.svc : svcSleepThread;
+
+        version (Horizon)
+        {
+            auto maxSleepNanos = dur!("nsecs")(long.max - 1);
+
+            while (val > maxSleepNanos)
+            {
+                svcSleepThread(maxSleepNanos.total!"nsecs");
+                val -= maxSleepNanos;
+            }
+
+            svcSleepThread(val.total!"nsecs");
+        }
+        else version (Windows)
         {
             auto maxSleepMillis = dur!("msecs")( uint.max - 1 );
 
@@ -1115,8 +1127,9 @@ class Thread : ThreadBase
      */
     static void yield() @nogc nothrow
     {
-        // TODO 3dskit
-        version (Windows)
+        version (Horizon)
+            Thread.sleep(dur!"nsecs"(1)); // non-ideal lol
+        else version (Windows)
             SwitchToThread();
         else version (Posix)
             sched_yield();
@@ -2718,6 +2731,131 @@ else version (Posix)
         do
         {
 
+        }
+    }
+}
+else version (Horizon)
+{
+    private
+    {
+        //
+        // Entry point for Horizon threads
+        //
+        extern (C) void thread_entryPoint( void* arg ) nothrow @nogc
+        {
+            /* version (Shared)
+            {
+                Thread obj = cast(Thread)(cast(void**)arg)[0];
+                auto loadedLibraries = (cast(void**)arg)[1];
+                .free(arg);
+            }
+            else
+            { */
+            Thread obj = cast(Thread)arg;
+            /* } */
+            assert( obj );
+
+            // loadedLibraries need to be inherited from parent thread
+            // before initilizing GC for TLS (rt_tlsgc_init)
+            /* version (Shared)
+            {
+                externDFunc!("rt.sections_elf_shared.inheritLoadedLibraries",
+                             void function(void*) @nogc nothrow)(loadedLibraries);
+            } */
+
+            obj.initDataStorage();
+
+            //atomicStore!(MemoryOrder.raw)(obj.m_isRunning, true);
+            Thread.setThis(obj); // allocates lazy TLS (see Issue 11981)
+            Thread.add(obj);     // can only receive signals from here on
+            scope (exit)
+            {
+                Thread.remove(obj);
+                //atomicStore!(MemoryOrder.raw)(obj.m_isRunning, false);
+                obj.destroyDataStorage();
+            }
+            Thread.add(&obj.m_main);
+
+            /* static extern (C) void thread_cleanupHandler( void* arg ) nothrow @nogc
+            {
+                Thread  obj = cast(Thread) arg;
+                assert( obj );
+
+                // NOTE: If the thread terminated abnormally, just set it as
+                //       not running and let thread_suspendAll remove it from
+                //       the thread list.  This is safer and is consistent
+                //       with the Windows thread code.
+                //atomicStore!(MemoryOrder.raw)(obj.m_isRunning,false);
+            }
+
+            // NOTE: Using void to skip the initialization here relies on
+            //       knowledge of how pthread_cleanup is implemented.  It may
+            //       not be appropriate for all platforms.  However, it does
+            //       avoid the need to link the pthread module.  If any
+            //       implementation actually requires default initialization
+            //       then pthread_cleanup should be restructured to maintain
+            //       the current lack of a link dependency.
+            static if ( __traits( compiles, pthread_cleanup ) )
+            {
+                pthread_cleanup cleanup = void;
+                cleanup.push( &thread_cleanupHandler, cast(void*) obj );
+            }
+            else static if ( __traits( compiles, pthread_cleanup_push ) )
+            {
+                pthread_cleanup_push( &thread_cleanupHandler, cast(void*) obj );
+            }
+            else
+            {
+                static assert( false, "Platform not supported." );
+            } */
+
+            // NOTE: No GC allocations may occur until the stack pointers have
+            //       been set and Thread.getThis returns a valid reference to
+            //       this thread object (this latter condition is not strictly
+            //       necessary on Windows but it should be followed for the
+            //       sake of consistency).
+
+            // TODO: Consider putting an auto exception object here (using
+            //       alloca) forOutOfMemoryError plus something to track
+            //       whether an exception is in-flight?
+
+            void append( Throwable t )
+            {
+                obj.m_unhandled = Throwable.chainTogether(obj.m_unhandled, t);
+            }
+            try
+            {
+                rt_moduleTlsCtor();
+                try
+                {
+                    obj.run();
+                }
+                catch ( Throwable t )
+                {
+                    append( t );
+                }
+                rt_moduleTlsDtor();
+                /* version (Shared)
+                {
+                    externDFunc!("rt.sections_elf_shared.cleanupLoadedLibraries",
+                                 void function() @nogc nothrow)();
+                } */
+            }
+            catch ( Throwable t )
+            {
+                append( t );
+            }
+
+            // NOTE: Normal cleanup is handled by scope(exit).
+
+            /* static if ( __traits( compiles, pthread_cleanup ) )
+            {
+                cleanup.pop( 0 );
+            }
+            else static if ( __traits( compiles, pthread_cleanup_push ) )
+            {
+                pthread_cleanup_pop( 0 );
+            } */
         }
     }
 }
