@@ -34,7 +34,7 @@ toolchain("devkitarm")
 	add_asflags(c_flags)
 	add_cxxflags({ "-frtti", "-std=gnu++11", "-fexceptions" })
 
-	add_dcflags("-d-version=Horizon,N3DS", "-mtriple=arm-freestanding-eabihf", "-float-abi=hard", "-mcpu=mpcore", "-mattr=armv6k", "-betterC", "--conf=")
+	add_dcflags("-d-version=Horizon,N3DS", "-mtriple=arm-freestanding-eabihf", "-float-abi=hard", "-mcpu=mpcore", "-mattr=armv6k", "--conf=")
 
 	-- for some reason (xmake bug?) this does not work here
 	-- so we do it in rule("3ds") instead.
