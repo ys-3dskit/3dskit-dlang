@@ -1,4 +1,4 @@
-includes("toolchain/*.lua")
+includes("3dskit.lua")
 
 add_rules("mode.debug", "mode.release")
 
@@ -8,29 +8,20 @@ add_rules("mode.debug", "mode.release")
 
 target("ys3ds-dlang")
 	set_kind("static")
-	set_plat("3ds")
 
-	set_arch("arm")
 	add_rules("3ds")
 	set_toolchains("devkitarm")
-	set_languages("c11")
-
-	-- TODO: this does not belong here. it NEEDS to go. xmake won't play without it.
-	add_ldflags("-specs=3dsx.specs", "-g", "-march=armv6k", "-mtune=mpcore", "-mtp=soft", "-mfloat-abi=hard", {force = true})
 
 	add_files("ys3ds/**.d")
-  add_files("btl/**.d")
-  add_files("ysbase/source/ysbase/**.d")
-  add_files("3ds-d-runtime/druntime/src/**.d")
-  add_files("3ds-d-runtime/druntime/src/**.c")
-  add_files("3ds-d-runtime/druntime/src/**.S")
-  --add_files("3ds-d-runtime/phobos/phobos/**.d")
-  --add_files("3ds-d-runtime/phobos/std/**.d")
-
-  -- remove default runtime
-  add_dcflags("--conf=", {force=true})
+	add_files("btl/**.d")
+	add_files("ysbase/source/ysbase/**.d")
+	add_files("3ds-d-runtime/druntime/src/**.d")
+	add_files("3ds-d-runtime/druntime/src/**.c")
+	add_files("3ds-d-runtime/druntime/src/**.S")
+	--add_files("3ds-d-runtime/phobos/phobos/**.d")
+	--add_files("3ds-d-runtime/phobos/std/**.d")
 
 	-- fix imports
-	add_dcflags("-g", "-I.", "-Iysbase/source", "-I3ds-d-runtime/druntime/src", "-I3ds-d-runtime/phobos", {force = true})
+	add_includedirs(".", "ysbase/source", "3ds-d-runtime/druntime/src", "3ds-d-runtime/phobos")
 
 	set_strip("debug")
