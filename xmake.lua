@@ -2,6 +2,10 @@ includes("toolchain/*.lua")
 
 add_rules("mode.debug", "mode.release")
 
+-- dub does not support cross compiling, even though LDC does, so xmake cannot support dub dependencies for arm.
+-- we use a submodule and include ysbase into libys3ds-dlang instead.
+--add_requires("dub::ysbase 0.2.0-beta", {alias = "ysbase"})
+
 target("ys3ds-dlang")
 	set_kind("static")
 	set_plat("3ds")
