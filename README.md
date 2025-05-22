@@ -1,5 +1,7 @@
 # ys-3dskit D language bindings
 
+3DSKIT IS EOL AS OF 2025-05-22. The version that actually worked was 3dskit-dlang 0.1.1.
+
 D language bindings for 3ds homebrew development.
 
 Install from the xmake repo and import as so:
